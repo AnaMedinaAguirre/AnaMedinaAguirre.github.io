@@ -1,0 +1,7 @@
+# Herramientas locales
+.agents/
+.claude/
+skills-lock.json
+
+# Foto original sin recortar (el sitio usa assets/foto-ana.webp / .jpg)
+assets/yo.jpeg
