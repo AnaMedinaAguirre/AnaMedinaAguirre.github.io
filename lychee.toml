@@ -1,0 +1,10 @@
+max_retries = 2
+timeout = 30
+max_concurrency = 4
+exclude = [
+  '^mailto:',
+  '^tel:',
+  # Estos servicios bloquean comprobaciones automatizadas; revisar manualmente.
+  '^https://www\.linkedin\.com/',
+  '^https://wa\.me/',
+]

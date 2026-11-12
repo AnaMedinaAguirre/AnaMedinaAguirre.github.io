@@ -7,10 +7,14 @@
     "build": "astro build",
     "preview": "astro preview",
     "pdf": "node scripts/generate-pdfs.mjs",
-    "build:all": "astro build && node scripts/generate-pdfs.mjs"
+    "build:all": "astro build && node scripts/generate-pdfs.mjs",
+    "check:html": "html-validate \"dist/**/*.html\"",
+    "check:lighthouse": "lhci autorun"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.16.1",
     "astro": "^5.18.2",
+    "html-validate": "^11.21.0",
     "playwright": "^1.65.0"
   }
 }
