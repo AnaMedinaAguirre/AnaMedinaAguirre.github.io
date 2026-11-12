@@ -2,8 +2,8 @@
 import Icon from '../Icon.astro';
 import type { CV } from '../../lib/cv';
 import type { UI } from '../../i18n/ui';
-interface Props { cv: CV; t: UI }
-const { cv, t } = Astro.props;
+interface Props { cv: CV; t: UI; altHref: string }
+const { cv, t, altHref } = Astro.props;
 const links = Object.entries(t.nav) as [string, string][];
 ---
 <a class="skip-link" href="#contenido">{t.skip}</a>
@@ -26,6 +26,8 @@ const links = Object.entries(t.nav) as [string, string][];
     </div>
 
     <div class="nav-actions">
+      <a class="icon-btn lang-toggle" href={altHref} hreflang={t.langSwitch.hreflang} lang={t.langSwitch.hreflang}
+        aria-label={t.langSwitch.label} data-lang={t.langSwitch.hreflang}>{t.langSwitch.short}</a>
       <button class="icon-btn theme-toggle" type="button" aria-label={t.themeToLight}
         data-label-light={t.themeToLight} data-label-dark={t.themeToDark}>
         <Icon name="sun" class="ic ic-sun" />

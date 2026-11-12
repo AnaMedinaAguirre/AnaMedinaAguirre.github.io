@@ -257,6 +257,14 @@
     });
   });
 
+  /* Idioma: recordar la elección y conservar la sección actual al cambiar */
+  Array.prototype.forEach.call(document.querySelectorAll('.lang-toggle'), function (a) {
+    a.addEventListener('click', function () {
+      storageSet('lang', a.getAttribute('data-lang'));
+      if (location.hash) a.setAttribute('href', a.getAttribute('href').split('#')[0] + location.hash);
+    });
+  });
+
   /* Skip link: mover el foco al contenido principal */
   var skip = document.querySelector('.skip-link');
   var main = document.getElementById('contenido');

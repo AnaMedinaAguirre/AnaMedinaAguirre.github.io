@@ -15,13 +15,19 @@ interface Props {
   styles?: string[];
   /** Incluir el sprite de íconos (el CV no lo usa) */
   sprite?: boolean;
+  /** Versiones de esta página en cada idioma, para hreflang */
+  alternates: { es: string; en: string };
+  /** En la portada en español: redirigir a /en/ si la persona eligió inglés */
+  langRedirect?: boolean;
 }
 
-const { cv, title, description, path, jsonLd, bodyClass, styles = ['/css/styles.css'], sprite = true } = Astro.props;
+const { cv, title, description, path, jsonLd, bodyClass, styles = ['/css/styles.css'], sprite = true, alternates, langRedirect = false } = Astro.props;
 const site = Astro.site!;
 const canonical = new URL(path, site).href;
-const ogImage = new URL('/assets/og-image.png', site).href;
+const ogImage = new URL(cv.lang === 'en' ? '/assets/og-image-en.png' : '/assets/og-image.png', site).href;
 const ogLocale = cv.lang === 'es' ? 'es_PE' : 'en_US';
+const ogLocaleAlt = cv.lang === 'es' ? 'en_US' : 'es_PE';
+const alt = (p: string) => new URL(p, site).href;
 ---
 <!doctype html>
 <html lang={cv.lang} data-theme="dark">
@@ -32,10 +38,14 @@ const ogLocale = cv.lang === 'es' ? 'es_PE' : 'en_US';
   <meta name="description" content={description}>
   <meta name="author" content={cv.persona.nombre}>
   <link rel="canonical" href={canonical}>
+  <link rel="alternate" hreflang="es" href={alt(alternates.es)}>
+  <link rel="alternate" hreflang="en" href={alt(alternates.en)}>
+  <link rel="alternate" hreflang="x-default" href={alt(alternates.es)}>
 
   <!-- Open Graph / redes sociales -->
   <meta property="og:type" content="website">
   <meta property="og:locale" content={ogLocale}>
+  <meta property="og:locale:alternate" content={ogLocaleAlt}>
   <meta property="og:title" content={title}>
   <meta property="og:description" content={cv.meta.ogDescription}>
   <meta property="og:url" content={canonical}>
@@ -49,6 +59,13 @@ const ogLocale = cv.lang === 'es' ? 'es_PE' : 'en_US';
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <meta name="theme-color" content="#0F1A2B" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#F5F7FA" media="(prefers-color-scheme: light)">
+
+  {langRedirect && (
+    <script is:inline>
+      /* Si la persona eligió inglés antes, ir a /en/ (los buscadores no guardan preferencias) */
+      try { if (localStorage.getItem('lang') === 'en') location.replace('/en/' + location.hash); } catch (e) {}
+    </script>
+  )}
 
   <!-- Tema antes de pintar: elección guardada o, si no hay, la preferencia del sistema -->
   <script is:inline>

@@ -1,9 +1,13 @@
 ---
 // Ilustración propia; no muestra datos del cliente.
+import { diagramText } from '../../i18n/diagrams';
+import type { Lang } from '../../lib/cv';
+interface Props { lang?: Lang }
+const d = diagramText(Astro.props.lang ?? 'es');
 ---
 <figure class="project-art">
             <svg class="diagram" viewBox="0 0 320 180" role="img" aria-labelledby="pj5-d-title">
-              <title id="pj5-d-title">Diagrama BPMN con carriles para Ventas, Almacén, Finanzas y RRHH</title>
+              <title id="pj5-d-title">{d.bpmnTitle}</title>
               <defs>
                 <marker id="arrow5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
                   orient="auto-start-reverse">
@@ -12,10 +16,10 @@
               </defs>
               <rect class="d-frame" x="10" y="10" width="300" height="160" rx="6" />
               <path class="d-sep d-sep--solid" d="M10 50H310M10 90H310M10 130H310M76 10V170" />
-              <text class="d-sub d-sub--sm" x="20" y="34">Ventas</text>
-              <text class="d-sub d-sub--sm" x="20" y="74">Almacén</text>
-              <text class="d-sub d-sub--sm" x="20" y="114">Finanzas</text>
-              <text class="d-sub d-sub--sm" x="20" y="154">RRHH</text>
+              <text class="d-sub d-sub--sm" x="20" y="34">{d.laneSales}</text>
+              <text class="d-sub d-sub--sm" x="20" y="74">{d.laneWarehouse}</text>
+              <text class="d-sub d-sub--sm" x="20" y="114">{d.laneFinance}</text>
+              <text class="d-sub d-sub--sm" x="20" y="154">{d.laneHr}</text>
               <g class="d-links" marker-end="url(#arrow5)">
                 <path d="M101 30H118" />
                 <path d="M152 30H172" />

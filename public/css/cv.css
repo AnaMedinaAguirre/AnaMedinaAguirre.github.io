@@ -42,6 +42,7 @@ a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; 
   font-weight: 600;
 }
 .cv-toolbar a { color: var(--rule); }
+.cv-toolbar-end { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: flex-end; }
 
 .cv {
   max-width: 210mm;

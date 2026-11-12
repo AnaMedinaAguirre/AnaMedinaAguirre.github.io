@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../site/Header.astro';
+import Hero from '../site/Hero.astro';
+import About from '../site/About.astro';
+import Projects from '../site/Projects.astro';
+import Experience from '../site/Experience.astro';
+import Technologies from '../site/Technologies.astro';
+import Skills from '../site/Skills.astro';
+import Education from '../site/Education.astro';
+import Contact from '../site/Contact.astro';
+import Footer from '../site/Footer.astro';
+import { getCV, type Lang } from '../../lib/cv';
+import { useUI, routes } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const cv = getCV(lang);
+const t = useUI(lang);
+const other: Lang = lang === 'es' ? 'en' : 'es';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: cv.persona.nombre,
+  jobTitle: cv.persona.titulo,
+  email: `mailto:${cv.contacto.email}`,
+  telephone: cv.contacto.telefono,
+  address: { '@type': 'PostalAddress', addressLocality: 'Lima', addressCountry: 'PE' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: cv.educacion[0].institucion },
+  url: new URL(routes.home[lang], Astro.site).href,
+  sameAs: [cv.contacto.linkedin.url, cv.contacto.github.url],
+};
+---
+<Base cv={cv} title={cv.meta.title} description={cv.meta.description} path={routes.home[lang]}
+  alternates={routes.home} langRedirect={lang === 'es'} jsonLd={jsonLd}>
+  <Header cv={cv} t={t} altHref={routes.home[other]} />
+  <main id="contenido" class="flow wrap" tabindex="-1">
+    <Hero cv={cv} t={t} />
+    <About cv={cv} t={t} />
+    <Projects cv={cv} t={t} />
+    <Experience cv={cv} t={t} />
+    <Technologies cv={cv} t={t} />
+    <Skills cv={cv} t={t} />
+    <Education cv={cv} t={t} />
+    <Contact cv={cv} t={t} />
+  </main>
+  <Footer cv={cv} t={t} />
+  <script type="application/json" id="ui-strings" set:html={JSON.stringify(t.js)} />
+  <script is:inline src="/js/main.js" defer></script>
+</Base>
