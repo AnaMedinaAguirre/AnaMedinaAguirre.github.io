@@ -10,7 +10,8 @@
     "build:all": "astro build && node scripts/generate-pdfs.mjs",
     "check:html": "html-validate \"dist/**/*.html\"",
     "check:lighthouse": "lhci autorun",
-    "test:github": "node --test scripts/github.test.mjs"
+    "test:github": "node --test scripts/github.test.mjs",
+    "test:metrics": "node --test scripts/metrics.test.mjs"
   },
   "devDependencies": {
     "@lhci/cli": "^0.16.1",

@@ -1,0 +1,32 @@
+---
+import type { CV } from '../../lib/cv';
+import type { UI } from '../../i18n/ui';
+import { metricsConfig } from '../../lib/metrics.mjs';
+interface Props { cv: CV; t: UI }
+const { cv, t } = Astro.props;
+const config = metricsConfig(import.meta.env.PUBLIC_SUPABASE_URL, import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+const m = t.metrics;
+---
+<section class="site-metrics wrap" aria-labelledby="metrics-title" data-metrics
+  data-url={config?.url} data-key={config?.key} data-origin={Astro.site?.origin} data-lang={cv.lang}>
+  <div class="metrics-panel">
+    <h2 id="metrics-title">{m.title}</h2>
+    <dl class="metrics-counts">
+      <div><dt>{m.total}</dt><dd data-total>—</dd></div>
+      <div><dt>{m.last30}</dt><dd data-last30>—</dd></div>
+    </dl>
+    <figure class="metrics-trend" hidden>
+      <svg viewBox="0 0 300 80" role="img" aria-label={m.trend}>
+        <line x1="8" y1="72" x2="292" y2="72" class="metrics-axis" />
+        <polyline data-trend points="" fill="none" class="metrics-line" />
+      </svg>
+      <figcaption>{m.trend}</figcaption>
+    </figure>
+    <p class="metrics-status" role="status" data-status data-unavailable={m.unavailable}>{config ? m.loading : m.unavailable}</p>
+    <p class="metrics-note">{m.privacy}</p>
+    <noscript><p>{m.noScript}</p></noscript>
+  </div>
+</section>
+<script>
+  import '../../scripts/metrics.js';
+</script>

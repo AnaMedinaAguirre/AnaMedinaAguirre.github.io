@@ -35,6 +35,16 @@ jobs:
         run: npm run build:all
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+      - name: Probar lógica de métricas
+        run: npm run test:metrics
+      - name: Verificar permisos reales de Supabase sin sumar visitas
+        run: node scripts/verify-supabase.mjs
+        env:
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+          REQUIRE_METRICS: ${{ github.ref == 'refs/heads/main' }}
       - name: Probar integración con GitHub
         run: npm run test:github
       - name: Validar HTML generado

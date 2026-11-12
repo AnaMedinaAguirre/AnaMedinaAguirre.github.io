@@ -56,6 +56,16 @@ const es = {
   email: 'Email',
   copyEmail: 'Copiar email',
   backToTop: 'Volver arriba',
+  metrics: {
+    title: 'Métricas del sitio',
+    total: 'Visitas totales',
+    last30: 'Visitas en los últimos 30 días',
+    trend: 'Visitas diarias · últimos 30 días',
+    privacy: 'Métricas anónimas, sin cookies ni datos personales.',
+    loading: 'Cargando métricas…',
+    unavailable: 'Métricas no disponibles por el momento.',
+    noScript: 'Activa JavaScript para consultar las métricas.',
+  },
   /** Textos que usa js/main.js (se inyectan como JSON en la página) */
   js: {
     themeToLight: 'Cambiar a modo claro',
@@ -136,6 +146,16 @@ const en: UI = {
   email: 'Email',
   copyEmail: 'Copy email',
   backToTop: 'Back to top',
+  metrics: {
+    title: 'Site metrics',
+    total: 'Total visits',
+    last30: 'Visits in the last 30 days',
+    trend: 'Daily visits · last 30 days',
+    privacy: 'Anonymous metrics, without cookies or personal data.',
+    loading: 'Loading metrics…',
+    unavailable: 'Metrics are currently unavailable.',
+    noScript: 'Enable JavaScript to view site metrics.',
+  },
   js: {
     themeToLight: 'Switch to light mode',
     themeToDark: 'Switch to dark mode',
