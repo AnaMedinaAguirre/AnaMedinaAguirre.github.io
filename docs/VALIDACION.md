@@ -1,60 +1,74 @@
 # Validación de la versión 2
 
-Revisión local: 12 de noviembre de 2026. Rama de trabajo: `v2`.
+Última actualización: 12 de noviembre de 2026.
 
-## Resultado funcional
+## Estado de la publicación
+
+| Hito | Estado |
+| --- | --- |
+| PR #1 (`v2` → `main`) | Fusionado con merge commit. La rama `v2` se eliminó. |
+| Despliegue | Publicado en GitHub Pages desde `main` con GitHub Actions (`actions/deploy-pages`). |
+| Regla "Proteger main" | Activa: exige PR y el control **Build y controles de calidad**. |
+| Producción | `/`, `/en/`, `/cv/`, `/en/cv/` y los dos PDF responden correctamente. |
+| Métricas | Supabase configurado en GitHub Secrets; la lectura y el registro de visitas funcionan en producción. |
+| Cron diario | Configurado a las 11:17 UTC (06:17 de Lima) desde `main`. |
+
+### Limpieza del historial (12/11/2026)
+
+Un PDF antiguo del CV incluía el teléfono de una referencia. Se reescribió el historial con `git filter-repo` para reemplazar ese archivo por la versión sin el dato en todos los commits; el contenido de cada fase quedó idéntico y el árbol final de `main` no cambió. Se publicó con un force push controlado (`--force-with-lease`) desactivando y reactivando la regla de `main`.
+
+Verificación sobre un clon nuevo del remoto: 0 resultados al buscar el número en los archivos de todos los commits, en los mensajes y en el texto extraído de cada PDF. Queda la referencia de solo lectura `refs/pull/1/head`, que GitHub no permite borrar al propietario: se solicitó a GitHub Support su eliminación y la purga de vistas en caché.
+
+## Resultado funcional de la versión 2
 
 | Área | Comprobación | Resultado |
 | --- | --- | --- |
 | Build | Astro con Node 22, cuatro rutas y dos PDF A4 | Correcto |
 | HTML | `html-validate:recommended` sobre las cuatro rutas | Correcto |
-| Escritorio y móvil | 1440 y 375 px × ES/EN × claro/oscuro | Ocho combinaciones correctas |
+| Escritorio y móvil | 1440 y 375 px × ES/EN × claro/oscuro | Correcto (revisado también en producción) |
+| Accesibilidad | axe-core (WCAG A/AA y buenas prácticas) en las 16 combinaciones | Sin violaciones |
 | Tema | Cambio y persistencia tras recargar | Correcto |
 | Idioma | Cambio, memoria y conservación de sección | Correcto |
 | Menú móvil | Apertura, cierre con Escape y selección de enlace | Correcto |
-| Tecnologías | Filtro de datos y restablecimiento de todas las áreas | Correcto |
-| Enlaces internos | Respuesta HTTP y existencia de anclas | Correcto |
-| PDF | Descarga de ambos idiomas y cabecera `%PDF-` | Correcto |
-| CV | Columna sin tablas, ancho móvil y barra oculta al imprimir | Correcto |
-| GitHub | Selección pública por topic, paginación, errores y campos opcionales | Cuatro pruebas correctas |
-| Métricas | Configuración pública, validación, bots y deduplicación | Cinco pruebas correctas |
-| Métricas en navegador | Datos, ceros, error, bot y almacenamiento bloqueado en ES/EN, escritorio claro y móvil oscuro | Veinte escenarios correctos |
+| Tecnologías | Filtros y restablecimiento de todas las áreas | Correcto |
+| Enlaces | Respuesta HTTP y existencia de anclas (lychee) | Correcto |
+| PDF | Descarga de ambos idiomas, dos páginas, sin datos de terceros | Correcto |
+| GitHub | Selección por topic, paginación, errores y campos opcionales | Correcto |
 
-Los scripts reproducibles están en `scripts/check-bilingual.py`, `scripts/check-metrics.py`, `scripts/github.test.mjs` y `scripts/metrics.test.mjs`. Los comandos completos están en el README. Las pruebas de Supabase en navegador interceptan la API con datos simulados: no insertan visitas reales.
+## Rama `mejoras` (posterior a la publicación)
 
-## Lighthouse final
+| Cambio | Comprobación | Resultado |
+| --- | --- | --- |
+| Nota de métricas completa (ES/EN) | Texto visible en ambos idiomas | Correcto |
+| Gráfico de barras por día | Inicio en la primera visita, fechas sin solaparse, valores selectivos, tooltip con puntero y teclado, tabla equivalente | Correcto |
+| KPIs | Totales, últimos 30 días y reparto ES/EN | Correcto |
+| Estados | Esqueleto al cargar, sin visitas, error con reintento, sin configuración | Correcto |
+| Colores del gráfico | Validador de paleta (banda de luminosidad, croma, daltonismo, contraste) en claro y oscuro | Todas las comprobaciones pasan |
+| Alineación | La tarjeta mide lo mismo que las tarjetas de proyectos; la línea de flujo termina en el círculo ámbar de Contacto | Correcto en 1440 y 375 px |
+| Pie en móvil | "Volver arriba" no tapa "Lima, Perú" | Correcto |
+| Pruebas | `npm run test:metrics` (9 pruebas) y `scripts/check-metrics.py` (20 escenarios) | Correcto |
+| Workflow | `cancel-in-progress: false`; `configure-pages@v6`, `deploy-pages@v5`, `upload-pages-artifact@v5` (Node 24) | Pendiente de la ejecución en el PR |
 
-Se realizaron tres mediciones móviles de cada ruta, doce en total. El mínimo observado en cada categoría fue:
+La función SQL ampliada (`supabase/2026-11-12-metricas-por-idioma.sql`) debe ejecutarse una vez en Supabase para que el KPI de idioma y la fecha inicial vengan de la base. El sitio es compatible con la función anterior mientras tanto.
 
-| Ruta | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
-| --- | --- | --- | --- | --- |
-| `/` | 100 | 100 | 100 | 100 |
-| `/en/` | 100 | 100 | 100 | 100 |
-| `/cv/` | 100 | 100 | 100 | 100 |
-| `/en/cv/` | 100 | 100 | 100 | 100 |
+## Lighthouse
 
-Son mediciones del build servido localmente, no una garantía de resultados idénticos en producción. Superan el umbral configurado de 90 en las cuatro categorías.
+Tres mediciones móviles de cada ruta en la versión 2. El mínimo observado en cada categoría fue 100 en rendimiento, accesibilidad, buenas prácticas y SEO para `/`, `/en/`, `/cv/` y `/en/cv/`. Son mediciones del build servido localmente; el umbral bloqueante del workflow es 90.
 
 ## Evidencia visual
 
-Las capturas de esta revisión se guardan localmente, fuera de la carpeta que se publica:
+Las capturas de cada revisión se guardan localmente, fuera de la carpeta publicada:
 
-- `.lighthouseci/review-final/`: ocho portadas completas y dos CV móviles.
-- `.lighthouseci/review-phase5/`: estados simulados del gráfico y sus errores.
+- `.lighthouseci/review-final/`: portadas completas y CV móviles.
+- `.lighthouseci/review-phase5/`: estados simulados de la sección de métricas.
 - `.lighthouseci/reports/`: informes Lighthouse HTML y JSON.
 
-Las capturas y los informes no se versionan. No se publican proyectos ni métricas ficticias. Sin los valores públicos de Supabase en el entorno local, las portadas muestran el estado explícito de métricas no disponibles. Actions recibe esos valores de GitHub Secrets.
+Las capturas y los informes no se versionan. Las pruebas de métricas en navegador interceptan la API con datos simulados: no insertan visitas reales.
 
-## Evidencia de integración
-
-La ejecución de Actions de la fase 5, commit `69fb453`, fue mostrada por la propietaria con resultado **Success**. El workflow incluye verificación HTTP de lectura y permisos de Supabase sin generar visitas. El SQL de permisos también fue ejecutado en el dashboard: RLS activo, lectura permitida, INSERT/UPDATE/DELETE directos denegados y ejecución del incremento permitida a `anon`.
-
-En la fase 6 se actualiza `actions/upload-artifact` de v4 a v7, cuyo [runtime oficial es Node 24](https://github.com/actions/upload-artifact/blob/v7/action.yml), para corregir el aviso de esa acción. El sitio sigue compilando con Node 22; son entornos distintos. Este cambio debe comprobarse en la próxima ejecución de Actions.
-
-## Alcance y pendientes de publicación
+## Alcance y pendientes
 
 - Las pruebas locales se realizaron con Chromium; no se afirma cobertura de Safari o Firefox.
 - Las pruebas funcionales no certifican compatibilidad con todos los sistemas ATS; el CV utiliza HTML de una columna sin tablas y PDF etiquetado.
 - LinkedIn y WhatsApp están excluidos del verificador automático por sus bloqueos a bots y requieren comprobación manual.
-- Los 14 avisos de dependencias de desarrollo documentados en el README siguen pendientes de una revisión de actualización mayor. No se incluyó esa migración en la versión 2.
-- Falta la ejecución del commit de fase 6 en GitHub, la aprobación del PR, el despliegue desde `main`, su revisión en producción y la primera ejecución diaria del cron. No se ha realizado el merge.
+- Dependencias de desarrollo: `npm audit` reporta 14 avisos (1 bajo, 12 altos, 1 crítico) en Astro 5 y Lighthouse CI. El crítico afecta a la optimización de imágenes AVIF de Astro, que este sitio no usa. La actualización a Astro 7 se hará en una rama aparte.
+- Pendiente de GitHub Support: eliminar `refs/pull/1/head` y purgar las vistas en caché.

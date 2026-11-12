@@ -15,7 +15,9 @@ permissions:
 
 concurrency:
   group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  # No cancelar una ejecución en curso: podría cortar un despliegue a medias
+  # (por ejemplo, el build diario coincidiendo con un push a main).
+  cancel-in-progress: false
 
 jobs:
   quality:
@@ -84,7 +86,7 @@ jobs:
           retention-days: 7
       - name: Preparar artefacto para Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
@@ -101,7 +103,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - name: Desplegar artefacto validado
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

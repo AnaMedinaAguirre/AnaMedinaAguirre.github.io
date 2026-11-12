@@ -60,13 +60,21 @@ try:
                     panel = page.locator('[data-metrics]')
                     panel.scroll_into_view_if_needed()
                     if scenario == 'error':
-                        page.wait_for_function("document.querySelector('[data-status]').textContent === document.querySelector('[data-status]').dataset.unavailable")
-                        assert panel.locator('[data-total]').inner_text() == '—'
-                        assert panel.locator('.metrics-trend').is_hidden()
+                        page.wait_for_function("document.querySelector('[data-metrics]').dataset.state === 'error'")
+                        assert panel.locator('[data-error]').is_visible()
+                        assert panel.locator('[data-retry]').is_visible()
+                        assert panel.locator('[data-body]').is_hidden()
                     else:
-                        page.wait_for_function("document.querySelector('[data-total]').textContent !== '—'")
+                        page.wait_for_function("document.querySelector('[data-metrics]').dataset.state === 'ready'")
                         assert panel.locator('[data-total]').inner_text() == ('0' if scenario == 'zero' else '120')
-                        assert len(panel.locator('[data-trend]').get_attribute('points').split()) == 30
+                        bars = panel.locator('.mchart-cols:not(.skel-bars) .mchart-col')
+                        if scenario == 'zero':
+                            assert panel.locator('[data-no-data]').is_visible()
+                            assert bars.count() == 0
+                        else:
+                            # Sin first_day (formato SQL anterior) empieza en el primer día con visitas.
+                            assert bars.count() == 29, bars.count()
+                            assert panel.locator('[data-table-body] tr').count() == 29
                     assert len(increments) == (0 if scenario in ('bot', 'storage-blocked') else 1)
                     if increments:
                         assert increments[0] == {'p_page': path, 'p_lang': lang}

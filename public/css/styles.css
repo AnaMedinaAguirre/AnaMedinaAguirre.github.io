@@ -51,6 +51,9 @@
   --on-accent: #0F1A2B;
   --shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 18px 40px -24px rgba(0, 0, 0, 0.6);
   --photo-filter: grayscale(1) contrast(1.06) brightness(1.04);
+  /* Marcas de gráfico (validadas: banda de luminosidad, croma, daltonismo y contraste) */
+  --chart-1: #1E9AA3;
+  --chart-2: #C4861E;
 }
 
 /* Claro */
@@ -71,6 +74,8 @@
   --on-accent: #FFFFFF;
   --shadow: 0 18px 40px -26px rgba(20, 32, 47, 0.35);
   --photo-filter: grayscale(1) contrast(1.04);
+  --chart-1: #008C99;
+  --chart-2: #9A5F00;
 }
 
 @media (min-width: 900px) {
@@ -594,18 +599,130 @@ a:hover { text-decoration-thickness: 2px; }
 .project-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
 /* Métricas agregadas: el mismo tema y escala que el resto del sitio. */
-.site-metrics { padding-top: 24px; padding-bottom: 48px; }
-.metrics-panel { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); padding: 24px; }
-.metrics-panel h2 { font-size: var(--fs-lg); }
-.metrics-counts { display: flex; flex-wrap: wrap; gap: 24px 48px; margin: 20px 0; }
-.metrics-counts dt, .metrics-note, .metrics-status, .metrics-trend figcaption { color: var(--muted); font-size: var(--fs-sm); }
-.metrics-counts dd { margin: 4px 0 0; font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 700; }
-.metrics-trend { max-width: 500px; margin: 16px 0; }
-.metrics-trend svg { width: 100%; height: auto; display: block; }
-.metrics-axis { stroke: var(--line-strong); }
-.metrics-line { stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; }
-.metrics-status:empty { display: none; }
-.metrics-note { margin-top: 12px; }
+.site-metrics { padding-top: clamp(3rem, 2rem + 3vw, 4.5rem); padding-bottom: 48px; }
+/* La tarjeta se alinea con la columna de contenido, como el resto de secciones */
+.site-metrics { padding-left: calc(var(--gutter) + var(--content-x)); }
+.metrics-panel {
+  border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface);
+  padding: clamp(20px, 1rem + 1.5vw, 32px);
+}
+.metrics-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 24px; }
+.metrics-head h2 { font-size: var(--fs-xl); font-weight: 700; font-stretch: 110%; }
+.metrics-since { color: var(--muted); font-size: var(--fs-sm); }
+
+/* KPIs */
+.metrics-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; margin: 24px 0 28px; }
+.kpi-lang { grid-column: 1 / -1; }
+@media (min-width: 640px) { .metrics-kpis { grid-template-columns: 1fr 1fr 1.6fr; gap: 24px 40px; } .kpi-lang { grid-column: auto; } }
+.kpi dt { color: var(--muted); font-size: var(--fs-sm); }
+.kpi dd { margin-top: 6px; font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 700; font-variant-numeric: tabular-nums; min-height: 1.4em; }
+.kpi-lang dd { font-size: var(--fs-base); font-family: var(--font-body); font-weight: 400; }
+.kpi-pending { display: block; margin-top: 4px; color: var(--muted); font-size: var(--fs-sm); }
+.lang-split { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.lang-item { display: inline-flex; align-items: center; gap: 8px; color: var(--text); }
+.lang-item strong { font-family: var(--font-display); font-size: var(--fs-lg); font-variant-numeric: tabular-nums; }
+.lang-swatch { width: 10px; height: 10px; border-radius: 3px; }
+.lang-item--es .lang-swatch, .lang-seg--es { background: var(--chart-1); }
+.lang-item--en .lang-swatch, .lang-seg--en { background: var(--chart-2); }
+.lang-bar { display: flex; gap: 2px; height: 8px; margin-top: 10px; max-width: 320px; }
+.lang-seg { flex: 1 1 0; border-radius: 999px; min-width: 4px; }
+
+/* Gráfico de barras (HTML): el eje ocupa todo el ancho de la tarjeta */
+.mchart { margin: 0; }
+.mchart-caption { color: var(--muted); font-size: var(--fs-sm); margin-bottom: 12px; }
+.mchart-area { position: relative; }
+.mchart-plot {
+  --slots: 7;
+  height: clamp(120px, 9rem + 4vw, 180px);
+  border-bottom: 1.5px solid var(--line-strong);
+  padding-top: 22px;              /* espacio para los valores sobre las barras */
+  border-radius: 2px;
+}
+.mchart-plot:focus-visible { outline: 3px solid var(--event); outline-offset: 6px; }
+.mchart-cols { display: flex; align-items: flex-end; height: 100%; }
+.mchart-col {
+  flex: 0 0 calc(100% / var(--slots));
+  height: 100%;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+  position: relative;
+  border-radius: 6px 6px 0 0;
+}
+.mchart-col[data-index] { cursor: default; }
+.mchart-col.is-active { background: var(--accent-soft); }
+.mchart-bar {
+  display: block;
+  width: min(24px, calc(100% - 4px));
+  min-height: 2px;
+  background: var(--chart-1);
+  border-radius: 4px 4px 0 0;     /* extremo de dato redondeado, base recta */
+}
+.mchart-col.is-active .mchart-bar { filter: brightness(1.12); }
+.mchart-value {
+  font-family: var(--font-display); font-size: 0.8125rem; font-weight: 650;
+  color: var(--text); font-variant-numeric: tabular-nums; margin-bottom: 4px; line-height: 1;
+}
+.mchart-axis { display: flex; margin-top: 8px; --slots: 7; min-height: 1.2em; }
+.mchart-tick {
+  flex: 0 0 calc(100% / var(--slots));
+  position: relative; height: 1.2em;
+  color: var(--muted); font-size: 0.75rem;
+}
+/* La fecha se centra bajo su barra; la primera y la última se anclan hacia dentro
+   para no salir de la tarjeta. */
+.mchart-tick > span { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.mchart-tick:first-child > span { left: 0; transform: none; }
+.mchart-tick:last-child > span { left: auto; right: 0; transform: none; }
+.mchart-tick:first-child:last-child > span { left: 50%; right: auto; transform: translateX(-50%); }
+.mchart-empty { color: var(--muted); padding: 24px 0 8px; }
+.mchart-tip {
+  position: absolute; top: 0; transform: translate(-50%, -100%);
+  display: grid; gap: 2px; padding: 8px 12px;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--line-strong); border-radius: var(--r-md);
+  box-shadow: var(--shadow); pointer-events: none; white-space: nowrap; z-index: 2;
+  font-size: var(--fs-sm);
+}
+.mchart-tip strong { font-family: var(--font-display); font-size: 1rem; }
+.mchart-tip span { color: var(--muted); }
+.mchart-tip[hidden] { display: none; }
+
+/* Tabla equivalente al gráfico */
+.metrics-table { margin-top: 20px; font-size: var(--fs-sm); }
+.metrics-table summary { cursor: pointer; color: var(--accent); font-weight: 700; width: fit-content; }
+.metrics-table table { margin-top: 12px; border-collapse: collapse; min-width: 220px; }
+.metrics-table th, .metrics-table td { padding: 6px 16px 6px 0; border-bottom: 1px solid var(--line); text-align: left; font-weight: 400; }
+.metrics-table thead th { color: var(--muted); }
+.metrics-table td { font-variant-numeric: tabular-nums; text-align: right; }
+
+/* Skeleton (solo en la primera carga) */
+.skel { display: inline-block; background: var(--line); border-radius: 6px; }
+.skel-num { width: 3.5ch; height: 1.1em; vertical-align: middle; }
+.skel-line { width: min(220px, 100%); height: 1.1em; vertical-align: middle; }
+.skel-bars .mchart-bar { background: var(--line); }
+.skel-bars .mchart-col:nth-child(1) .mchart-bar { height: 38%; }
+.skel-bars .mchart-col:nth-child(2) .mchart-bar { height: 62%; }
+.skel-bars .mchart-col:nth-child(3) .mchart-bar { height: 30%; }
+.skel-bars .mchart-col:nth-child(4) .mchart-bar { height: 74%; }
+.skel-bars .mchart-col:nth-child(5) .mchart-bar { height: 48%; }
+.skel-bars .mchart-col:nth-child(6) .mchart-bar { height: 86%; }
+.skel-bars .mchart-col:nth-child(7) .mchart-bar { height: 56%; }
+@media (prefers-reduced-motion: no-preference) {
+  [data-state="loading"] .skel { animation: skel-pulse 1.4s ease-in-out infinite; }
+}
+@keyframes skel-pulse { 50% { opacity: 0.45; } }
+
+/* Estado de error o sin configuración */
+.metrics-state { display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start; padding: 28px 0 8px; }
+.metrics-state[hidden] { display: none; }
+.metrics-state .ic-lg { color: var(--muted); }
+.metrics-state-title { font-family: var(--font-display); font-size: var(--fs-md); font-weight: 650; }
+.metrics-state-hint { color: var(--muted); margin-top: 4px; }
+.metrics-state .btn { margin-top: 14px; }
+html:not(.js) .metrics-body, html:not(.js) .metrics-state { display: none; }
+.metrics-noscript { color: var(--muted); margin-top: 16px; }
+
+.metrics-note { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--fs-sm); }
+.metrics-note > span { display: block; max-width: 70ch; }
 
 /* ---------- Experiencia (línea de tiempo sobre el conector) ---------- */
 .timeline { display: grid; gap: 40px; max-width: 48rem; }
@@ -749,6 +866,9 @@ a:hover { text-decoration-thickness: 2px; }
   padding-block: 28px 32px;
   color: var(--muted); font-size: var(--fs-sm);
 }
+/* En móvil el botón flotante "volver arriba" (44px a 16px del borde) quedaba sobre el
+   texto del pie: se reserva su espacio debajo del contenido. */
+@media (max-width: 899px) { .footer-inner { padding-bottom: calc(32px + 44px + 16px); } }
 
 /* ---------- Volver arriba ---------- */
 .back-to-top {
