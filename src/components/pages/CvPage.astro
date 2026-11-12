@@ -1,0 +1,27 @@
+---
+/**
+ * CV en una columna, sin tablas y con títulos estándar (apto para ATS).
+ * Se genera desde el mismo JSON que el portafolio; el PDF descargable se
+ * imprime desde esta página con Playwright (scripts/generate-pdfs.mjs).
+ */
+import Base from '../../layouts/Base.astro';
+import CvDocument from '../cv/CvDocument.astro';
+import { getCV, type Lang } from '../../lib/cv';
+import { useUI, routes } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const cv = getCV(lang);
+const t = useUI(lang);
+const other: Lang = lang === 'es' ? 'en' : 'es';
+---
+<Base cv={cv} title={cv.meta.cvTitle} description={cv.meta.cvDescription} path={routes.cv[lang]}
+  alternates={routes.cv} styles={['/css/cv.css']} bodyClass="cv-page" sprite={false}>
+  <CvDocument cv={cv} t={t} portfolioHref={routes.home[lang]} altHref={routes.cv[other]} />
+  <script is:inline>
+    /* Recordar el idioma elegido también desde el CV */
+    document.querySelectorAll('.lang-toggle').forEach(function (a) {
+      a.addEventListener('click', function () { try { localStorage.setItem('lang', a.dataset.lang); } catch (e) {} });
+    });
+  </script>
+</Base>

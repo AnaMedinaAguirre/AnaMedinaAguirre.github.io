@@ -203,6 +203,14 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .icon-btn:hover { background: var(--surface); }
 .icon-btn .ic { width: 20px; height: 20px; }
+/* Botón de idioma: mismo formato que el de tema, con el código del otro idioma */
+.lang-toggle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
 
 /* sol en oscuro (para pasar a claro), luna en claro */
 .ic-moon { display: none; }

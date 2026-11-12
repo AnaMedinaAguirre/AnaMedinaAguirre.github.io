@@ -5,6 +5,7 @@
  */
 import { z } from 'astro/zod';
 import cvEs from '../../data/cv.es.json';
+import cvEn from '../../data/cv.en.json';
 
 const yearMonth = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, 'Usa el formato AAAA-MM');
 const nonEmpty = z.string().trim().min(1);
@@ -106,9 +107,35 @@ function parse(raw: unknown, file: string): CV {
   return result.data;
 }
 
-const sources: Partial<Record<Lang, CV>> = {
+const sources: Record<Lang, CV> = {
   es: parse(cvEs, 'data/cv.es.json'),
+  en: parse(cvEn, 'data/cv.en.json'),
 };
+
+/**
+ * Los dos idiomas deben describir lo mismo: mismos proyectos, cargos, fechas,
+ * grupos y cantidad de logros. Si alguien agrega algo solo en un idioma,
+ * el build falla en lugar de publicar versiones distintas.
+ */
+function checkParity(a: CV, b: CV) {
+  const shape = (cv: CV) =>
+    JSON.stringify({
+      proyectos: cv.proyectosProfesionales.map((p) => [p.id, p.diagrama, p.tecnologias.length]),
+      experiencia: cv.experiencia.map((j) => [j.inicio, j.fin, j.logros.length]),
+      tecnologias: cv.tecnologias.map((g) => [g.id, g.items.map((i) => i.icono)]),
+      competencias: cv.competencias.map((c) => c.icono),
+      educacion: cv.educacion.map((e) => [e.inicio, e.fin, e.detalles.length, e.meritos.length]),
+      formacion: cv.formacion.map((f) => [f.estado, f.icono]),
+      idiomas: cv.idiomas.length,
+      ficha: cv.ficha.length,
+      perfil: cv.perfil.length,
+      contacto: cv.contacto.email + cv.contacto.telefono + cv.contacto.linkedin.url + cv.contacto.github.url,
+    });
+  if (shape(a) !== shape(b)) {
+    throw new Error('data/cv.es.json y data/cv.en.json no tienen la misma estructura (proyectos, fechas, grupos o cantidad de elementos).');
+  }
+}
+checkParity(sources.es, sources.en);
 
 export function getCV(lang: Lang = 'es'): CV {
   const cv = sources[lang];

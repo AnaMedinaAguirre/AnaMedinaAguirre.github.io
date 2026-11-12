@@ -1,0 +1,257 @@
+{
+  "lang": "en",
+  "meta": {
+    "title": "Ana Medina Aguirre | Data & Process Automation Analyst",
+    "description": "Portfolio of Ana Patricia Medina Aguirre, a data and process automation analyst based in Lima, Peru. ETL, Python, SQL (PostgreSQL), Power BI, n8n, Power Automate and Odoo.",
+    "ogDescription": "ETL, Python, SQL (PostgreSQL), Power BI, n8n, Power Automate and Odoo. Lima, Peru. Available immediately.",
+    "ogImageAlt": "Ana Medina Aguirre, Data & Process Automation Analyst",
+    "cvTitle": "Résumé | Ana Patricia Medina Aguirre",
+    "cvDescription": "Résumé of Ana Patricia Medina Aguirre, data and process automation analyst based in Lima, Peru."
+  },
+  "persona": {
+    "nombre": "Ana Patricia Medina Aguirre",
+    "nombreCorto": "Ana Medina",
+    "titulo": "Data & Process Automation Analyst",
+    "stack": ["ETL", "Python", "SQL (PostgreSQL)", "Power BI", "n8n", "Power Automate", "Odoo"],
+    "ubicacion": "Lima, Peru",
+    "disponibilidad": "Available immediately",
+    "foto": { "alt": "Portrait of Ana Patricia Medina Aguirre" }
+  },
+  "contacto": {
+    "email": "meymar1405@gmail.com",
+    "telefono": "+51970585398",
+    "telefonoVisible": "+51 970 585 398",
+    "whatsapp": "https://wa.me/51970585398",
+    "linkedin": { "url": "https://www.linkedin.com/in/ana-medina-ba5839269", "usuario": "ana-medina-ba5839269" },
+    "github": { "url": "https://github.com/AnaMedinaAguirre", "usuario": "AnaMedinaAguirre" },
+    "cierre": "Looking for someone who turns manual processes into automated workflows and data into decisions? Let’s talk."
+  },
+  "perfil": [
+    "Systems Engineering student in my tenth semester at Universidad César Vallejo (top 20% of my class), with experience in process automation, enterprise systems integration and digital transformation.",
+    "I have built solutions with n8n, Power Automate, Python and Odoo 17/18 that streamline sales, warehouse, finance and HR operations. I also have experience in data analysis and Power BI dashboards.",
+    "I currently design and implement distributed Odoo 18 architectures for retail companies. My focus is on improving operational efficiency with scalable, results-oriented technology solutions."
+  ],
+  "ficha": [
+    { "etiqueta": "Degree", "valor": "Systems Engineering, tenth semester" },
+    { "etiqueta": "University", "valor": "Universidad César Vallejo, top 20% of class" },
+    { "etiqueta": "Current focus", "valor": "Distributed Odoo 18 architectures for retail" },
+    { "etiqueta": "Location", "valor": "Lima, Peru" },
+    { "etiqueta": "Availability", "valor": "Immediate" },
+    { "etiqueta": "Languages", "valor": "Spanish (native) · English (intermediate)" }
+  ],
+  "proyectosProfesionales": [
+    {
+      "id": "multisede",
+      "diagrama": "multisede",
+      "destacado": true,
+      "cliente": "Boson Innovation",
+      "titulo": "Offline-first multi-site architecture on Odoo 18",
+      "descripcion": "A central VPS and a local PostgreSQL database at each site, kept in sync through the API / JSON-RPC. A centralized sync module manages, for each site, the API connection, remote warehouse, price list and point of sale, so new stores can be rolled out in a standardized way.",
+      "tecnologias": ["Odoo 18", "Python", "PostgreSQL", "API JSON-RPC", "Debian", "Nginx", "Tailscale"]
+    },
+    {
+      "id": "dashboards",
+      "diagrama": "dashboards",
+      "cliente": "Boson Innovation",
+      "titulo": "Multi-site executive dashboards",
+      "descripcion": "Sales, Purchasing, Inventory, Accounting and Expenses dashboards with per-site indicators: total sales, electronic receipts, average ticket, credit notes and purchases by supplier. They give management a consolidated view of every store.",
+      "tecnologias": ["Power BI", "Power Query", "DAX", "PostgreSQL"]
+    },
+    {
+      "id": "sunat",
+      "diagrama": "sunat",
+      "cliente": "Boson Innovation",
+      "titulo": "SUNAT e-invoicing and stock synchronization",
+      "descripcion": "Custom Python modules on Odoo for SUNAT electronic invoicing through an OSE, synchronization of catalog, prices and stock across sites with event traceability, and settlement reports by payment method.",
+      "tecnologias": ["Python", "Odoo", "SUNAT / OSE", "API"]
+    },
+    {
+      "id": "integraciones",
+      "diagrama": "integraciones",
+      "cliente": "CasaLinda",
+      "titulo": "Systems automation and integration",
+      "descripcion": "Integration and data transformation (ETL) workflows connecting Odoo 17, WooCommerce and BioTime to sync stock, orders and attendance, reducing manual work. Includes monitoring, logs and alerts for critical automations.",
+      "tecnologias": ["n8n", "Power Automate", "Python", "APIs"]
+    },
+    {
+      "id": "bpmn",
+      "diagrama": "bpmn",
+      "cliente": "CasaLinda",
+      "titulo": "Business process redesign",
+      "descripcion": "AS-IS / TO-BE modeling in BPMN for sales, warehouse, finance and HR, plus functional support for the Odoo 17 rollout: configuration, UAT and documentation.",
+      "tecnologias": ["BPMN", "Odoo 17", "UAT"]
+    }
+  ],
+  "experiencia": [
+    {
+      "cargo": "Functional Analyst",
+      "empresa": "BOSON INNOVATION E.I.R.L.",
+      "inicio": "2026-08",
+      "fin": null,
+      "ubicacion": "Lima, Peru",
+      "logros": [
+        "Designed and implemented a distributed multi-site architecture on Odoo 18 (a central VPS and a local PostgreSQL database per site) synchronized through the API / JSON-RPC.",
+        "Developed custom Python modules on Odoo for SUNAT electronic invoicing through an OSE, catalog and stock synchronization across sites, and settlement reports by payment method.",
+        "Implemented a centralized sync module on the VPS that manages, for each site, the API connection, remote warehouse, price list and point of sale, allowing the solution to scale to new stores.",
+        "Built executive dashboards (Sales, Purchasing, Inventory, Accounting and Expenses) with per-site indicators: total sales, electronic receipts, average ticket, credit notes and purchases by supplier.",
+        "Synchronized catalogs and price lists between headquarters and each store through the API, with event traceability to keep data consistent.",
+        "Standardized the deployment and remote management of sites with Debian, PostgreSQL, Nginx and Tailscale, replicated across several retail companies."
+      ]
+    },
+    {
+      "cargo": "Automation and Digital Transformation Analyst",
+      "empresa": "CasaLinda",
+      "inicio": "2025-11",
+      "fin": "2026-07",
+      "ubicacion": "Lima, Peru",
+      "logros": [
+        "Automated business processes with n8n, Power Automate (with SharePoint) and Python, reducing manual tasks and operating times.",
+        "Integrated systems through APIs (Odoo 17, WooCommerce, BioTime), keeping stock, orders, attendance and other critical data in sync.",
+        "Modeled and redesigned processes (AS-IS / TO-BE, BPMN) for sales, warehouse, finance and HR.",
+        "Built executive dashboards in Power BI, ensuring data consistency and traceability.",
+        "Provided functional support for the Odoo 17 rollout: configuration, UAT and documentation.",
+        "Set up monitoring, logs and alerts for critical automations; managed user access and backups.",
+        "Trained users, wrote technical manuals and ran digital pilots."
+      ]
+    },
+    {
+      "cargo": "Web Developer",
+      "empresa": "CasaLinda",
+      "inicio": "2025-02",
+      "fin": "2025-11",
+      "ubicacion": "Lima, Peru",
+      "logros": [
+        "Administered and maintained the corporate WordPress website, including hosting, domains and SSL.",
+        "Developed new features, forms, landing pages and responsive design (UX/UI).",
+        "Integrated the website with internal systems (Sistema PROGRESS).",
+        "Improved technical SEO, page speed, security and technical documentation, with version control in Git."
+      ]
+    },
+    {
+      "cargo": "Web Developer",
+      "empresa": "Consigue Ventas",
+      "inicio": "2024-11",
+      "fin": "2025-02",
+      "ubicacion": "Lima, Peru",
+      "logros": [
+        "Designed responsive web pages with Elementor and WordPress for mobile, tablet and desktop."
+      ]
+    }
+  ],
+  "tecnologias": [
+    {
+      "id": "datos",
+      "nombre": "Data & BI",
+      "items": [
+        { "nombre": "Power BI", "icono": "powerbi" },
+        { "nombre": "Power Query", "icono": "etl" },
+        { "nombre": "DAX", "icono": "api" },
+        { "nombre": "Data modeling", "icono": "bpmn" },
+        { "nombre": "Dashboards", "icono": "powerbi" },
+        { "nombre": "Advanced Excel", "icono": "excel" },
+        { "nombre": "SQL (PostgreSQL)", "icono": "postgresql" },
+        { "nombre": "ETL", "icono": "etl" }
+      ]
+    },
+    {
+      "id": "automatizacion",
+      "nombre": "Automation",
+      "items": [
+        { "nombre": "n8n", "icono": "n8n" },
+        { "nombre": "Power Automate", "icono": "powerautomate" },
+        { "nombre": "Python", "icono": "python" },
+        { "nombre": "SharePoint", "icono": "sharepoint" }
+      ]
+    },
+    {
+      "id": "erp",
+      "nombre": "ERP",
+      "items": [
+        { "nombre": "Odoo 17 and 18", "icono": "modules" },
+        { "nombre": "Custom Python modules", "icono": "python" },
+        { "nombre": "API / JSON-RPC", "icono": "api" }
+      ]
+    },
+    {
+      "id": "integraciones",
+      "nombre": "Integrations",
+      "items": [
+        { "nombre": "WooCommerce", "icono": "cart" },
+        { "nombre": "BioTime", "icono": "fingerprint" },
+        { "nombre": "SUNAT (e-invoicing through an OSE)", "icono": "invoice" },
+        { "nombre": "Sistema PROGRESS", "icono": "server" },
+        { "nombre": "SharePoint", "icono": "sharepoint" }
+      ]
+    },
+    {
+      "id": "infra",
+      "nombre": "Infrastructure",
+      "items": [
+        { "nombre": "Debian Linux", "icono": "debian" },
+        { "nombre": "PostgreSQL", "icono": "postgresql" },
+        { "nombre": "Nginx", "icono": "nginx" },
+        { "nombre": "Tailscale", "icono": "tailscale" },
+        { "nombre": "VPS", "icono": "server" }
+      ]
+    },
+    {
+      "id": "procesos",
+      "nombre": "Process management",
+      "items": [
+        { "nombre": "BPMN (AS-IS / TO-BE)", "icono": "bpmn" },
+        { "nombre": "UAT", "icono": "checklist" }
+      ]
+    },
+    {
+      "id": "web",
+      "nombre": "Web",
+      "items": [
+        { "nombre": "WordPress", "icono": "wordpress" },
+        { "nombre": "Elementor", "icono": "elementor" },
+        { "nombre": "HTML", "icono": "html5" },
+        { "nombre": "CSS", "icono": "css" }
+      ]
+    },
+    {
+      "id": "herramientas",
+      "nombre": "Tools",
+      "items": [
+        { "nombre": "Git", "icono": "git" },
+        { "nombre": "GitHub", "icono": "github" },
+        { "nombre": "Advanced Microsoft Office (Excel, Word, PowerPoint)", "icono": "doc" }
+      ]
+    }
+  ],
+  "competencias": [
+    { "icono": "search", "titulo": "Functional analysis", "descripcion": "Architecture design and integration of multi-site systems for retail." },
+    { "icono": "bpmn", "titulo": "Process modeling", "descripcion": "AS-IS / TO-BE processes in BPMN for sales, warehouse, finance and HR." },
+    { "icono": "checklist", "titulo": "Implementation and testing", "descripcion": "Configuration, UAT and functional support on Odoo 17." },
+    { "icono": "etl", "titulo": "Integration and automation", "descripcion": "ETL pipelines and cross-system workflows, with monitoring, logs and alerts for critical automations." },
+    { "icono": "shield", "titulo": "Systems administration", "descripcion": "Standardized server deployment, user access management and backups." },
+    { "icono": "users", "titulo": "Documentation and training", "descripcion": "Technical manuals, user training and digital pilots." }
+  ],
+  "educacion": [
+    {
+      "titulo": "Systems Engineering",
+      "institucion": "Universidad César Vallejo",
+      "inicio": "2022-04",
+      "fin": "2026-12",
+      "nota": "expected graduation",
+      "ubicacion": "Lima, Peru",
+      "detalles": ["Tenth-semester student."],
+      "meritos": [
+        { "titulo": "Top 20% of class", "detalle": "Rank 418 of 2,466" },
+        { "titulo": "Top 10% — semester 2026-I", "detalle": "Rank 24 of 254, GPA 15.67/20" }
+      ]
+    }
+  ],
+  "formacion": [
+    { "nombre": "Microsoft Azure Data Fundamentals (DP-900)", "emisor": "Microsoft Learn", "estado": "en_curso", "icono": "azure" },
+    { "nombre": "Databricks Fundamentals", "emisor": "Databricks Academy", "estado": "en_curso", "icono": "databricks" }
+  ],
+  "idiomas": [
+    { "idioma": "Spanish", "nivel": "Native" },
+    { "idioma": "English", "nivel": "Intermediate" }
+  ],
+  "referencias": "References available upon request"
+}

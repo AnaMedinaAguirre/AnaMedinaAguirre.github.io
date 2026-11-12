@@ -1,14 +1,16 @@
 ---
 // Pipeline del hero: horizontal (≥700px) y vertical (móvil).
+import { diagramText } from '../../i18n/diagrams';
+import type { Lang } from '../../lib/cv';
+interface Props { lang?: Lang }
+const d = diagramText(Astro.props.lang ?? 'es');
 ---
 <figure class="hero-canvas">
         <!-- Pipeline vertical (pantallas angostas) -->
         <svg class="diagram flow-diagram only-narrow" viewBox="0 0 300 536" role="img"
           aria-labelledby="hero-v-title hero-v-desc">
-          <title id="hero-v-title">Pipeline de datos: fuentes, integración, almacenamiento, visualización y decisiones
-          </title>
-          <desc id="hero-v-desc">Odoo, WooCommerce y BioTime son las fuentes; sus datos se integran con flujos ETL en
-            n8n y Python, se almacenan en PostgreSQL y se visualizan en Power BI para tomar decisiones.</desc>
+          <title id="hero-v-title">{d.heroTitle}</title>
+          <desc id="hero-v-desc">{d.heroDesc}</desc>
           <defs>
             <marker id="arrowv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
               orient="auto-start-reverse">
@@ -16,7 +18,7 @@
             </marker>
           </defs>
 
-          <text class="d-lane" x="40" y="16">Fuentes</text>
+          <text class="d-lane" x="40" y="16">{d.sources}</text>
           <rect class="d-group" x="28" y="24" width="244" height="168" rx="12" />
           <g class="d-node">
             <rect x="40" y="36" width="220" height="44" rx="10" />
@@ -47,7 +49,7 @@
             <path pathLength="100" d="M150 468V496" style="--d:2.4s" />
           </g>
 
-          <text class="d-lane" x="40" y="226">Integración</text>
+          <text class="d-lane" x="40" y="226">{d.integration}</text>
           <g class="d-node d-node--accent">
             <rect x="40" y="236" width="220" height="48" rx="10" />
             <use href="#i-n8n" x="56" y="249" width="22" height="22" class="d-icon" />
@@ -55,14 +57,14 @@
             <text class="d-label d-label--sm" x="118" y="265">n8n · Python</text>
           </g>
 
-          <text class="d-lane" x="40" y="318">Almacenamiento</text>
+          <text class="d-lane" x="40" y="318">{d.storage}</text>
           <g class="d-node">
             <rect x="40" y="328" width="220" height="48" rx="10" />
             <use href="#i-postgresql" x="56" y="341" width="22" height="22" class="d-icon" />
             <text class="d-label d-label--sm" x="90" y="357">PostgreSQL</text>
           </g>
 
-          <text class="d-lane" x="40" y="410">Visualización</text>
+          <text class="d-lane" x="40" y="410">{d.visualization}</text>
           <g class="d-node">
             <rect x="40" y="420" width="220" height="48" rx="10" />
             <use href="#i-powerbi" x="56" y="433" width="22" height="22" class="d-icon" />
@@ -70,16 +72,14 @@
           </g>
 
           <circle class="d-end" cx="150" cy="511" r="13" />
-          <text class="d-sub d-end-label" x="174" y="511" dominant-baseline="central">Decisiones</text>
+          <text class="d-sub d-end-label" x="174" y="511" dominant-baseline="central">{d.decisions}</text>
         </svg>
 
         <!-- Pipeline horizontal: 4 columnas de igual ancho + evento final -->
         <svg class="diagram flow-diagram only-wide" viewBox="0 0 680 288" role="img"
           aria-labelledby="hero-d-title hero-d-desc">
-          <title id="hero-d-title">Pipeline de datos: fuentes, integración, almacenamiento, visualización y decisiones
-          </title>
-          <desc id="hero-d-desc">Odoo, WooCommerce y BioTime son las fuentes; sus datos se integran con flujos ETL en
-            n8n y Python, se almacenan en PostgreSQL y se visualizan en Power BI para tomar decisiones.</desc>
+          <title id="hero-d-title">{d.heroTitle}</title>
+          <desc id="hero-d-desc">{d.heroDesc}</desc>
           <defs>
             <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
               orient="auto-start-reverse">
@@ -88,10 +88,10 @@
           </defs>
 
           <!-- etiquetas de etapa, centradas sobre cada columna -->
-          <text class="d-lane" x="56" y="18" text-anchor="middle">Fuentes</text>
-          <text class="d-lane" x="216" y="18" text-anchor="middle">Integración</text>
-          <text class="d-lane" x="356" y="18" text-anchor="middle">Almacenamiento</text>
-          <text class="d-lane" x="496" y="18" text-anchor="middle">Visualización</text>
+          <text class="d-lane" x="56" y="18" text-anchor="middle">{d.sources}</text>
+          <text class="d-lane" x="216" y="18" text-anchor="middle">{d.integration}</text>
+          <text class="d-lane" x="356" y="18" text-anchor="middle">{d.storage}</text>
+          <text class="d-lane" x="496" y="18" text-anchor="middle">{d.visualization}</text>
           <path class="d-stage" d="M4 28H108M164 28H268M304 28H408M444 28H548" />
 
           <!-- conectores: convergen en 3 puntos distintos del borde de ETL -->
@@ -148,6 +148,6 @@
           </g>
 
           <circle class="d-end" cx="584" cy="158" r="12" />
-          <text class="d-sub d-end-label" x="604" y="158" dominant-baseline="central">Decisiones</text>
+          <text class="d-sub d-end-label" x="604" y="158" dominant-baseline="central">{d.decisions}</text>
         </svg>
       </figure>

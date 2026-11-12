@@ -4,7 +4,9 @@ import type { CV } from '../../lib/cv';
 import type { UI } from '../../i18n/ui';
 interface Props { cv: CV; t: UI }
 const { cv, t } = Astro.props;
-const idiomas = cv.idiomas.map((i) => `${i.idioma} ${i.nivel.toLowerCase()}.`).join(' ');
+const idiomas = cv.idiomas
+  .map((i) => (cv.lang === 'es' ? `${i.idioma} ${i.nivel.toLowerCase()}.` : `${i.idioma} (${i.nivel.toLowerCase()}).`))
+  .join(' ');
 ---
 <section class="step" id="habilidades" aria-labelledby="hab-title">
   <header class="step-head reveal">

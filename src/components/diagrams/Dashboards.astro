@@ -1,9 +1,13 @@
 ---
 // Ilustración propia; no muestra datos del cliente.
+import { diagramText } from '../../i18n/diagrams';
+import type { Lang } from '../../lib/cv';
+interface Props { lang?: Lang }
+const d = diagramText(Astro.props.lang ?? 'es');
 ---
 <figure class="project-art">
             <svg class="diagram" viewBox="0 0 320 180" role="img" aria-labelledby="pj2-d-title">
-              <title id="pj2-d-title">Ilustración de un reporte con filtro por sede, indicadores y gráficos</title>
+              <title id="pj2-d-title">{d.dashTitle}</title>
               <rect class="d-frame" x="10" y="10" width="300" height="160" rx="10" />
               <g class="d-bars-soft">
                 <rect x="22" y="24" width="56" height="10" rx="3" />

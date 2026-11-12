@@ -24,7 +24,7 @@ const diagrams = { multisede: Multisede, dashboards: Dashboards, sunat: Sunat, i
       const hid = `pj-${p.id}`;
       return (
         <article class:list={['project', 'reveal', { 'project--featured': p.destacado }]} aria-labelledby={hid}>
-          <Diagram />
+          <Diagram lang={cv.lang} />
           <div class="project-body">
             <p class="project-client">
               <span class="client-badge"><Icon name="lock" />{t.clientBadge}</span>

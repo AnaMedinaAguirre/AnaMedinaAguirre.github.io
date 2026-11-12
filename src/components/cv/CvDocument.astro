@@ -1,8 +1,8 @@
 ---
 import { formatMonth, type CV } from '../../lib/cv';
 import { cvPdfPath, type UI } from '../../i18n/ui';
-interface Props { cv: CV; t: UI; portfolioHref: string }
-const { cv, t, portfolioHref } = Astro.props;
+interface Props { cv: CV; t: UI; portfolioHref: string; altHref: string }
+const { cv, t, portfolioHref, altHref } = Astro.props;
 const c = cv.contacto;
 const tc = t.cv;
 const range = (inicio: string, fin: string | null) =>
@@ -12,7 +12,10 @@ const stripProtocol = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
 ---
 <nav class="cv-toolbar" aria-label={tc.backToSite}>
   <a href={portfolioHref}>{tc.backToSite}</a>
-  <a href={cvPdfPath(cv.lang)} download>{tc.download}</a>
+  <span class="cv-toolbar-end">
+    <a href={altHref} hreflang={t.langSwitch.hreflang} lang={t.langSwitch.hreflang} class="lang-toggle" data-lang={t.langSwitch.hreflang}>{t.langSwitch.label}</a>
+    <a href={cvPdfPath(cv.lang)} download>{tc.download}</a>
+  </span>
 </nav>
 
 <main class="cv" id="contenido">
