@@ -10,6 +10,7 @@ import Skills from '../site/Skills.astro';
 import Education from '../site/Education.astro';
 import Contact from '../site/Contact.astro';
 import Footer from '../site/Footer.astro';
+import Metrics from '../site/Metrics.astro';
 import { getCV, type Lang } from '../../lib/cv';
 import { useUI, routes } from '../../i18n/ui';
 
@@ -44,6 +45,7 @@ const jsonLd = {
     <Education cv={cv} t={t} />
     <Contact cv={cv} t={t} />
   </main>
+  <Metrics cv={cv} t={t} />
   <Footer cv={cv} t={t} />
   <script type="application/json" id="ui-strings" set:html={JSON.stringify(t.js)} />
   <script is:inline src="/js/main.js" defer></script>

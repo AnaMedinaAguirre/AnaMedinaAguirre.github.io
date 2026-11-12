@@ -13,3 +13,6 @@ dist/
 .lighthouseci/
 .lycheecache
 lychee/out.md
+.env
+.env.*
+!.env.example

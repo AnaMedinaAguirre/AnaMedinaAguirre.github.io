@@ -103,9 +103,57 @@ Un error HTTP, timeout o respuesta inválida hace fallar el build y bloquea el d
 npm run test:github
 ```
 
+## Métricas anónimas con Supabase
+
+```mermaid
+flowchart LR
+  A[Navegador en producción] -->|Una visita por sesión| B[RPC record_portfolio_visit]
+  B --> C[(Agregados en Supabase)]
+  C --> D[RPC get_portfolio_metrics]
+  D --> E[Totales y gráfico SVG de 30 días]
+```
+
+`supabase/metrics.sql` contiene el esquema completo, la política RLS y las dos funciones. Ejecuta el archivo completo en SQL Editor. `supabase/verify-metrics.sql` permite revisar permisos y leer como `anon` sin insertar visitas.
+
+- `portfolio_daily_visits`: clave `(day, page, lang)` y contador `visits`; día calculado en el servidor con zona `America/Lima`.
+- RLS activo y `SELECT` permitido a `anon`. Se revocan permisos directos de escritura y no se crean políticas de inserción, actualización o borrado para visitantes.
+- `record_portfolio_visit`: función `SECURITY DEFINER` con `search_path` vacío. Acepta solo las parejas `/`–`es` y `/en/`–`en`, y realiza un incremento atómico. El visitante no puede elegir fecha ni contador. Solo se concede ejecución explícita a `anon`.
+- `get_portfolio_metrics`: `SECURITY INVOKER`, conserva RLS y devuelve totales globales, últimos 30 días (hoy y 29 anteriores) y una serie de 30 días, completada con ceros.
+
+El navegador envía únicamente página e idioma, sin parámetros de URL, identificadores de visitante, cookies, IP ni user-agent en la tabla. No se crean usuarios de Supabase Auth. El filtro básico de bots examina el navegador localmente, sin guardar su user-agent. Como cualquier servicio web, la infraestructura de alojamiento puede procesar IP y registros técnicos; la promesa de anonimato describe los datos que almacena esta aplicación.
+
+El conteo se inicia al abrir la portada en el dominio de producción. Se excluyen bots reconocibles, automatización (`navigator.webdriver`), localhost y los CV, para no contar pruebas ni generación de PDF. Una marca en `sessionStorage` evita contar de nuevo al recargar o cambiar de idioma dentro de la misma sesión de pestaña. Si el almacenamiento está bloqueado, se omite el conteo y sigue funcionando la lectura. No representa personas únicas: otra pestaña o sesión puede contar otra visita. La deduplicación es del navegador; una RPC pública puede recibir llamadas automatizadas directas, por lo que las cifras son orientativas y no ofrecen protección estricta contra abuso.
+
+Las cifras se consultan al acercarse a la sección. Mientras cargan o ante errores se muestra `—` y un estado explícito; nunca se sustituyen errores por ceros. Un cero solo se muestra si lo devuelve la base. El SVG representa la tendencia diaria, con título accesible y totales textuales. Los datos de GitHub y CV siguen siendo HTML estático aunque la consulta de métricas falle.
+
+### Configurar valores públicos
+
+1. Crea un proyecto Free en Supabase con Data API activada. Desactiva la exposición automática de tablas y activa RLS automático.
+2. Ejecuta `supabase/metrics.sql` y después `supabase/verify-metrics.sql` en SQL Editor.
+3. En el inicio del proyecto copia la URL `https://<referencia>.supabase.co` (no la URL del dashboard).
+4. En **API Keys** copia la clave **Publishable** (`sb_publishable_…`). Nunca uses Secret, `service_role` ni la contraseña de base de datos en el sitio.
+5. En GitHub, **Settings → Secrets and variables → Actions → Repository secrets**, crea `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+6. El workflow pasa ambos valores al build y verifica las RPC y los permisos por HTTP, sin generar visitas. Si falla esta comprobación, se bloquea el despliegue. En `main` exige configuración; en PR de forks sin secretos se permite compilar sin métricas.
+
+Aunque estén guardados como GitHub Secrets, estos dos valores están diseñados para ser públicos y se incluyen en la web. La protección de la base depende de los permisos y RLS, no de ocultar la clave Publishable. La aplicación rechaza claves que no tengan el formato Publishable. Usa Node 22 como en Actions.
+
+Para desarrollo local copia `.env.example` a `.env` y completa solo esos dos valores públicos. `.env` está ignorado por Git. Sin configuración, el sitio compila y muestra el estado no disponible. Las visitas locales no incrementan la base.
+
+### Validar la fase 5
+
+```sh
+npm run test:metrics
+python scripts/check-metrics.py
+node scripts/verify-supabase.mjs
+```
+
+La prueba de navegador requiere el build en `dist/`, Playwright para Python y Chromium; intercepta las RPC con datos simulados y no accede a Supabase real. Sus capturas quedan en `.lighthouseci/review-phase5/`. Comprueba cifras, gráfico con ceros, errores, bots, almacenamiento bloqueado, deduplicación al recargar y al cambiar de idioma. Los datos de las pruebas no se publican.
+
+La verificación HTTP real usa variables de entorno; en local, `node` no carga `.env` automáticamente (puedes usar `node --env-file=.env scripts/verify-supabase.mjs`). Verifica lectura, rechazo de escritura directa mediante operaciones vacías o sin filas coincidentes, y rechazo de una ruta inválida. No invoca el incremento con una página válida ni crea visitas de prueba.
+
 ## Próximas fases
 
-Pendientes: métricas anónimas con Supabase y pruebas finales de toda la solución. No hay métricas inventadas.
+Pendientes: revisión final de documentación y pruebas de toda la solución; despliegue cuando esté aprobado el merge a `main`.
 
 ### Dependencias de desarrollo
 

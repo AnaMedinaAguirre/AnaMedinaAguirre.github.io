@@ -593,6 +593,20 @@ a:hover { text-decoration-thickness: 2px; }
 .project-updated { color: var(--muted); font-size: var(--fs-sm); }
 .project-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
+/* Métricas agregadas: el mismo tema y escala que el resto del sitio. */
+.site-metrics { padding-top: 24px; padding-bottom: 48px; }
+.metrics-panel { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); padding: 24px; }
+.metrics-panel h2 { font-size: var(--fs-lg); }
+.metrics-counts { display: flex; flex-wrap: wrap; gap: 24px 48px; margin: 20px 0; }
+.metrics-counts dt, .metrics-note, .metrics-status, .metrics-trend figcaption { color: var(--muted); font-size: var(--fs-sm); }
+.metrics-counts dd { margin: 4px 0 0; font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 700; }
+.metrics-trend { max-width: 500px; margin: 16px 0; }
+.metrics-trend svg { width: 100%; height: auto; display: block; }
+.metrics-axis { stroke: var(--line-strong); }
+.metrics-line { stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; }
+.metrics-status:empty { display: none; }
+.metrics-note { margin-top: 12px; }
+
 /* ---------- Experiencia (línea de tiempo sobre el conector) ---------- */
 .timeline { display: grid; gap: 40px; max-width: 48rem; }
 .job { position: relative; }
