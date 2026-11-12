@@ -47,3 +47,20 @@ test('campos opcionales ausentes y demo insegura', async () => {
   for (const value of ['', 'bad-url', 'javascript:alert(1)', 'https://user:pass@example.com']) assert.equal(safeHomepage(value), null);
   assert.equal(safeHomepage('https://example.com'), 'https://example.com/');
 });
+
+test('reconoce el repositorio del propio sitio y traduce su descripción', async () => {
+  const { localizeProject } = await import('../src/lib/github.mjs');
+  const [site, other] = await loadPersonalProjects('AnaMedinaAguirre', { token: '', fetchImpl: async () => response([
+    repo({ id: 10, name: 'AnaMedinaAguirre.github.io', description: 'Original', homepage: 'https://anamedinaaguirre.github.io' }),
+    repo({ id: 11, name: 'etl-demo', updated_at: '2026-10-01T00:00:00Z' }),
+  ]) });
+  assert.equal(site.isSite, true);
+  const { uniqueTags } = await import('../src/lib/github.mjs');
+  assert.deepEqual(uniqueTags(['Astro', 'astro', 'supabase', '', null, 'Supabase']), ['Astro', 'supabase']);
+  assert.equal(other.isSite, false);
+  const overrides = { 'anamedinaaguirre.github.io': { en: { description: 'Translated' } } };
+  assert.equal(localizeProject(site, 'en', overrides).description, 'Translated');
+  assert.equal(localizeProject(site, 'es', overrides).description, 'Original', 'sin traducción se conserva el original');
+  assert.equal(localizeProject(other, 'en', overrides).description, 'Pipeline');
+  assert.throws(() => localizeProject(site, 'en', { 'AnaMedinaAguirre.github.io': { en: { description: '  ' } } }));
+});

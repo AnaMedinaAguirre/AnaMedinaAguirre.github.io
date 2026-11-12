@@ -100,7 +100,15 @@ Actions proporciona `GITHUB_TOKEN`. La integración de métricas requiere ademá
 
 Durante el build, `src/lib/github.mjs` consulta los repositorios públicos del usuario indicado en `contacto.github.usuario` de los JSON. Recorre todas las páginas de la API (100 repositorios por página), selecciona los que tienen el topic `portfolio` y los ordena por última actualización. ES/EN comparten la consulta durante el mismo build.
 
-Cada tarjeta muestra nombre, descripción, lenguaje principal y topics (sin la etiqueta de selección `portfolio`), fecha, código y demo si `homepage` tiene una URL HTTP/HTTPS válida. Los metadatos de GitHub se conservan en su idioma original; los botones y las fechas se adaptan a ES/EN. Si falta la descripción, aparece `[PENDIENTE]` / `[PENDING]`. Si no hay repositorios seleccionados, se mantiene el estado vacío.
+Cada tarjeta muestra nombre, descripción, lenguaje principal y topics (sin la etiqueta de selección `portfolio`), fecha, código y demo si `homepage` tiene una URL HTTP/HTTPS válida. Los botones y las fechas se adaptan a ES/EN. Si falta la descripción, aparece `[PENDIENTE]` / `[PENDING]`. Si no hay repositorios seleccionados, se mantiene el estado vacío.
+
+La descripción de GitHub está en un solo idioma. Para traducirla, agrega el repositorio en `data/repos.overrides.json`:
+
+```json
+{ "nombre-del-repo": { "es": { "description": "…" }, "en": { "description": "…" } } }
+```
+
+Sin entrada para un idioma se muestra la descripción original. El repositorio de este sitio (`AnaMedinaAguirre.github.io`) se presenta como un proyecto más: en lugar de "Ver demo", que abriría la misma página, su tarjeta lleva a la sección de métricas en vivo (`#metricas`).
 
 Para añadir un proyecto sin modificar la web:
 
