@@ -10,7 +10,7 @@ const m = t.metrics;
 // Barras del skeleton: decorativas; sus alturas están en el CSS.
 const skeletonBars = Array.from({ length: 7 });
 ---
-<section class="site-metrics wrap" aria-labelledby="metrics-title" data-metrics
+<section class="site-metrics wrap" id="metricas" aria-labelledby="metrics-title" data-metrics
   data-state={config ? 'loading' : 'unavailable'}
   data-url={config?.url} data-key={config?.key} data-origin={Astro.site?.origin} data-lang={cv.lang}>
   <script type="application/json" data-metrics-i18n set:html={JSON.stringify(m)} />

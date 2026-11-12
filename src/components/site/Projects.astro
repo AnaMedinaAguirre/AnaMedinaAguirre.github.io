@@ -7,10 +7,11 @@ import Integraciones from '../diagrams/Integraciones.astro';
 import Bpmn from '../diagrams/Bpmn.astro';
 import type { CV } from '../../lib/cv';
 import type { UI } from '../../i18n/ui';
-import { getPersonalProjects } from '../../lib/github.mjs';
+import { getPersonalProjects, localizeProject } from '../../lib/github.mjs';
+import repoOverrides from '../../../data/repos.overrides.json';
 interface Props { cv: CV; t: UI }
 const { cv, t } = Astro.props;
-const personal = await getPersonalProjects(cv.contacto.github.usuario);
+const personal = (await getPersonalProjects(cv.contacto.github.usuario)).map((p) => localizeProject(p, cv.lang, repoOverrides));
 const dateFormatter = new Intl.DateTimeFormat(cv.lang === 'es' ? 'es-PE' : 'en-US', { dateStyle: 'medium', timeZone: 'UTC' });
 const diagrams = { multisede: Multisede, dashboards: Dashboards, sunat: Sunat, integraciones: Integraciones, bpmn: Bpmn };
 ---
@@ -57,7 +58,9 @@ const diagrams = { multisede: Multisede, dashboards: Dashboards, sunat: Sunat, i
             <p class="project-updated">{t.projectUpdated}: <time datetime={p.updatedAt}>{dateFormatter.format(new Date(p.updatedAt))}</time></p>
             <div class="project-actions">
               <a class="btn btn-ghost btn-sm" href={p.codeUrl} target="_blank" rel="noopener noreferrer">{t.projectCode}<span class="sr-only"> {p.name} {t.newTab}</span></a>
-              {p.demoUrl && <a class="btn btn-ghost btn-sm" href={p.demoUrl} target="_blank" rel="noopener noreferrer">{t.projectDemo}<span class="sr-only"> {p.name} {t.newTab}</span></a>}
+              {p.isSite
+                ? <a class="btn btn-ghost btn-sm" href="#metricas"><Icon name="powerbi" />{t.projectMetrics}</a>
+                : p.demoUrl && <a class="btn btn-ghost btn-sm" href={p.demoUrl} target="_blank" rel="noopener noreferrer">{t.projectDemo}<span class="sr-only"> {p.name} {t.newTab}</span></a>}
             </div>
           </div>
         </article>

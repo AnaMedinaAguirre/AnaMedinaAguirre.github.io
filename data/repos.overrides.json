@@ -1,0 +1,10 @@
+{
+  "AnaMedinaAguirre.github.io": {
+    "es": {
+      "description": "Este portafolio como producto de datos: contenido desde una sola fuente JSON, CI/CD con controles de calidad, CV en PDF generado automáticamente y métricas anónimas con Supabase."
+    },
+    "en": {
+      "description": "This portfolio as a data product: content from a single JSON source, CI/CD with quality checks, an automatically generated PDF résumé and anonymous metrics with Supabase."
+    }
+  }
+}
