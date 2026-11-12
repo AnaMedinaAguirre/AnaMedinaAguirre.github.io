@@ -24,6 +24,8 @@ npm run dev
 
 Requiere Node.js 22 (22.12 o posterior). En PowerShell puedes usar `npm.cmd` y `npx.cmd` si la política de scripts bloquea los comandos habituales.
 
+En la validación de la fase 4, Node 24.18 en Windows abortó al cerrar Astro después de una consulta de red (`UV_HANDLE_CLOSING`). Con Node 22 el build terminó correctamente; utiliza esa versión, igual que en Actions.
+
 ## Generar web y CV
 
 Edita los JSON de `data/`. El build valida su esquema y paridad estructural por idioma; Astro genera el contenido como HTML estático. Playwright imprime las páginas del CV para producir ambos PDF.
@@ -77,9 +79,33 @@ La prueba visual `python scripts/check-bilingual.py` requiere Playwright para Py
 
 No hacen falta secretos propios en esta fase: Actions proporciona `GITHUB_TOKEN`. El badge refleja `main` y puede no tener resultados hasta que el workflow exista en esa rama.
 
+## Proyectos personales desde GitHub
+
+Durante el build, `src/lib/github.mjs` consulta los repositorios públicos del usuario indicado en `contacto.github.usuario` de los JSON. Recorre todas las páginas de la API (100 repositorios por página), selecciona los que tienen el topic `portfolio` y los ordena por última actualización. ES/EN comparten la consulta durante el mismo build.
+
+Cada tarjeta muestra nombre, descripción, lenguaje principal y topics (sin la etiqueta de selección `portfolio`), fecha, código y demo si `homepage` tiene una URL HTTP/HTTPS válida. Los metadatos de GitHub se conservan en su idioma original; los botones y las fechas se adaptan a ES/EN. Si falta la descripción, aparece `[PENDIENTE]` / `[PENDING]`. Si no hay repositorios seleccionados, se mantiene el estado vacío.
+
+Para añadir un proyecto sin modificar la web:
+
+1. Publica un repositorio en tu cuenta de GitHub.
+2. En la página del repo, abre el engranaje junto a **About**.
+3. Completa **Description**, **Website** (opcional, para la demo) y **Topics**.
+4. Incluye el topic `portfolio` y las etiquetas técnicas que quieras mostrar; guarda los cambios.
+5. La siguiente compilación lo incluirá. Para quitarlo del portafolio, retira el topic `portfolio`.
+
+El workflow ejecuta el proceso completo todos los días a las **11:17 UTC (06:17 de Lima)**. El cron se activará cuando este workflow llegue a `main`, que debe ser la rama predeterminada; en `v2` se verifica mediante push. Los horarios de Actions pueden retrasarse. En repositorios públicos, GitHub puede desactivar las ejecuciones programadas tras 60 días sin actividad.
+
+En Actions se pasa `GITHUB_TOKEN` únicamente al paso de build; nunca se incluye en HTML ni JavaScript del navegador. En local la consulta funciona sin token, con los límites de la API pública; puedes definir `GITHUB_TOKEN` en tu entorno si necesitas más cuota. No guardes claves en archivos versionados.
+
+Un error HTTP, timeout o respuesta inválida hace fallar el build y bloquea el despliegue: no se presenta como si la cuenta estuviera vacía. El sitio ya publicado permanece disponible. Para probar selección, paginación y fallos sin consumir la API:
+
+```sh
+npm run test:github
+```
+
 ## Próximas fases
 
-Pendientes: repositorios desde la API de GitHub, build diario y métricas anónimas con Supabase. Los proyectos personales muestran un estado vacío y no hay métricas inventadas.
+Pendientes: métricas anónimas con Supabase y pruebas finales de toda la solución. No hay métricas inventadas.
 
 ### Dependencias de desarrollo
 
