@@ -36,7 +36,7 @@ with sync_playwright() as p:
                 assert page.locator('link[hreflang="es"]').count() == 1
                 assert page.locator('link[hreflang="en"]').count() == 1
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Desbordamiento horizontal'
-                assert page.locator('.project').count() == 5
+                assert page.locator('.project:not(.personal-project)').count() == 5
                 page.screenshot(path=str(OUT / f'{lang}-{theme}-{width}.png'), full_page=True)
                 page.locator('.theme-toggle').click()
                 assert page.locator('html').get_attribute('data-theme') != theme
