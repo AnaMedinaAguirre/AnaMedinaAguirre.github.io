@@ -64,7 +64,14 @@ as $$
   select jsonb_build_object(
     'total', (select coalesce(sum(visits), 0) from public.portfolio_daily_visits),
     'last30', (select coalesce(sum(visits), 0) from daily),
-    'series', (select jsonb_agg(jsonb_build_object('day', day, 'visits', visits) order by day) from daily)
+    'series', (select jsonb_agg(jsonb_build_object('day', day, 'visits', visits) order by day) from daily),
+    -- Primer día con visitas (null si todavía no hay ninguna): inicio del eje del gráfico.
+    'first_day', (select min(day) from public.portfolio_daily_visits where visits > 0),
+    -- Totales históricos por idioma, para el KPI de reparto ES/EN.
+    'by_lang', jsonb_build_object(
+      'es', (select coalesce(sum(visits), 0) from public.portfolio_daily_visits where lang = 'es'),
+      'en', (select coalesce(sum(visits), 0) from public.portfolio_daily_visits where lang = 'en')
+    )
   );
 $$;
 

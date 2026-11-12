@@ -1,4 +1,5 @@
 ---
+import Icon from '../Icon.astro';
 import type { CV } from '../../lib/cv';
 import type { UI } from '../../i18n/ui';
 import { metricsConfig } from '../../lib/metrics.mjs';
@@ -6,25 +7,62 @@ interface Props { cv: CV; t: UI }
 const { cv, t } = Astro.props;
 const config = metricsConfig(import.meta.env.PUBLIC_SUPABASE_URL, import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 const m = t.metrics;
+// Barras del skeleton: decorativas; sus alturas están en el CSS.
+const skeletonBars = Array.from({ length: 7 });
 ---
 <section class="site-metrics wrap" aria-labelledby="metrics-title" data-metrics
+  data-state={config ? 'loading' : 'unavailable'}
   data-url={config?.url} data-key={config?.key} data-origin={Astro.site?.origin} data-lang={cv.lang}>
+  <script type="application/json" data-metrics-i18n set:html={JSON.stringify(m)} />
   <div class="metrics-panel">
-    <h2 id="metrics-title">{m.title}</h2>
-    <dl class="metrics-counts">
-      <div><dt>{m.total}</dt><dd data-total>—</dd></div>
-      <div><dt>{m.last30}</dt><dd data-last30>—</dd></div>
-    </dl>
-    <figure class="metrics-trend" hidden>
-      <svg viewBox="0 0 300 80" role="img" aria-label={m.trend}>
-        <line x1="8" y1="72" x2="292" y2="72" class="metrics-axis" />
-        <polyline data-trend points="" fill="none" class="metrics-line" />
-      </svg>
-      <figcaption>{m.trend}</figcaption>
-    </figure>
-    <p class="metrics-status" role="status" data-status data-unavailable={m.unavailable}>{config ? m.loading : m.unavailable}</p>
-    <p class="metrics-note">{m.privacy}</p>
-    <noscript><p>{m.noScript}</p></noscript>
+    <header class="metrics-head">
+      <h2 id="metrics-title">{m.title}</h2>
+      <p class="metrics-since" data-since hidden></p>
+    </header>
+
+    <div class="metrics-body" data-body aria-busy="true">
+      <dl class="metrics-kpis">
+        <div class="kpi"><dt>{m.total}</dt><dd data-total><span class="skel skel-num" aria-hidden="true"></span></dd></div>
+        <div class="kpi"><dt>{m.last30}</dt><dd data-last30><span class="skel skel-num" aria-hidden="true"></span></dd></div>
+        <div class="kpi kpi-lang"><dt>{m.byLang}</dt><dd data-lang-share><span class="skel skel-line" aria-hidden="true"></span></dd></div>
+      </dl>
+
+      <figure class="mchart" data-chart-figure>
+        <figcaption class="mchart-caption">{m.chartLabel}</figcaption>
+        <div class="mchart-area">
+          <div class="mchart-plot" data-chart>
+            <div class="mchart-cols skel-bars" aria-hidden="true">
+              {skeletonBars.map(() => <div class="mchart-col"><span class="mchart-bar skel"></span></div>)}
+            </div>
+          </div>
+          <div class="mchart-tip" role="tooltip" data-tip hidden><strong data-tip-value></strong><span data-tip-day></span></div>
+        </div>
+        <div class="mchart-axis" data-axis aria-hidden="true"></div>
+        <p class="mchart-empty" data-no-data hidden>{m.noData}</p>
+        <p class="sr-only" aria-live="polite" data-live></p>
+      </figure>
+
+      <details class="metrics-table" data-table hidden>
+        <summary>{m.tableToggle}</summary>
+        <table>
+          <thead><tr><th scope="col">{m.tableDay}</th><th scope="col">{m.tableVisits}</th></tr></thead>
+          <tbody data-table-body></tbody>
+        </table>
+      </details>
+    </div>
+
+    <div class="metrics-state" data-error hidden>
+      <Icon name="server" class="ic ic-lg" />
+      <div>
+        <p class="metrics-state-title" data-error-title>{m.error}</p>
+        <p class="metrics-state-hint" data-error-hint>{m.errorHint}</p>
+        <button type="button" class="btn btn-ghost btn-sm" data-retry>{m.retry}</button>
+      </div>
+    </div>
+
+    <p class="sr-only" role="status" data-status>{config ? m.loading : ''}</p>
+    <p class="metrics-note"><span>{m.privacy}</span></p>
+    <noscript><p class="metrics-noscript">{m.noScript}</p></noscript>
   </div>
 </section>
 <script>

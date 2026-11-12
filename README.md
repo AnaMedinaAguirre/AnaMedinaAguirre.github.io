@@ -37,9 +37,11 @@ npx playwright install chromium
 npm run dev
 ```
 
-Requiere Node.js 22 (22.12 o posterior). En PowerShell puedes usar `npm.cmd` y `npx.cmd` si la política de scripts bloquea los comandos habituales.
+Requiere **Node.js 22** (22.12 o posterior), la misma versión que usa Actions. El archivo `.nvmrc` la declara: con [nvm-windows](https://github.com/nvm-windows/nvm) en modo Shim y la detección automática activada, el proyecto usa Node 22 sin cambiar la versión del resto del equipo. Para instalarla: `nvm install 22` y `nvm use 22.x.x` (la versión exacta que muestre `nvm list`).
 
-En la validación de la fase 4, Node 24.18 en Windows abortó al cerrar Astro después de una consulta de red (`UV_HANDLE_CLOSING`). Con Node 22 el build terminó correctamente; utiliza esa versión, igual que en Actions.
+Con nvm-windows en modo Shim, `npm` y `npx` son ejecutables (`npm.exe`, `npx.exe`): úsalos directamente en PowerShell, sin `.cmd`, y la política de scripts no los bloquea.
+
+Con Node 24.18 en Windows, Astro abortaba al cerrar el build después de una consulta de red (`UV_HANDLE_CLOSING`); con Node 22 termina correctamente.
 
 ## Generar web y CV
 
@@ -125,7 +127,7 @@ flowchart LR
   A[Navegador en producción] -->|Una visita por sesión| B[RPC record_portfolio_visit]
   B --> C[(Agregados en Supabase)]
   C --> D[RPC get_portfolio_metrics]
-  D --> E[Totales y gráfico SVG de 30 días]
+  D --> E[KPIs, reparto ES/EN y barras por día]
 ```
 
 `supabase/metrics.sql` contiene el esquema completo, la política RLS y las dos funciones. Ejecuta el archivo completo en SQL Editor. `supabase/verify-metrics.sql` permite revisar permisos y leer como `anon` sin insertar visitas.
@@ -133,18 +135,31 @@ flowchart LR
 - `portfolio_daily_visits`: clave `(day, page, lang)` y contador `visits`; día calculado en el servidor con zona `America/Lima`.
 - RLS activo y `SELECT` permitido a `anon`. Se revocan permisos directos de escritura y no se crean políticas de inserción, actualización o borrado para visitantes.
 - `record_portfolio_visit`: función `SECURITY DEFINER` con `search_path` vacío. Acepta solo las parejas `/`–`es` y `/en/`–`en`, y realiza un incremento atómico. El visitante no puede elegir fecha ni contador. Solo se concede ejecución explícita a `anon`.
-- `get_portfolio_metrics`: `SECURITY INVOKER`, conserva RLS y devuelve totales globales, últimos 30 días (hoy y 29 anteriores) y una serie de 30 días, completada con ceros.
+- `get_portfolio_metrics`: `SECURITY INVOKER`, conserva RLS y devuelve totales globales, últimos 30 días (hoy y 29 anteriores), una serie de 30 días completada con ceros, `first_day` (primer día con visitas, o `null`) y `by_lang` (totales históricos `{ es, en }`).
+
+> **Actualización del 12/11/2026.** Si tu base se creó antes de esa fecha, ejecuta una vez `supabase/2026-11-12-metricas-por-idioma.sql` en SQL Editor: agrega `first_day` y `by_lang` sin tocar la tabla ni los permisos. Hasta entonces el sitio sigue funcionando: el gráfico arranca en el primer día con visitas de la serie y el KPI de idioma indica que está pendiente de la actualización.
 
 El navegador envía únicamente página e idioma, sin parámetros de URL, identificadores de visitante, cookies, IP ni user-agent en la tabla. No se crean usuarios de Supabase Auth. El filtro básico de bots examina el navegador localmente, sin guardar su user-agent. Como cualquier servicio web, la infraestructura de alojamiento puede procesar IP y registros técnicos; la promesa de anonimato describe los datos que almacena esta aplicación.
 
 El conteo se inicia al abrir la portada en el dominio de producción. Se excluyen bots reconocibles, automatización (`navigator.webdriver`), localhost y los CV, para no contar pruebas ni generación de PDF. Una marca en `sessionStorage` evita contar de nuevo al recargar o cambiar de idioma dentro de la misma sesión de pestaña. Si el almacenamiento está bloqueado, se omite el conteo y sigue funcionando la lectura. No representa personas únicas: otra pestaña o sesión puede contar otra visita. La deduplicación es del navegador; una RPC pública puede recibir llamadas automatizadas directas, por lo que las cifras son orientativas y no ofrecen protección estricta contra abuso.
 
-Las cifras se consultan al acercarse a la sección. Mientras cargan o ante errores se muestra `—` y un estado explícito; nunca se sustituyen errores por ceros. Un cero solo se muestra si lo devuelve la base. El SVG representa la tendencia diaria, con título accesible y totales textuales. Los datos de GitHub y CV siguen siendo HTML estático aunque la consulta de métricas falle.
+Las cifras se consultan al acercarse a la sección. Mientras cargan se muestra un esqueleto (sin animación si el sistema pide reducir el movimiento); ante un error, un estado explícito con **Reintentar**. Nunca se sustituyen errores por ceros: un cero solo se muestra si lo devuelve la base.
+
+La tarjeta muestra tres KPIs (visitas totales, últimos 30 días y reparto ES/EN) y un gráfico de barras por día:
+
+- El eje empieza en la primera visita ("Recolectando datos desde el …") y cubre como máximo los últimos 30 días.
+- Las fechas son legibles ("12 nov" / "Nov 12") y nunca se solapan: con muchos días se muestran espaciadas.
+- El valor aparece sobre las barras con visitas mientras sean pocas (hasta 12); con más, solo sobre el máximo y el último día, para no saturar el gráfico.
+- Cada barra tiene tooltip con el puntero y con el teclado (el gráfico recibe foco; ← → Inicio Fin para moverse y Escape para cerrar), anunciado a lectores de pantalla.
+- **Ver los datos en una tabla** ofrece los mismos valores sin depender del gráfico.
+- Los colores de las barras y del reparto ES/EN (`--chart-1`, `--chart-2`) se validaron para cada tema: banda de luminosidad, croma, separación para daltonismo y contraste.
+
+Los datos de GitHub y del CV siguen siendo HTML estático aunque la consulta de métricas falle.
 
 ### Configurar valores públicos
 
 1. Crea un proyecto Free en Supabase con Data API activada. Desactiva la exposición automática de tablas y activa RLS automático.
-2. Ejecuta `supabase/metrics.sql` y después `supabase/verify-metrics.sql` en SQL Editor.
+2. Ejecuta `supabase/metrics.sql` y después `supabase/verify-metrics.sql` en SQL Editor. (`metrics.sql` ya incluye la actualización del 12/11/2026; no hace falta el archivo de migración en una base nueva.)
 3. En el inicio del proyecto copia la URL `https://<referencia>.supabase.co` (no la URL del dashboard).
 4. En **API Keys** copia la clave **Publishable** (`sb_publishable_…`). Nunca uses Secret, `service_role` ni la contraseña de base de datos en el sitio.
 5. En GitHub, **Settings → Secrets and variables → Actions → Repository secrets**, crea `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
@@ -162,7 +177,7 @@ python scripts/check-metrics.py
 node scripts/verify-supabase.mjs
 ```
 
-La prueba de navegador requiere el build en `dist/`, Playwright para Python y Chromium; intercepta las RPC con datos simulados y no accede a Supabase real. Sus capturas quedan en `.lighthouseci/review-phase5/`. Comprueba cifras, gráfico con ceros, errores, bots, almacenamiento bloqueado, deduplicación al recargar y al cambiar de idioma. Los datos de las pruebas no se publican.
+La prueba de navegador requiere el build en `dist/`, Playwright para Python y Chromium; intercepta las RPC con datos simulados y no accede a Supabase real. Sus capturas quedan en `.lighthouseci/review-phase5/`. Comprueba cifras, barras, tabla, estado sin visitas, error con reintento, bots, almacenamiento bloqueado, deduplicación al recargar y al cambiar de idioma. Los datos de las pruebas no se publican.
 
 La verificación HTTP real usa variables de entorno; en local, `node` no carga `.env` automáticamente (puedes usar `node --env-file=.env scripts/verify-supabase.mjs`). Verifica lectura, rechazo de escritura directa mediante operaciones vacías o sin filas coincidentes, y rechazo de una ruta inválida. No invoca el incremento con una página válida ni crea visitas de prueba.
 
