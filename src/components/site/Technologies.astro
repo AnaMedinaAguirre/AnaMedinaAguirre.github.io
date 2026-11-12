@@ -1,0 +1,32 @@
+---
+import Icon from '../Icon.astro';
+import type { CV } from '../../lib/cv';
+import type { UI } from '../../i18n/ui';
+interface Props { cv: CV; t: UI }
+const { cv, t } = Astro.props;
+---
+<section class="step" id="tecnologias" aria-labelledby="tec-title">
+  <header class="step-head reveal">
+    <h2 id="tec-title">{t.technologies}</h2>
+    <p class="lede">{t.technologiesLede}</p>
+  </header>
+
+  <div class="filters reveal" role="group" aria-label={t.filterLabel}>
+    <button type="button" class="filter" data-filter="todas" aria-pressed="true">{t.filterAll}</button>
+    {cv.tecnologias.map((g) => (
+      <button type="button" class="filter" data-filter={g.id} aria-pressed="false">{g.nombre}</button>
+    ))}
+  </div>
+  <p class="sr-only" aria-live="polite" id="filter-status"></p>
+
+  <div class="tech-grid">
+    {cv.tecnologias.map((g) => (
+      <div class="tech-group reveal" data-group={g.id}>
+        <h3>{g.nombre}</h3>
+        <ul class="chips">
+          {g.items.map((it) => <li><Icon name={it.icono} />{it.nombre}</li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>

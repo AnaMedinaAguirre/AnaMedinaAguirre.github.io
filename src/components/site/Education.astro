@@ -1,0 +1,48 @@
+---
+import Icon from '../Icon.astro';
+import { formatMonth, type CV } from '../../lib/cv';
+import type { UI } from '../../i18n/ui';
+interface Props { cv: CV; t: UI }
+const { cv, t } = Astro.props;
+---
+<section class="step" id="educacion" aria-labelledby="edu-title">
+  <header class="step-head reveal">
+    <h2 id="edu-title">{t.education}</h2>
+  </header>
+  <div class="edu">
+    {cv.educacion.map((e, i) => (
+      <article class="edu-main reveal" aria-labelledby={`edu-degree-${i}`}>
+        <Icon name="grad" class="ic ic-lg" />
+        <h3 id={`edu-degree-${i}`}>{e.titulo}</h3>
+        <p class="edu-org">{e.institucion}</p>
+        <p class="edu-date">
+          <time datetime={e.inicio}>{formatMonth(e.inicio, cv.lang)}</time> –{' '}
+          <time datetime={e.fin}>{formatMonth(e.fin, cv.lang)}</time>{e.nota && ` (${e.nota})`}
+        </p>
+        <ul class="merits">
+          {e.meritos.map((m) => (
+            <li>
+              <Icon name="award" />
+              <div><strong>{m.titulo}</strong><span>{m.detalle}</span></div>
+            </li>
+          ))}
+        </ul>
+      </article>
+    ))}
+    <div class="edu-extra reveal">
+      <h3>{t.courses}</h3>
+      <ul class="courses">
+        {cv.formacion.map((f) => (
+          <li class="course">
+            <span class:list={['course-badge', { 'course-badge--progress': f.estado === 'en_curso' }]} aria-hidden="true">
+              <svg class="course-badge-frame"><use href="#i-badge" /></svg>
+              <Icon name={f.icono} />
+            </span>
+            <div><strong>{f.nombre}</strong><span>{f.emisor}</span></div>
+            <span class="badge-progress">{f.estado === 'en_curso' ? t.inProgress : t.completed}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

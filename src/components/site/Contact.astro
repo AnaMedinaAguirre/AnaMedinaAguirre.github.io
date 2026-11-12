@@ -1,0 +1,41 @@
+---
+import Icon from '../Icon.astro';
+import { cvPdfPath, type UI } from '../../i18n/ui';
+import type { CV } from '../../lib/cv';
+interface Props { cv: CV; t: UI }
+const { cv, t } = Astro.props;
+const c = cv.contacto;
+---
+<section class="step step--end" id="contacto" aria-labelledby="contacto-title">
+  <header class="step-head reveal">
+    <h2 id="contacto-title">{c.cierre}</h2>
+  </header>
+
+  <ul class="contact-list reveal">
+    <li>
+      <Icon name="mail" />
+      <div class="contact-info"><span class="contact-label">{t.email}</span><a href={`mailto:${c.email}`}>{c.email}</a></div>
+      <button type="button" class="btn btn-ghost btn-sm copy-btn" data-copy={c.email}>
+        <Icon name="copy" /><span>{t.copyEmail}</span>
+      </button>
+    </li>
+    <li>
+      <Icon name="whatsapp" />
+      <div class="contact-info"><span class="contact-label">WhatsApp</span><a href={c.whatsapp} target="_blank" rel="noopener">{c.telefonoVisible}<span class="sr-only"> {t.newTab}</span></a></div>
+    </li>
+    <li>
+      <Icon name="linkedin" />
+      <div class="contact-info"><span class="contact-label">LinkedIn</span><a href={c.linkedin.url} target="_blank" rel="noopener">{c.linkedin.usuario}<span class="sr-only"> {t.newTab}</span></a></div>
+    </li>
+    <li>
+      <Icon name="github" />
+      <div class="contact-info"><span class="contact-label">GitHub</span><a href={c.github.url} target="_blank" rel="noopener">{c.github.usuario}<span class="sr-only"> {t.newTab}</span></a></div>
+    </li>
+  </ul>
+  <div class="contact-cta reveal">
+    <a class="btn btn-primary" href={cvPdfPath(cv.lang)} download>
+      <Icon name="download" />{t.downloadCvPdf}
+    </a>
+  </div>
+  <p class="sr-only" aria-live="polite" id="copy-status"></p>
+</section>

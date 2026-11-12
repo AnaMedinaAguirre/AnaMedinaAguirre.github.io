@@ -1,0 +1,25 @@
+---
+import type { CV } from '../../lib/cv';
+import type { UI } from '../../i18n/ui';
+interface Props { cv: CV; t: UI }
+const { cv, t } = Astro.props;
+---
+<section class="step" id="sobre-mi" aria-labelledby="sobre-title">
+  <header class="step-head reveal">
+    <h2 id="sobre-title">{t.about}</h2>
+  </header>
+  <div class="about">
+    <figure class="about-photo reveal">
+      <picture>
+        <source srcset="/assets/foto-ana.webp" type="image/webp">
+        <img src="/assets/foto-ana.jpg" width="640" height="640" loading="lazy" decoding="async" alt={cv.persona.foto.alt}>
+      </picture>
+    </figure>
+    <div class="about-text reveal">
+      {cv.perfil.map((p) => <p>{p}</p>)}
+    </div>
+    <dl class="facts reveal">
+      {cv.ficha.map((f) => <div><dt>{f.etiqueta}</dt><dd>{f.valor}</dd></div>)}
+    </dl>
+  </div>
+</section>

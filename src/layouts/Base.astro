@@ -1,0 +1,79 @@
+---
+import IconSprite from '../components/IconSprite.astro';
+import type { CV } from '../lib/cv';
+
+interface Props {
+  cv: CV;
+  title: string;
+  description: string;
+  /** Ruta canónica de la página, p. ej. "/" o "/cv/" */
+  path: string;
+  /** JSON-LD opcional */
+  jsonLd?: object;
+  bodyClass?: string;
+  /** Hojas de estilo de la página (por defecto, las del portafolio) */
+  styles?: string[];
+  /** Incluir el sprite de íconos (el CV no lo usa) */
+  sprite?: boolean;
+}
+
+const { cv, title, description, path, jsonLd, bodyClass, styles = ['/css/styles.css'], sprite = true } = Astro.props;
+const site = Astro.site!;
+const canonical = new URL(path, site).href;
+const ogImage = new URL('/assets/og-image.png', site).href;
+const ogLocale = cv.lang === 'es' ? 'es_PE' : 'en_US';
+---
+<!doctype html>
+<html lang={cv.lang} data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <meta name="author" content={cv.persona.nombre}>
+  <link rel="canonical" href={canonical}>
+
+  <!-- Open Graph / redes sociales -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content={ogLocale}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={cv.meta.ogDescription}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={ogImage}>
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content={cv.meta.ogImageAlt}>
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#0F1A2B" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#F5F7FA" media="(prefers-color-scheme: light)">
+
+  <!-- Tema antes de pintar: elección guardada o, si no hay, la preferencia del sistema -->
+  <script is:inline>
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') {
+        t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.classList.add('js');
+    })();
+  </script>
+
+  <!-- Fuentes servidas desde el propio sitio -->
+  <link rel="preload" href="/fonts/archivo-normal-400-800-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/atkinson-hyperlegible-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  {styles.map((href) => <link rel="stylesheet" href={href}>)}
+  <slot name="head" />
+
+  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+</head>
+<body class={bodyClass}>
+  {sprite && <IconSprite />}
+  <slot />
+</body>
+</html>

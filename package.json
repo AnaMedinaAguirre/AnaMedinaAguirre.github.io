@@ -1,0 +1,16 @@
+{
+  "name": "portafolio-ana-medina",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "pdf": "node scripts/generate-pdfs.mjs",
+    "build:all": "astro build && node scripts/generate-pdfs.mjs"
+  },
+  "devDependencies": {
+    "astro": "^5.18.2",
+    "playwright": "^1.65.0"
+  }
+}
