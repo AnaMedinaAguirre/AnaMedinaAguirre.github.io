@@ -62,10 +62,10 @@ try {
   const page = await browser.newPage();
   for (const t of TARGETS) {
     if (!existsSync(join(DIST, t.route, 'index.html'))) {
-      console.log(`- ${t.route} no existe todavía; se omite ${t.out}`);
-      continue;
+      throw new Error(`Falta la página obligatoria ${t.route}; no se puede generar ${t.out}`);
     }
-    await page.goto(`http://127.0.0.1:${PORT}${t.route}`, { waitUntil: 'networkidle' });
+    const response = await page.goto(`http://127.0.0.1:${PORT}${t.route}`, { waitUntil: 'networkidle' });
+    if (!response?.ok()) throw new Error(`No se pudo cargar ${t.route}`);
     await page.evaluate(() => document.fonts.ready);
     await page.emulateMedia({ media: 'print' });
     const out = join(DIST, t.out);
