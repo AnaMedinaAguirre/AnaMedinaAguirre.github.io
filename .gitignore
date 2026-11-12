@@ -3,5 +3,16 @@
 .claude/
 skills-lock.json
 
-# Foto original sin recortar (el sitio usa assets/foto-ana.webp / .jpg)
+# Foto original sin recortar (el sitio usa public/assets/foto-ana.webp / .jpg)
 assets/yo.jpeg
+
+# Build y dependencias
+node_modules/
+dist/
+.astro/
+.lighthouseci/
+.lycheecache
+lychee/out.md
+.env
+.env.*
+!.env.example

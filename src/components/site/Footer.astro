@@ -1,0 +1,17 @@
+---
+import Icon from '../Icon.astro';
+import type { CV } from '../../lib/cv';
+import type { UI } from '../../i18n/ui';
+interface Props { cv: CV; t: UI }
+const { cv, t } = Astro.props;
+---
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>© {new Date().getFullYear()} {cv.persona.nombre}</p>
+    <p>{cv.persona.ubicacion}</p>
+  </div>
+</footer>
+
+<button type="button" class="back-to-top" aria-label={t.backToTop} hidden>
+  <Icon name="arrow-up" />
+</button>

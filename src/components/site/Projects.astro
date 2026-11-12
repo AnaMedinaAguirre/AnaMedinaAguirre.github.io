@@ -1,0 +1,73 @@
+---
+import Icon from '../Icon.astro';
+import Multisede from '../diagrams/Multisede.astro';
+import Dashboards from '../diagrams/Dashboards.astro';
+import Sunat from '../diagrams/Sunat.astro';
+import Integraciones from '../diagrams/Integraciones.astro';
+import Bpmn from '../diagrams/Bpmn.astro';
+import type { CV } from '../../lib/cv';
+import type { UI } from '../../i18n/ui';
+import { getPersonalProjects } from '../../lib/github.mjs';
+interface Props { cv: CV; t: UI }
+const { cv, t } = Astro.props;
+const personal = await getPersonalProjects(cv.contacto.github.usuario);
+const dateFormatter = new Intl.DateTimeFormat(cv.lang === 'es' ? 'es-PE' : 'en-US', { dateStyle: 'medium', timeZone: 'UTC' });
+const diagrams = { multisede: Multisede, dashboards: Dashboards, sunat: Sunat, integraciones: Integraciones, bpmn: Bpmn };
+---
+<section class="step" id="proyectos" aria-labelledby="proyectos-title">
+  <header class="step-head reveal">
+    <h2 id="proyectos-title">{t.projects}</h2>
+    <p class="lede">{t.projectsLede}</p>
+  </header>
+
+  <h3 class="projects-group-title reveal" id="proyectos-profesionales">{t.projectsPro}</h3>
+  <div class="projects">
+    {cv.proyectosProfesionales.map((p) => {
+      const Diagram = diagrams[p.diagrama];
+      const hid = `pj-${p.id}`;
+      return (
+        <article class:list={['project', 'reveal', { 'project--featured': p.destacado }]} aria-labelledby={hid}>
+          <Diagram lang={cv.lang} />
+          <div class="project-body">
+            <p class="project-client">
+              <span class="client-badge"><Icon name="lock" />{t.clientBadge}</span>
+              <span class="client-name">{p.cliente}</span>
+            </p>
+            <h4 class="project-title" id={hid}>{p.titulo}</h4>
+            <p>{p.descripcion}</p>
+            <ul class="tags" aria-label={t.techUsed}>
+              {p.tecnologias.map((x) => <li>{x}</li>)}
+            </ul>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+
+  <h3 class="projects-group-title reveal" id="proyectos-personales">{t.projectsPersonal}</h3>
+  {personal.length > 0 ? (
+    <div class="projects personal-projects">
+      {personal.map((p) => (
+        <article class="project personal-project reveal" aria-labelledby={`repo-${p.id}`}>
+          <div class="project-body">
+            <Icon name="github" class="ic ic-lg" />
+            <h4 class="project-title" id={`repo-${p.id}`}>{p.name}</h4>
+            <p>{p.description || t.projectDescriptionPending}</p>
+            {p.technologies.length > 0 && <ul class="tags" aria-label={t.techUsed}>{p.technologies.map((tech) => <li>{tech}</li>)}</ul>}
+            <p class="project-updated">{t.projectUpdated}: <time datetime={p.updatedAt}>{dateFormatter.format(new Date(p.updatedAt))}</time></p>
+            <div class="project-actions">
+              <a class="btn btn-ghost btn-sm" href={p.codeUrl} target="_blank" rel="noopener noreferrer">{t.projectCode}<span class="sr-only"> {p.name} {t.newTab}</span></a>
+              {p.demoUrl && <a class="btn btn-ghost btn-sm" href={p.demoUrl} target="_blank" rel="noopener noreferrer">{t.projectDemo}<span class="sr-only"> {p.name} {t.newTab}</span></a>}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  ) : <div class="projects-empty reveal">
+    <Icon name="github" class="ic ic-lg" />
+    <div>
+      <p class="projects-empty-title">{t.projectsPersonalEmpty}</p>
+      <p class="projects-empty-hint">{t.projectsPersonalEmptyHint}</p>
+    </div>
+  </div>}
+</section>

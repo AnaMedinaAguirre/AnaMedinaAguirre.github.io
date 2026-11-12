@@ -1,0 +1,39 @@
+---
+// Ilustración propia; no muestra datos del cliente.
+import { diagramText } from '../../i18n/diagrams';
+import type { Lang } from '../../lib/cv';
+interface Props { lang?: Lang }
+const d = diagramText(Astro.props.lang ?? 'es');
+---
+<figure class="project-art">
+            <svg class="diagram" viewBox="0 0 320 180" role="img" aria-labelledby="pj4-d-title">
+              <title id="pj4-d-title">{d.integTitle}</title>
+              <g class="d-links">
+                <path d="M160 90 72 40M160 90 248 40M160 90 72 140M160 90 248 140" />
+              </g>
+              <g class="d-node">
+                <rect x="16" y="24" width="108" height="32" rx="16" />
+                <use href="#i-modules" x="28" y="31" width="18" height="18" class="d-icon" /><text
+                  class="d-sub d-sub--sm d-strong" x="52" y="44">Odoo 17</text>
+              </g>
+              <g class="d-node">
+                <rect x="184" y="24" width="128" height="32" rx="16" />
+                <use href="#i-cart" x="196" y="31" width="18" height="18" class="d-icon" /><text
+                  class="d-sub d-sub--sm d-strong" x="220" y="44">WooCommerce</text>
+              </g>
+              <g class="d-node">
+                <rect x="16" y="124" width="108" height="32" rx="16" />
+                <use href="#i-fingerprint" x="28" y="131" width="18" height="18" class="d-icon" /><text
+                  class="d-sub d-sub--sm d-strong" x="52" y="144">BioTime</text>
+              </g>
+              <g class="d-node d-node--event">
+                <rect x="184" y="124" width="128" height="32" rx="16" />
+                <use href="#i-checklist" x="196" y="131" width="18" height="18" class="d-icon d-icon--event" /><text
+                  class="d-sub d-sub--sm d-strong" x="220" y="144">{d.logsAlerts}</text>
+              </g>
+              <g class="d-node d-node--accent">
+                <circle cx="160" cy="90" r="30" />
+                <use href="#i-n8n" x="146" y="76" width="28" height="28" class="d-icon" />
+              </g>
+            </svg>
+          </figure>

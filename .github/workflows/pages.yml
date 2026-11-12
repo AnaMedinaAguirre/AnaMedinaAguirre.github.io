@@ -1,0 +1,107 @@
+name: Calidad y despliegue
+
+on:
+  push:
+    branches: [main, v2]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # 11:17 UTC = 06:17 en Lima. Se activa cuando el workflow llegue a main.
+    - cron: '17 11 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Build y controles de calidad
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Instalar Chromium para los PDF
+        run: npx playwright install --with-deps chromium
+      - name: Generar web y ambos PDF
+        run: npm run build:all
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+      - name: Probar lógica de métricas
+        run: npm run test:metrics
+      - name: Verificar permisos reales de Supabase sin sumar visitas
+        run: node scripts/verify-supabase.mjs
+        env:
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+          REQUIRE_METRICS: ${{ github.ref == 'refs/heads/main' }}
+      - name: Probar integración con GitHub
+        run: npm run test:github
+      - name: Validar HTML generado
+        run: npm run check:html
+      - name: Comprobar enlaces internos y anclas
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --offline --include-fragments
+            --remap 'https://anamedinaaguirre.github.io/(.*) file://${{ github.workspace }}/dist/$1'
+            --root-dir "${{ github.workspace }}/dist" "dist/**/*.html"
+          lycheeVersion: v0.24.2
+          fail: true
+      - name: Comprobar enlaces externos
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --config lychee.toml
+            --remap 'https://anamedinaaguirre.github.io/(.*) file://${{ github.workspace }}/dist/$1'
+            --root-dir "${{ github.workspace }}/dist" "dist/**/*.html"
+          lycheeVersion: v0.24.2
+          fail: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Lighthouse en las cuatro páginas
+        run: npm run check:lighthouse
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+      - name: Guardar informes Lighthouse
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-${{ github.run_id }}
+          path: .lighthouseci/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Preparar artefacto para Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    name: Publicar en GitHub Pages
+    needs: quality
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - name: Desplegar artefacto validado
+        id: deployment
+        uses: actions/deploy-pages@v4

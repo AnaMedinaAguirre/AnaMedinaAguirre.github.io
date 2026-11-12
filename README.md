@@ -1,33 +1,206 @@
 # Portafolio — Ana Patricia Medina Aguirre
 
-Sitio estático (HTML, CSS y JavaScript puro, sin dependencias ni build).
+[![Calidad y despliegue](https://github.com/AnaMedinaAguirre/AnaMedinaAguirre.github.io/actions/workflows/pages.yml/badge.svg?branch=main)](https://github.com/AnaMedinaAguirre/AnaMedinaAguirre.github.io/actions/workflows/pages.yml)
+
+Portafolio estático de Datos y Automatización con Astro, español/inglés, tema claro/oscuro y CV generado desde los mismos datos que la web.
 
 ```
-index.html        contenido, SEO, Open Graph e íconos SVG
-css/styles.css    estilos (modo oscuro/claro, responsive)
-js/main.js        tema, menú, navegación, filtros, copiar email, volver arriba
-assets/           CV, foto, favicon e imagen para redes sociales
+data/cv.es.json, cv.en.json   contenido del portafolio y CV
+src/components/              secciones y diagramas
+src/i18n/                    textos de interfaz por idioma
+src/pages/                   /, /en/, /cv/, /en/cv/
+public/                      estilos, JS, fuentes e imágenes
+scripts/generate-pdfs.mjs    generación de PDF A4
+supabase/                   esquema y verificación de métricas
+.github/workflows/pages.yml  controles de calidad y publicación
+```
+
+## Arquitectura
+
+```mermaid
+flowchart LR
+  CV[JSON ES/EN] --> Astro[Astro]
+  GitHub[API de GitHub] --> Astro
+  Astro --> HTML[HTML estático ES/EN]
+  HTML --> PDF[Playwright: PDF A4 ES/EN]
+  HTML --> Pages[GitHub Pages]
+  PDF --> Pages
+  Pages --> Browser[Navegador]
+  Browser <-->|RPC de métricas| Supabase[(Supabase con RLS)]
 ```
 
 ## Ver en local
 
 ```bash
-python -m http.server 8000
-# abrir http://localhost:8000
+npm ci
+npx playwright install chromium
+npm run dev
 ```
 
-## Publicar
+Requiere Node.js 22 (22.12 o posterior). En PowerShell puedes usar `npm.cmd` y `npx.cmd` si la política de scripts bloquea los comandos habituales.
 
-**GitHub Pages:** sube la carpeta a un repositorio → Settings → Pages →
-"Deploy from a branch" → rama `main`, carpeta `/ (root)`.
+En la validación de la fase 4, Node 24.18 en Windows abortó al cerrar Astro después de una consulta de red (`UV_HANDLE_CLOSING`). Con Node 22 el build terminó correctamente; utiliza esa versión, igual que en Actions.
 
-**Netlify:** arrastra la carpeta a https://app.netlify.com/drop
-(o conecta el repositorio; no necesita comando de build, directorio de publicación: `/`).
+## Generar web y CV
 
-## Pendientes antes de publicar
+Edita los JSON de `data/`. El build valida su esquema y paridad estructural por idioma; Astro genera el contenido como HTML estático. Playwright imprime las páginas del CV para producir ambos PDF.
 
-- `[AGREGAR ENLACE]` de GitHub en la sección Contacto (`index.html`).
-- `[AGREGAR URL DEL SITIO]` en el `<head>`: completar `canonical`, `og:url`
-  y poner la URL absoluta en `og:image` (las redes sociales la necesitan así).
-- `assets/yo.jpeg` es la foto original; el sitio usa el recorte
-  `foto-ana.webp` / `foto-ana.jpg`. Puedes borrar `yo.jpeg` antes de subirlo.
+```sh
+npm run build:all
+npm run preview
+```
+
+Usa `build:all` para publicar: `build` por sí solo no genera PDF. Los resultados están en `dist/`; los PDF en `dist/assets/`. Estos archivos generados no se versionan.
+
+## CI/CD
+
+```mermaid
+flowchart LR
+  A[Push o PR] --> B[Instalar dependencias]
+  B --> C[Astro y PDF ES/EN]
+  C --> D[HTML y enlaces]
+  D --> E[Lighthouse]
+  E --> F{main y controles correctos}
+  F -->|Sí| G[Artefacto validado]
+  G --> H[GitHub Pages]
+```
+
+El workflow valida cada push a `v2` o `main`, los PR hacia `main` y ejecuciones manuales. Solo publica desde `main`, usando `actions/deploy-pages` y el mismo artefacto que pasó las comprobaciones.
+
+- **HTML:** preset `html-validate:recommended`. Solo se exceptúan formato de elementos vacíos, espacios finales y longitud editorial del título; las reglas estructurales siguen activas.
+- **Enlaces:** lychee revisa archivos internos y anclas en modo offline, y después enlaces externos con reintentos. Las URLs absolutas del propio dominio se mapean a `dist/`, para comprobar el contenido nuevo antes de publicarlo. LinkedIn y WhatsApp quedan excluidos por sus bloqueos a verificadores y requieren revisión manual. No se envían correos ni se hacen llamadas para validar `mailto:` o `tel:`.
+- **Lighthouse CI:** tres mediciones de cada una de las cuatro páginas; mínimo **90** en rendimiento, accesibilidad, buenas prácticas y SEO, con la agregación predeterminada de Lighthouse CI. Los informes se guardan como artefactos de Actions durante siete días; no se suben al almacenamiento público de Lighthouse.
+
+Si algún control falla, no se crea el artefacto de Pages ni se ejecuta el despliegue. La validación solo tiene permisos de lectura; los permisos de publicación están limitados al job `deploy`.
+
+Controles locales después de `build:all`:
+
+```sh
+npm run check:html
+npm run check:lighthouse
+```
+
+Lighthouse necesita Chrome instalado; define `CHROME_PATH` si no lo encuentra automáticamente. Los informes locales están en `.lighthouseci/` (ignorado por Git).
+
+La prueba visual `python scripts/check-bilingual.py` requiere Playwright para Python y su Chromium. Genera capturas en `.lighthouseci/review-final/`, fuera del directorio publicado.
+
+## Configurar GitHub Pages y proteger main
+
+1. En **Settings → Pages → Source**, selecciona **GitHub Actions**.
+2. Sube `v2` con `git push -u origin v2`: ejecutará la validación sin publicar.
+3. Tras la primera ejecución, crea una regla para `main` en **Settings → Rules → Rulesets** (o Branches). Exige PR y el control **Build y controles de calidad** antes del merge. Sin esta regla, el workflow impide desplegar un build fallido, pero no impide hacer merge.
+4. En el entorno `github-pages`, permite desplegar únicamente desde `main`.
+5. Integra `v2` a `main` solo cuando los cambios estén aprobados. Se ejecutará una validación completa antes de publicar.
+
+Actions proporciona `GITHUB_TOKEN`. La integración de métricas requiere además los dos valores públicos de Supabase documentados abajo. El badge refleja `main` y puede no tener resultados hasta que el workflow exista en esa rama.
+
+## Proyectos personales desde GitHub
+
+Durante el build, `src/lib/github.mjs` consulta los repositorios públicos del usuario indicado en `contacto.github.usuario` de los JSON. Recorre todas las páginas de la API (100 repositorios por página), selecciona los que tienen el topic `portfolio` y los ordena por última actualización. ES/EN comparten la consulta durante el mismo build.
+
+Cada tarjeta muestra nombre, descripción, lenguaje principal y topics (sin la etiqueta de selección `portfolio`), fecha, código y demo si `homepage` tiene una URL HTTP/HTTPS válida. Los metadatos de GitHub se conservan en su idioma original; los botones y las fechas se adaptan a ES/EN. Si falta la descripción, aparece `[PENDIENTE]` / `[PENDING]`. Si no hay repositorios seleccionados, se mantiene el estado vacío.
+
+Para añadir un proyecto sin modificar la web:
+
+1. Publica un repositorio en tu cuenta de GitHub.
+2. En la página del repo, abre el engranaje junto a **About**.
+3. Completa **Description**, **Website** (opcional, para la demo) y **Topics**.
+4. Incluye el topic `portfolio` y las etiquetas técnicas que quieras mostrar; guarda los cambios.
+5. La siguiente compilación lo incluirá. Para quitarlo del portafolio, retira el topic `portfolio`.
+
+El workflow ejecuta el proceso completo todos los días a las **11:17 UTC (06:17 de Lima)**. El cron se activará cuando este workflow llegue a `main`, que debe ser la rama predeterminada; en `v2` se verifica mediante push. Los horarios de Actions pueden retrasarse. En repositorios públicos, GitHub puede desactivar las ejecuciones programadas tras 60 días sin actividad.
+
+En Actions se pasa `GITHUB_TOKEN` únicamente al paso de build; nunca se incluye en HTML ni JavaScript del navegador. En local la consulta funciona sin token, con los límites de la API pública; puedes definir `GITHUB_TOKEN` en tu entorno si necesitas más cuota. No guardes claves en archivos versionados.
+
+Un error HTTP, timeout o respuesta inválida hace fallar el build y bloquea el despliegue: no se presenta como si la cuenta estuviera vacía. El sitio ya publicado permanece disponible. Para probar selección, paginación y fallos sin consumir la API:
+
+```sh
+npm run test:github
+```
+
+## Métricas anónimas con Supabase
+
+```mermaid
+flowchart LR
+  A[Navegador en producción] -->|Una visita por sesión| B[RPC record_portfolio_visit]
+  B --> C[(Agregados en Supabase)]
+  C --> D[RPC get_portfolio_metrics]
+  D --> E[Totales y gráfico SVG de 30 días]
+```
+
+`supabase/metrics.sql` contiene el esquema completo, la política RLS y las dos funciones. Ejecuta el archivo completo en SQL Editor. `supabase/verify-metrics.sql` permite revisar permisos y leer como `anon` sin insertar visitas.
+
+- `portfolio_daily_visits`: clave `(day, page, lang)` y contador `visits`; día calculado en el servidor con zona `America/Lima`.
+- RLS activo y `SELECT` permitido a `anon`. Se revocan permisos directos de escritura y no se crean políticas de inserción, actualización o borrado para visitantes.
+- `record_portfolio_visit`: función `SECURITY DEFINER` con `search_path` vacío. Acepta solo las parejas `/`–`es` y `/en/`–`en`, y realiza un incremento atómico. El visitante no puede elegir fecha ni contador. Solo se concede ejecución explícita a `anon`.
+- `get_portfolio_metrics`: `SECURITY INVOKER`, conserva RLS y devuelve totales globales, últimos 30 días (hoy y 29 anteriores) y una serie de 30 días, completada con ceros.
+
+El navegador envía únicamente página e idioma, sin parámetros de URL, identificadores de visitante, cookies, IP ni user-agent en la tabla. No se crean usuarios de Supabase Auth. El filtro básico de bots examina el navegador localmente, sin guardar su user-agent. Como cualquier servicio web, la infraestructura de alojamiento puede procesar IP y registros técnicos; la promesa de anonimato describe los datos que almacena esta aplicación.
+
+El conteo se inicia al abrir la portada en el dominio de producción. Se excluyen bots reconocibles, automatización (`navigator.webdriver`), localhost y los CV, para no contar pruebas ni generación de PDF. Una marca en `sessionStorage` evita contar de nuevo al recargar o cambiar de idioma dentro de la misma sesión de pestaña. Si el almacenamiento está bloqueado, se omite el conteo y sigue funcionando la lectura. No representa personas únicas: otra pestaña o sesión puede contar otra visita. La deduplicación es del navegador; una RPC pública puede recibir llamadas automatizadas directas, por lo que las cifras son orientativas y no ofrecen protección estricta contra abuso.
+
+Las cifras se consultan al acercarse a la sección. Mientras cargan o ante errores se muestra `—` y un estado explícito; nunca se sustituyen errores por ceros. Un cero solo se muestra si lo devuelve la base. El SVG representa la tendencia diaria, con título accesible y totales textuales. Los datos de GitHub y CV siguen siendo HTML estático aunque la consulta de métricas falle.
+
+### Configurar valores públicos
+
+1. Crea un proyecto Free en Supabase con Data API activada. Desactiva la exposición automática de tablas y activa RLS automático.
+2. Ejecuta `supabase/metrics.sql` y después `supabase/verify-metrics.sql` en SQL Editor.
+3. En el inicio del proyecto copia la URL `https://<referencia>.supabase.co` (no la URL del dashboard).
+4. En **API Keys** copia la clave **Publishable** (`sb_publishable_…`). Nunca uses Secret, `service_role` ni la contraseña de base de datos en el sitio.
+5. En GitHub, **Settings → Secrets and variables → Actions → Repository secrets**, crea `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+6. El workflow pasa ambos valores al build y verifica las RPC y los permisos por HTTP, sin generar visitas. Si falla esta comprobación, se bloquea el despliegue. En `main` exige configuración; en PR de forks sin secretos se permite compilar sin métricas.
+
+Aunque estén guardados como GitHub Secrets, estos dos valores están diseñados para ser públicos y se incluyen en la web. La protección de la base depende de los permisos y RLS, no de ocultar la clave Publishable. La aplicación rechaza claves que no tengan el formato Publishable. Usa Node 22 como en Actions.
+
+Para desarrollo local copia `.env.example` a `.env` y completa solo esos dos valores públicos. `.env` está ignorado por Git. Sin configuración, el sitio compila y muestra el estado no disponible. Las visitas locales no incrementan la base.
+
+### Validar la fase 5
+
+```sh
+npm run test:metrics
+python scripts/check-metrics.py
+node scripts/verify-supabase.mjs
+```
+
+La prueba de navegador requiere el build en `dist/`, Playwright para Python y Chromium; intercepta las RPC con datos simulados y no accede a Supabase real. Sus capturas quedan en `.lighthouseci/review-phase5/`. Comprueba cifras, gráfico con ceros, errores, bots, almacenamiento bloqueado, deduplicación al recargar y al cambiar de idioma. Los datos de las pruebas no se publican.
+
+La verificación HTTP real usa variables de entorno; en local, `node` no carga `.env` automáticamente (puedes usar `node --env-file=.env scripts/verify-supabase.mjs`). Verifica lectura, rechazo de escritura directa mediante operaciones vacías o sin filas coincidentes, y rechazo de una ruta inválida. No invoca el incremento con una página válida ni crea visitas de prueba.
+
+## Pruebas finales y publicación
+
+Instala las herramientas de navegador para Python si todavía no están disponibles:
+
+```sh
+python -m pip install playwright
+python -m playwright install chromium
+```
+
+Con Node 22 y el build completo generado:
+
+```sh
+npm run build:all
+npm run test:github
+npm run test:metrics
+npm run check:html
+python scripts/check-bilingual.py
+python scripts/check-metrics.py
+npm run check:lighthouse
+```
+
+La revisión bilingüe cubre 1440 y 375 px, ES/EN y claro/oscuro: cambio y persistencia del tema, selector y memoria de idioma, conservación de anclas, menú móvil (Escape y selección), filtros, enlaces internos y descarga de los dos PDF (incluida su cabecera binaria). Comprueba también los CV sin tablas, su ancho móvil y la ocultación de la barra al imprimir.
+
+Las capturas quedan en `.lighthouseci/review-final/` y `.lighthouseci/review-phase5/`, fuera de `dist/`. El resumen de validación y los límites de las pruebas están en [docs/VALIDACION.md](docs/VALIDACION.md).
+
+Cuando el commit de la fase 6 esté aprobado y los controles de `v2` pasen:
+
+1. Abre un PR con base `main` y compare `v2`.
+2. Espera el control requerido **Build y controles de calidad**.
+3. Tras aprobar la publicación, utiliza **Create a merge commit** para conservar un commit por fase. Evita Squash si quieres mantener ese historial.
+4. Comprueba que la ejecución de `main` termine con **Publicar en GitHub Pages** en verde.
+5. Revisa en producción `/`, `/en/`, `/cv/`, `/en/cv/` y ambas descargas. Comprueba las métricas desde un navegador normal: las pruebas automáticas no incrementan visitas. Confirma también el entorno `github-pages` limitado a `main`.
+
+El primer despliegue y la ejecución real del cron están pendientes hasta la aprobación del merge. Los controles validan el sitio antes de publicar, pero no sustituyen esa comprobación posterior.
+
+### Dependencias de desarrollo
+
+La consulta `npm audit` del 12 de noviembre de 2026 reportó 14 avisos (1 bajo, 12 altos y 1 crítico), incluidos Astro y dependencias transitivas de Lighthouse CI. La web publicada es estática y no incluye `node_modules`, pero las herramientas de desarrollo requieren una revisión de actualización por separado. No se aplicó `npm audit fix --force`, ya que propone cambios de versión mayor. Este audit es informativo y no es uno de los controles bloqueantes del workflow.
