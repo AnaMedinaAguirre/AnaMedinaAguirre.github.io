@@ -1,0 +1,28 @@
+---
+import Icon from '../Icon.astro';
+import type { CV } from '../../lib/cv';
+import type { UI } from '../../i18n/ui';
+interface Props { cv: CV; t: UI }
+const { cv, t } = Astro.props;
+const idiomas = cv.idiomas.map((i) => `${i.idioma} ${i.nivel.toLowerCase()}.`).join(' ');
+---
+<section class="step" id="habilidades" aria-labelledby="hab-title">
+  <header class="step-head reveal">
+    <h2 id="hab-title">{t.skills}</h2>
+    <p class="lede">{t.skillsLede}</p>
+  </header>
+  <ul class="skills">
+    {cv.competencias.map((c) => (
+      <li class="skill reveal">
+        <Icon name={c.icono} class="ic ic-lg" />
+        <h3>{c.titulo}</h3>
+        <p>{c.descripcion}</p>
+      </li>
+    ))}
+    <li class="skill reveal">
+      <Icon name="lang" class="ic ic-lg" />
+      <h3>{t.languages}</h3>
+      <p>{idiomas}</p>
+    </li>
+  </ul>
+</section>

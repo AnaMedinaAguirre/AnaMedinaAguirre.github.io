@@ -5,6 +5,18 @@
   'use strict';
 
   var root = document.documentElement;
+
+  /* Textos de interfaz del idioma de la página (inyectados por el build) */
+  var T = {
+    themeToLight: 'Cambiar a modo claro', themeToDark: 'Cambiar a modo oscuro',
+    menuOpen: 'Abrir menú', menuClose: 'Cerrar menú',
+    filterAll: 'Mostrando todas las áreas', filterOne: 'Mostrando',
+    copied: 'Email copiado', copiedStatus: 'Email copiado al portapapeles'
+  };
+  try {
+    var uiEl = document.getElementById('ui-strings');
+    if (uiEl) { var parsed = JSON.parse(uiEl.textContent); for (var k in parsed) T[k] = parsed[k]; }
+  } catch (e) { /* se usan los textos por defecto */ }
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var prefersLight = window.matchMedia('(prefers-color-scheme: light)');
 
@@ -21,7 +33,7 @@
     }
     root.setAttribute('data-theme', theme);
     if (themeBtn) {
-      themeBtn.setAttribute('aria-label', theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+      themeBtn.setAttribute('aria-label', theme === 'dark' ? T.themeToLight : T.themeToDark);
     }
   }
 
@@ -50,7 +62,7 @@
   function setMenu(open, returnFocus) {
     if (!menuBtn || !panel) return;
     menuBtn.setAttribute('aria-expanded', String(open));
-    menuBtn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    menuBtn.setAttribute('aria-label', open ? T.menuClose : T.menuOpen);
     panel.classList.toggle('is-open', open);
     if (open) {
       var first = panel.querySelector('a');
@@ -202,8 +214,8 @@
       });
       if (filterStatus) {
         filterStatus.textContent = key === 'todas'
-          ? 'Mostrando todas las áreas'
-          : 'Mostrando ' + btn.textContent.trim();
+          ? T.filterAll
+          : T.filterOne + ' ' + btn.textContent.trim();
       }
     });
   });
@@ -217,8 +229,8 @@
       var text = btn.getAttribute('data-copy');
       var done = function () {
         btn.classList.add('is-done');
-        if (label) label.textContent = 'Email copiado';
-        if (copyStatus) copyStatus.textContent = 'Email copiado al portapapeles';
+        if (label) label.textContent = T.copied;
+        if (copyStatus) copyStatus.textContent = T.copiedStatus;
         window.setTimeout(function () {
           btn.classList.remove('is-done');
           if (label) label.textContent = original;

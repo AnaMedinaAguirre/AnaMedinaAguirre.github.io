@@ -1,0 +1,35 @@
+---
+import Icon from '../Icon.astro';
+import HeroPipeline from '../diagrams/HeroPipeline.astro';
+import { cvPdfPath, type UI } from '../../i18n/ui';
+import type { CV } from '../../lib/cv';
+interface Props { cv: CV; t: UI }
+const { cv, t } = Astro.props;
+const { persona, contacto } = cv;
+const last = persona.stack.length - 1;
+---
+<section class="hero step" id="inicio" aria-labelledby="hero-title">
+  <div class="hero-text">
+    <h1 id="hero-title" tabindex="-1">{persona.nombre}</h1>
+    <div class="hero-detail">
+      <p class="hero-role">{persona.titulo}</p>
+      <p class="hero-stack">{persona.stack.map((s, i) => <Fragment><span>{i < last ? `${s} ·` : s}</span>{i < last && ' '}</Fragment>)}</p>
+      <ul class="hero-meta">
+        <li><Icon name="pin" />{persona.ubicacion}</li>
+        <li><span class="status-dot" aria-hidden="true"></span>{persona.disponibilidad}</li>
+      </ul>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href={cvPdfPath(cv.lang)} download>
+          <Icon name="download" />{t.downloadCv}
+        </a>
+        <a class="btn btn-ghost" href="#contacto">
+          <Icon name="mail" />{t.contact}
+        </a>
+        <a class="btn btn-ghost btn-icon" href={contacto.linkedin.url} target="_blank" rel="noopener" aria-label={`LinkedIn ${t.newTab}`}>
+          <Icon name="linkedin" />
+        </a>
+      </div>
+    </div>
+  </div>
+  <HeroPipeline />
+</section>

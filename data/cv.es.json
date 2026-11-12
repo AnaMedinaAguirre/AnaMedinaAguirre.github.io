@@ -1,0 +1,257 @@
+{
+  "lang": "es",
+  "meta": {
+    "title": "Ana Medina Aguirre | Analista de Datos y Automatización de Procesos",
+    "description": "Portafolio de Ana Patricia Medina Aguirre, analista de datos y automatización de procesos en Lima, Perú. ETL, Python, SQL (PostgreSQL), Power BI, n8n, Power Automate y Odoo.",
+    "ogDescription": "ETL, Python, SQL (PostgreSQL), Power BI, n8n, Power Automate y Odoo. Lima, Perú. Disponibilidad inmediata.",
+    "ogImageAlt": "Ana Medina Aguirre, Analista de Datos y Automatización de Procesos",
+    "cvTitle": "CV | Ana Patricia Medina Aguirre",
+    "cvDescription": "Currículum de Ana Patricia Medina Aguirre, analista de datos y automatización de procesos en Lima, Perú."
+  },
+  "persona": {
+    "nombre": "Ana Patricia Medina Aguirre",
+    "nombreCorto": "Ana Medina",
+    "titulo": "Analista de Datos y Automatización de Procesos",
+    "stack": ["ETL", "Python", "SQL (PostgreSQL)", "Power BI", "n8n", "Power Automate", "Odoo"],
+    "ubicacion": "Lima, Perú",
+    "disponibilidad": "Disponibilidad inmediata",
+    "foto": { "alt": "Retrato de Ana Patricia Medina Aguirre" }
+  },
+  "contacto": {
+    "email": "meymar1405@gmail.com",
+    "telefono": "+51970585398",
+    "telefonoVisible": "+51 970 585 398",
+    "whatsapp": "https://wa.me/51970585398",
+    "linkedin": { "url": "https://www.linkedin.com/in/ana-medina-ba5839269", "usuario": "ana-medina-ba5839269" },
+    "github": { "url": "https://github.com/AnaMedinaAguirre", "usuario": "AnaMedinaAguirre" },
+    "cierre": "¿Buscas a alguien que convierta procesos manuales en flujos automatizados y datos en decisiones? Conversemos."
+  },
+  "perfil": [
+    "Estudiante de Ingeniería de Sistemas de décimo ciclo en la Universidad César Vallejo (Quinto Superior), con experiencia en automatización de procesos, integración de sistemas empresariales y transformación digital.",
+    "He desarrollado soluciones con n8n, Power Automate, Python y Odoo 17/18, optimizando operaciones de ventas, almacén, finanzas y RRHH. Tengo experiencia en análisis de datos y dashboards en Power BI.",
+    "Actualmente diseño e implemento arquitecturas distribuidas en Odoo 18 para empresas del sector retail. Me enfoco en mejorar la eficiencia operativa con soluciones tecnológicas escalables y orientadas a resultados."
+  ],
+  "ficha": [
+    { "etiqueta": "Formación", "valor": "Ingeniería de Sistemas, décimo ciclo" },
+    { "etiqueta": "Universidad", "valor": "Universidad César Vallejo, Quinto Superior" },
+    { "etiqueta": "Foco actual", "valor": "Arquitecturas distribuidas en Odoo 18 para retail" },
+    { "etiqueta": "Ubicación", "valor": "Lima, Perú" },
+    { "etiqueta": "Disponibilidad", "valor": "Inmediata" },
+    { "etiqueta": "Idiomas", "valor": "Español nativo · Inglés intermedio" }
+  ],
+  "proyectosProfesionales": [
+    {
+      "id": "multisede",
+      "diagrama": "multisede",
+      "destacado": true,
+      "cliente": "Boson Innovation",
+      "titulo": "Arquitectura multisede offline-first en Odoo 18",
+      "descripcion": "VPS central y base de datos PostgreSQL local por sede, sincronizadas vía API / JSON-RPC. Un módulo de sincronización centralizado gestiona por sede la conexión API, el almacén remoto, la lista de precios y el punto de venta, para escalar a nuevas tiendas de forma estandarizada.",
+      "tecnologias": ["Odoo 18", "Python", "PostgreSQL", "API JSON-RPC", "Debian", "Nginx", "Tailscale"]
+    },
+    {
+      "id": "dashboards",
+      "diagrama": "dashboards",
+      "cliente": "Boson Innovation",
+      "titulo": "Dashboards ejecutivos multisede",
+      "descripcion": "Dashboards de Ventas, Compras, Inventario, Contabilidad y Gastos con indicadores por sede: ventas totales, comprobantes electrónicos, ticket promedio, notas de crédito y compras por proveedor. Dan a la gerencia una vista consolidada de todas las tiendas.",
+      "tecnologias": ["Power BI", "Power Query", "DAX", "PostgreSQL"]
+    },
+    {
+      "id": "sunat",
+      "diagrama": "sunat",
+      "cliente": "Boson Innovation",
+      "titulo": "Facturación electrónica SUNAT y sincronización de stock",
+      "descripcion": "Módulos personalizados en Python sobre Odoo para facturación electrónica SUNAT vía OSE, sincronización de catálogo, precios y stock entre sedes con trazabilidad de eventos, y reportes de liquidación por formas de pago.",
+      "tecnologias": ["Python", "Odoo", "SUNAT / OSE", "API"]
+    },
+    {
+      "id": "integraciones",
+      "diagrama": "integraciones",
+      "cliente": "CasaLinda",
+      "titulo": "Automatización e integración de sistemas",
+      "descripcion": "Flujos de integración y transformación de datos (ETL) que conectan Odoo 17, WooCommerce y BioTime para sincronizar stock, pedidos y asistencia, reduciendo tareas manuales. Incluye monitoreo, logs y alertas para automatizaciones críticas.",
+      "tecnologias": ["n8n", "Power Automate", "Python", "APIs"]
+    },
+    {
+      "id": "bpmn",
+      "diagrama": "bpmn",
+      "cliente": "CasaLinda",
+      "titulo": "Rediseño de procesos de negocio",
+      "descripcion": "Modelamiento AS-IS / TO-BE en BPMN para las áreas de ventas, almacén, finanzas y RRHH, con soporte funcional en la implementación de Odoo 17: parametrización, pruebas UAT y documentación.",
+      "tecnologias": ["BPMN", "Odoo 17", "UAT"]
+    }
+  ],
+  "experiencia": [
+    {
+      "cargo": "Analista Funcional",
+      "empresa": "BOSON INNOVATION E.I.R.L.",
+      "inicio": "2026-08",
+      "fin": null,
+      "ubicacion": "Lima, Perú",
+      "logros": [
+        "Diseño e implementación de una arquitectura distribuida multisede en Odoo 18 (VPS central y base de datos PostgreSQL local por sede) con sincronización vía API / JSON-RPC.",
+        "Desarrollo de módulos personalizados en Python sobre Odoo para facturación electrónica SUNAT vía OSE, sincronización de catálogo y stock entre sedes y reportes de liquidación por formas de pago.",
+        "Implementación de un módulo de sincronización centralizado en el VPS que gestiona por sede la conexión API, el almacén remoto, la lista de precios y el punto de venta, para escalar la solución a nuevas tiendas.",
+        "Desarrollo de dashboards ejecutivos (Ventas, Compras, Inventario, Contabilidad y Gastos) con indicadores por sede: ventas totales, comprobantes electrónicos, ticket promedio, notas de crédito y compras por proveedor.",
+        "Sincronización de catálogos y listas de precios entre la sede central y cada tienda vía API, con trazabilidad de eventos para asegurar la consistencia de los datos.",
+        "Estandarización del despliegue y la gestión remota de sedes con Debian, PostgreSQL, Nginx y Tailscale, replicada en distintas empresas del sector retail."
+      ]
+    },
+    {
+      "cargo": "Analista de Automatización y Transformación Digital",
+      "empresa": "CasaLinda",
+      "inicio": "2025-11",
+      "fin": "2026-07",
+      "ubicacion": "Lima, Perú",
+      "logros": [
+        "Automatización de procesos empresariales con n8n, Power Automate (con SharePoint) y Python, reduciendo tareas manuales y tiempos operativos.",
+        "Integración de sistemas vía API (Odoo 17, WooCommerce, BioTime), asegurando la sincronización de stock, pedidos, asistencia y datos críticos.",
+        "Modelamiento y rediseño de procesos (AS-IS / TO-BE, BPMN) para las áreas de ventas, almacén, finanzas y RRHH.",
+        "Desarrollo de dashboards ejecutivos en Power BI, garantizando la consistencia y trazabilidad de los datos.",
+        "Soporte funcional en la implementación de Odoo 17: parametrización, pruebas UAT y documentación.",
+        "Implementación de monitoreo, logs y alertas para automatizaciones críticas; gestión de accesos y backups.",
+        "Capacitación a usuarios, elaboración de manuales técnicos y ejecución de pilotos digitales."
+      ]
+    },
+    {
+      "cargo": "Desarrolladora Web",
+      "empresa": "CasaLinda",
+      "inicio": "2025-02",
+      "fin": "2025-11",
+      "ubicacion": "Lima, Perú",
+      "logros": [
+        "Administración y mantenimiento del sitio web corporativo en WordPress, incluyendo hosting, dominios y SSL.",
+        "Desarrollo de nuevas funcionalidades, formularios, landings y diseño responsive (UX/UI).",
+        "Integración del sitio web con sistemas internos (Sistema PROGRESS).",
+        "Optimización SEO técnico, velocidad de carga, seguridad, documentación técnica y control de versiones con Git."
+      ]
+    },
+    {
+      "cargo": "Desarrolladora Web",
+      "empresa": "Consigue Ventas",
+      "inicio": "2024-11",
+      "fin": "2025-02",
+      "ubicacion": "Lima, Perú",
+      "logros": [
+        "Diseño de páginas web responsive con Elementor y WordPress para móviles, tablets y computadoras."
+      ]
+    }
+  ],
+  "tecnologias": [
+    {
+      "id": "datos",
+      "nombre": "Datos y BI",
+      "items": [
+        { "nombre": "Power BI", "icono": "powerbi" },
+        { "nombre": "Power Query", "icono": "etl" },
+        { "nombre": "DAX", "icono": "api" },
+        { "nombre": "Modelado de datos", "icono": "bpmn" },
+        { "nombre": "Dashboards", "icono": "powerbi" },
+        { "nombre": "Excel avanzado", "icono": "excel" },
+        { "nombre": "SQL (PostgreSQL)", "icono": "postgresql" },
+        { "nombre": "ETL", "icono": "etl" }
+      ]
+    },
+    {
+      "id": "automatizacion",
+      "nombre": "Automatización",
+      "items": [
+        { "nombre": "n8n", "icono": "n8n" },
+        { "nombre": "Power Automate", "icono": "powerautomate" },
+        { "nombre": "Python", "icono": "python" },
+        { "nombre": "SharePoint", "icono": "sharepoint" }
+      ]
+    },
+    {
+      "id": "erp",
+      "nombre": "ERP",
+      "items": [
+        { "nombre": "Odoo 17 y 18", "icono": "modules" },
+        { "nombre": "Módulos personalizados en Python", "icono": "python" },
+        { "nombre": "API / JSON-RPC", "icono": "api" }
+      ]
+    },
+    {
+      "id": "integraciones",
+      "nombre": "Integraciones",
+      "items": [
+        { "nombre": "WooCommerce", "icono": "cart" },
+        { "nombre": "BioTime", "icono": "fingerprint" },
+        { "nombre": "SUNAT (facturación electrónica vía OSE)", "icono": "invoice" },
+        { "nombre": "Sistema PROGRESS", "icono": "server" },
+        { "nombre": "SharePoint", "icono": "sharepoint" }
+      ]
+    },
+    {
+      "id": "infra",
+      "nombre": "Infraestructura",
+      "items": [
+        { "nombre": "Linux Debian", "icono": "debian" },
+        { "nombre": "PostgreSQL", "icono": "postgresql" },
+        { "nombre": "Nginx", "icono": "nginx" },
+        { "nombre": "Tailscale", "icono": "tailscale" },
+        { "nombre": "VPS", "icono": "server" }
+      ]
+    },
+    {
+      "id": "procesos",
+      "nombre": "Gestión de procesos",
+      "items": [
+        { "nombre": "BPMN (AS-IS / TO-BE)", "icono": "bpmn" },
+        { "nombre": "Pruebas UAT", "icono": "checklist" }
+      ]
+    },
+    {
+      "id": "web",
+      "nombre": "Web",
+      "items": [
+        { "nombre": "WordPress", "icono": "wordpress" },
+        { "nombre": "Elementor", "icono": "elementor" },
+        { "nombre": "HTML", "icono": "html5" },
+        { "nombre": "CSS", "icono": "css" }
+      ]
+    },
+    {
+      "id": "herramientas",
+      "nombre": "Herramientas",
+      "items": [
+        { "nombre": "Git", "icono": "git" },
+        { "nombre": "GitHub", "icono": "github" },
+        { "nombre": "Microsoft Office avanzado (Excel, Word, PowerPoint)", "icono": "doc" }
+      ]
+    }
+  ],
+  "competencias": [
+    { "icono": "search", "titulo": "Análisis funcional", "descripcion": "Diseño de arquitectura e integración de sistemas multisede para retail." },
+    { "icono": "bpmn", "titulo": "Modelado de procesos", "descripcion": "Procesos AS-IS / TO-BE en BPMN para ventas, almacén, finanzas y RRHH." },
+    { "icono": "checklist", "titulo": "Implementación y pruebas", "descripcion": "Parametrización, pruebas UAT y soporte funcional en Odoo 17." },
+    { "icono": "etl", "titulo": "Integración y automatización", "descripcion": "Pipelines ETL y flujos entre sistemas, con monitoreo, logs y alertas para automatizaciones críticas." },
+    { "icono": "shield", "titulo": "Administración de sistemas", "descripcion": "Despliegue estandarizado de servidores, gestión de accesos y backups." },
+    { "icono": "users", "titulo": "Documentación y capacitación", "descripcion": "Manuales técnicos, capacitación a usuarios y ejecución de pilotos digitales." }
+  ],
+  "educacion": [
+    {
+      "titulo": "Ingeniería de Sistemas",
+      "institucion": "Universidad César Vallejo",
+      "inicio": "2022-04",
+      "fin": "2026-12",
+      "nota": "egreso previsto",
+      "ubicacion": "Lima, Perú",
+      "detalles": ["Estudiante de décimo ciclo."],
+      "meritos": [
+        { "titulo": "Orden de mérito: Quinto Superior", "detalle": "Puesto 418 de 2466" },
+        { "titulo": "Cuadro de mérito semestral 2026-I: Décimo Superior", "detalle": "Puesto 24 de 254, promedio 15.67" }
+      ]
+    }
+  ],
+  "formacion": [
+    { "nombre": "Microsoft Azure Data Fundamentals (DP-900)", "emisor": "Microsoft Learn", "estado": "en_curso", "icono": "azure" },
+    { "nombre": "Databricks Fundamentals", "emisor": "Databricks Academy", "estado": "en_curso", "icono": "databricks" }
+  ],
+  "idiomas": [
+    { "idioma": "Español", "nivel": "Nativo" },
+    { "idioma": "Inglés", "nivel": "Intermedio" }
+  ],
+  "referencias": "Referencias disponibles a solicitud"
+}

@@ -1,0 +1,129 @@
+---
+// Ilustración propia; no muestra datos del cliente.
+---
+<figure class="project-art">
+            <svg class="diagram only-wide" viewBox="0 0 680 384" role="img" aria-labelledby="pj1-d-title pj1-d-desc">
+              <title id="pj1-d-title">Arquitectura multisede offline-first</title>
+              <desc id="pj1-d-desc">Un VPS central con Odoo 18, Nginx y el módulo de sincronización se conecta por API
+                JSON-RPC, dentro de una red privada Tailscale, con varias sedes. Cada sede tiene su propia base
+                PostgreSQL local, almacén y punto de venta. Una nueva sede se suma con el mismo estándar.</desc>
+              <defs>
+                <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                  orient="auto-start-reverse">
+                  <path d="M0 0 10 5 0 10z" class="d-arrowhead" />
+                </marker>
+              </defs>
+              <rect class="d-net" x="6" y="6" width="668" height="372" rx="16" />
+              <use href="#i-tailscale" x="24" y="22" width="18" height="18" class="d-icon d-icon--muted" />
+              <text class="d-sub" x="50" y="36">Red privada Tailscale</text>
+
+              <g class="d-links" marker-start="url(#arrow2)" marker-end="url(#arrow2)">
+                <path d="M300 176C300 220 92 210 92 244" />
+                <path d="M326 176C326 222 258 214 258 244" />
+                <path d="M354 176C354 222 422 214 422 244" />
+                <path class="d-dashed" d="M380 176C380 220 588 210 588 244" />
+              </g>
+
+              <g class="d-node d-node--accent">
+                <rect x="214" y="52" width="252" height="124" rx="12" />
+                <use href="#i-server" x="232" y="68" width="26" height="26" class="d-icon" />
+                <text class="d-label d-label--lg" x="268" y="88">VPS central</text>
+                <text class="d-sub" x="232" y="118">Odoo 18, Nginx, Debian</text>
+                <rect class="d-chip" x="232" y="132" width="216" height="30" rx="6" />
+                <text class="d-chip-txt" x="340" y="152" text-anchor="middle">Módulo de sincronización</text>
+              </g>
+
+              <rect class="d-pill" x="286" y="194" width="108" height="26" rx="13" />
+              <text class="d-pill-txt" x="340" y="211" text-anchor="middle">JSON-RPC</text>
+
+              <g class="d-node">
+                <rect x="18" y="244" width="148" height="112" rx="10" />
+                <text class="d-label" x="34" y="272">Sede 1</text>
+                <use href="#i-postgresql" x="34" y="287" width="18" height="18" class="d-icon" />
+                <text class="d-sub" x="58" y="301">PostgreSQL</text>
+                <text class="d-sub" x="34" y="335">Almacén y POS</text>
+              </g>
+              <g class="d-node">
+                <rect x="184" y="244" width="148" height="112" rx="10" />
+                <text class="d-label" x="200" y="272">Sede 2</text>
+                <use href="#i-postgresql" x="200" y="287" width="18" height="18" class="d-icon" />
+                <text class="d-sub" x="224" y="301">PostgreSQL</text>
+                <text class="d-sub" x="200" y="335">Almacén y POS</text>
+              </g>
+              <g class="d-node">
+                <rect x="348" y="244" width="148" height="112" rx="10" />
+                <text class="d-label" x="364" y="272">Sede 3</text>
+                <use href="#i-postgresql" x="364" y="287" width="18" height="18" class="d-icon" />
+                <text class="d-sub" x="388" y="301">PostgreSQL</text>
+                <text class="d-sub" x="364" y="335">Almacén y POS</text>
+              </g>
+              <g class="d-node d-node--ghost">
+                <rect x="514" y="244" width="148" height="112" rx="10" />
+                <text class="d-label" x="530" y="272">Nueva sede</text>
+                <text class="d-sub" x="530" y="301">Se agrega con el</text>
+                <text class="d-sub" x="530" y="320">mismo estándar</text>
+              </g>
+            </svg>
+
+            <svg class="diagram only-narrow" viewBox="0 0 340 486" role="img"
+              aria-labelledby="pj1-v-title pj1-d-desc-v">
+              <title id="pj1-v-title">Arquitectura multisede offline-first</title>
+              <desc id="pj1-d-desc-v">Un VPS central con Odoo 18, Nginx y el módulo de sincronización se conecta por API
+                JSON-RPC, dentro de una red privada Tailscale, con varias sedes. Cada sede tiene su propia base
+                PostgreSQL local, almacén y punto de venta. Una nueva sede se suma con el mismo estándar.</desc>
+              <defs>
+                <marker id="arrow2v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                  orient="auto-start-reverse">
+                  <path d="M0 0 10 5 0 10z" class="d-arrowhead" />
+                </marker>
+              </defs>
+              <rect class="d-net" x="3" y="3" width="334" height="480" rx="14" />
+              <use href="#i-tailscale" x="18" y="16" width="16" height="16" class="d-icon d-icon--muted" />
+              <text class="d-sub" x="40" y="29">Red privada Tailscale</text>
+
+              <g class="d-links">
+                <path d="M170 172C170 204 30 196 30 232V452" />
+              </g>
+              <g class="d-links" marker-end="url(#arrow2v)">
+                <path d="M30 266H51" />
+                <path d="M30 328H51" />
+                <path d="M30 390H51" />
+                <path class="d-dashed" d="M30 452H51" />
+              </g>
+
+              <g class="d-node d-node--accent">
+                <rect x="40" y="48" width="260" height="124" rx="12" />
+                <use href="#i-server" x="58" y="64" width="26" height="26" class="d-icon" />
+                <text class="d-label d-label--lg" x="94" y="84">VPS central</text>
+                <text class="d-sub" x="58" y="114">Odoo 18, Nginx, Debian</text>
+                <rect class="d-chip" x="58" y="128" width="224" height="30" rx="6" />
+                <text class="d-chip-txt" x="170" y="148" text-anchor="middle">Módulo de sincronización</text>
+              </g>
+              <rect class="d-pill" x="190" y="186" width="104" height="26" rx="13" />
+              <text class="d-pill-txt" x="242" y="203" text-anchor="middle">JSON-RPC</text>
+
+              <g class="d-node">
+                <rect x="52" y="240" width="276" height="52" rx="10" />
+                <text class="d-label d-label--sm" x="66" y="261">Sede 1</text>
+                <use href="#i-postgresql" x="66" y="268" width="14" height="14" class="d-icon" />
+                <text class="d-sub" x="86" y="280">PostgreSQL, almacén y POS</text>
+              </g>
+              <g class="d-node">
+                <rect x="52" y="302" width="276" height="52" rx="10" />
+                <text class="d-label d-label--sm" x="66" y="323">Sede 2</text>
+                <use href="#i-postgresql" x="66" y="330" width="14" height="14" class="d-icon" />
+                <text class="d-sub" x="86" y="342">PostgreSQL, almacén y POS</text>
+              </g>
+              <g class="d-node">
+                <rect x="52" y="364" width="276" height="52" rx="10" />
+                <text class="d-label d-label--sm" x="66" y="385">Sede 3</text>
+                <use href="#i-postgresql" x="66" y="392" width="14" height="14" class="d-icon" />
+                <text class="d-sub" x="86" y="404">PostgreSQL, almacén y POS</text>
+              </g>
+              <g class="d-node d-node--ghost">
+                <rect x="52" y="426" width="276" height="52" rx="10" />
+                <text class="d-label d-label--sm" x="66" y="447">Nueva sede</text>
+                <text class="d-sub" x="66" y="466">Se agrega con el mismo estándar</text>
+              </g>
+            </svg>
+          </figure>

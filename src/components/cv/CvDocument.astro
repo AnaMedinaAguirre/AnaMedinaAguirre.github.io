@@ -1,0 +1,92 @@
+---
+import { formatMonth, type CV } from '../../lib/cv';
+import { cvPdfPath, type UI } from '../../i18n/ui';
+interface Props { cv: CV; t: UI; portfolioHref: string }
+const { cv, t, portfolioHref } = Astro.props;
+const c = cv.contacto;
+const tc = t.cv;
+const range = (inicio: string, fin: string | null) =>
+  `${formatMonth(inicio, cv.lang)} - ${fin ? formatMonth(fin, cv.lang) : t.present}`;
+const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
+const stripProtocol = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
+---
+<nav class="cv-toolbar" aria-label={tc.backToSite}>
+  <a href={portfolioHref}>{tc.backToSite}</a>
+  <a href={cvPdfPath(cv.lang)} download>{tc.download}</a>
+</nav>
+
+<main class="cv" id="contenido">
+  <header class="cv-header">
+    <h1>{cv.persona.nombre}</h1>
+    <p class="cv-role">{cv.persona.titulo}</p>
+    <ul class="cv-contact">
+      <li>{tc.phone}: {c.telefonoVisible}</li>
+      <li>{tc.email}: <a href={`mailto:${c.email}`}>{c.email}</a></li>
+      <li>{tc.location}: {cv.persona.ubicacion}</li>
+    </ul>
+    <ul class="cv-contact">
+      <li>LinkedIn: <a href={c.linkedin.url}>{stripProtocol(c.linkedin.url)}</a></li>
+      <li>GitHub: <a href={c.github.url}>{stripProtocol(c.github.url)}</a></li>
+    </ul>
+  </header>
+
+  <section>
+    <h2>{tc.profile}</h2>
+    <p>{cv.perfil.join(' ')}</p>
+  </section>
+
+  <section>
+    <h2>{tc.experience}</h2>
+    {cv.experiencia.map((j) => (
+      <article class="cv-entry">
+        <h3>{j.cargo}</h3>
+        <p class="cv-org">{j.empresa}</p>
+        <p class="cv-meta">{range(j.inicio, j.fin)} | {j.ubicacion}</p>
+        <ul>{j.logros.map((l) => <li>{l}</li>)}</ul>
+      </article>
+    ))}
+  </section>
+
+  <section>
+    <h2>{tc.education}</h2>
+    {cv.educacion.map((e) => (
+      <article class="cv-entry">
+        <h3>{e.titulo}</h3>
+        <p class="cv-org">{e.institucion}</p>
+        <p class="cv-meta">{range(e.inicio, e.fin)}{e.nota && ` (${e.nota})`} | {e.ubicacion}</p>
+        <ul>
+          {e.detalles.map((d) => <li>{d}</li>)}
+          {e.meritos.map((m) => <li>{m.titulo} ({lowerFirst(m.detalle)}).</li>)}
+        </ul>
+      </article>
+    ))}
+  </section>
+
+  <section>
+    <h2>{tc.courses}</h2>
+    <ul>
+      {cv.formacion.map((f) => (
+        <li>{f.nombre}, {f.emisor} ({lowerFirst(f.estado === 'en_curso' ? t.inProgress : t.completed)}).</li>
+      ))}
+    </ul>
+  </section>
+
+  <section>
+    <h2>{tc.skills}</h2>
+    <ul>
+      {cv.tecnologias.map((g) => (
+        <li><strong>{g.nombre}:</strong> {g.items.map((i) => i.nombre).join(', ')}.</li>
+      ))}
+    </ul>
+  </section>
+
+  <section>
+    <h2>{tc.languages}</h2>
+    <ul>{cv.idiomas.map((i) => <li>{i.idioma}: {i.nivel}.</li>)}</ul>
+  </section>
+
+  <section>
+    <h2>{tc.references}</h2>
+    <p>{cv.referencias}.</p>
+  </section>
+</main>

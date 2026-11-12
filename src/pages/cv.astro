@@ -1,0 +1,17 @@
+---
+/**
+ * CV en una columna, sin tablas y con títulos estándar (apto para ATS).
+ * Se genera desde el mismo JSON que el portafolio; el PDF descargable se
+ * imprime desde esta página con Playwright (scripts/generate-pdfs.mjs).
+ */
+import Base from '../layouts/Base.astro';
+import CvDocument from '../components/cv/CvDocument.astro';
+import { getCV } from '../lib/cv';
+import { useUI } from '../i18n/ui';
+
+const cv = getCV('es');
+const t = useUI(cv.lang);
+---
+<Base cv={cv} title={cv.meta.cvTitle} description={cv.meta.cvDescription} path="/cv/" styles={['/css/cv.css']} bodyClass="cv-page" sprite={false}>
+  <CvDocument cv={cv} t={t} portfolioHref="/" />
+</Base>

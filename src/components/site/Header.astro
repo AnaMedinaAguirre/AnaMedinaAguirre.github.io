@@ -1,0 +1,40 @@
+---
+import Icon from '../Icon.astro';
+import type { CV } from '../../lib/cv';
+import type { UI } from '../../i18n/ui';
+interface Props { cv: CV; t: UI }
+const { cv, t } = Astro.props;
+const links = Object.entries(t.nav) as [string, string][];
+---
+<a class="skip-link" href="#contenido">{t.skip}</a>
+
+<header class="site-header" id="top">
+  <nav class="nav wrap" aria-label={t.navLabel}>
+    <a class="brand" href="#inicio" aria-label={`${cv.persona.nombreCorto}, ${t.brandLabel}`}>
+      <svg class="brand-mark" viewBox="0 0 40 24" aria-hidden="true">
+        <circle cx="7" cy="12" r="5" />
+        <path d="M12 12h8" />
+        <rect x="20" y="4" width="16" height="16" rx="4" />
+      </svg>
+      <span>{cv.persona.nombreCorto}</span>
+    </a>
+
+    <div class="nav-panel" id="nav-panel">
+      <ul class="nav-links">
+        {links.map(([id, label]) => <li><a href={`#${id}`}>{label}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="nav-actions">
+      <button class="icon-btn theme-toggle" type="button" aria-label={t.themeToLight}
+        data-label-light={t.themeToLight} data-label-dark={t.themeToDark}>
+        <Icon name="sun" class="ic ic-sun" />
+        <Icon name="moon" class="ic ic-moon" />
+      </button>
+      <button class="icon-btn menu-toggle" type="button" aria-label={t.menuOpen} aria-expanded="false" aria-controls="nav-panel">
+        <Icon name="menu" class="ic ic-menu" />
+        <Icon name="close" class="ic ic-close" />
+      </button>
+    </div>
+  </nav>
+</header>
