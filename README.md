@@ -11,7 +11,22 @@ src/i18n/                    textos de interfaz por idioma
 src/pages/                   /, /en/, /cv/, /en/cv/
 public/                      estilos, JS, fuentes e imágenes
 scripts/generate-pdfs.mjs    generación de PDF A4
+supabase/                   esquema y verificación de métricas
 .github/workflows/pages.yml  controles de calidad y publicación
+```
+
+## Arquitectura
+
+```mermaid
+flowchart LR
+  CV[JSON ES/EN] --> Astro[Astro]
+  GitHub[API de GitHub] --> Astro
+  Astro --> HTML[HTML estático ES/EN]
+  HTML --> PDF[Playwright: PDF A4 ES/EN]
+  HTML --> Pages[GitHub Pages]
+  PDF --> Pages
+  Pages --> Browser[Navegador]
+  Browser <-->|RPC de métricas| Supabase[(Supabase con RLS)]
 ```
 
 ## Ver en local
@@ -67,7 +82,7 @@ npm run check:lighthouse
 
 Lighthouse necesita Chrome instalado; define `CHROME_PATH` si no lo encuentra automáticamente. Los informes locales están en `.lighthouseci/` (ignorado por Git).
 
-La prueba visual `python scripts/check-bilingual.py` requiere Playwright para Python y su Chromium. Genera capturas en `dist/review-phase2/`; vuelve a ejecutar `build:all` antes de publicar para que las capturas no formen parte del sitio.
+La prueba visual `python scripts/check-bilingual.py` requiere Playwright para Python y su Chromium. Genera capturas en `.lighthouseci/review-final/`, fuera del directorio publicado.
 
 ## Configurar GitHub Pages y proteger main
 
@@ -77,7 +92,7 @@ La prueba visual `python scripts/check-bilingual.py` requiere Playwright para Py
 4. En el entorno `github-pages`, permite desplegar únicamente desde `main`.
 5. Integra `v2` a `main` solo cuando los cambios estén aprobados. Se ejecutará una validación completa antes de publicar.
 
-No hacen falta secretos propios en esta fase: Actions proporciona `GITHUB_TOKEN`. El badge refleja `main` y puede no tener resultados hasta que el workflow exista en esa rama.
+Actions proporciona `GITHUB_TOKEN`. La integración de métricas requiere además los dos valores públicos de Supabase documentados abajo. El badge refleja `main` y puede no tener resultados hasta que el workflow exista en esa rama.
 
 ## Proyectos personales desde GitHub
 
@@ -151,9 +166,40 @@ La prueba de navegador requiere el build en `dist/`, Playwright para Python y Ch
 
 La verificación HTTP real usa variables de entorno; en local, `node` no carga `.env` automáticamente (puedes usar `node --env-file=.env scripts/verify-supabase.mjs`). Verifica lectura, rechazo de escritura directa mediante operaciones vacías o sin filas coincidentes, y rechazo de una ruta inválida. No invoca el incremento con una página válida ni crea visitas de prueba.
 
-## Próximas fases
+## Pruebas finales y publicación
 
-Pendientes: revisión final de documentación y pruebas de toda la solución; despliegue cuando esté aprobado el merge a `main`.
+Instala las herramientas de navegador para Python si todavía no están disponibles:
+
+```sh
+python -m pip install playwright
+python -m playwright install chromium
+```
+
+Con Node 22 y el build completo generado:
+
+```sh
+npm run build:all
+npm run test:github
+npm run test:metrics
+npm run check:html
+python scripts/check-bilingual.py
+python scripts/check-metrics.py
+npm run check:lighthouse
+```
+
+La revisión bilingüe cubre 1440 y 375 px, ES/EN y claro/oscuro: cambio y persistencia del tema, selector y memoria de idioma, conservación de anclas, menú móvil (Escape y selección), filtros, enlaces internos y descarga de los dos PDF (incluida su cabecera binaria). Comprueba también los CV sin tablas, su ancho móvil y la ocultación de la barra al imprimir.
+
+Las capturas quedan en `.lighthouseci/review-final/` y `.lighthouseci/review-phase5/`, fuera de `dist/`. El resumen de validación y los límites de las pruebas están en [docs/VALIDACION.md](docs/VALIDACION.md).
+
+Cuando el commit de la fase 6 esté aprobado y los controles de `v2` pasen:
+
+1. Abre un PR con base `main` y compare `v2`.
+2. Espera el control requerido **Build y controles de calidad**.
+3. Tras aprobar la publicación, utiliza **Create a merge commit** para conservar un commit por fase. Evita Squash si quieres mantener ese historial.
+4. Comprueba que la ejecución de `main` termine con **Publicar en GitHub Pages** en verde.
+5. Revisa en producción `/`, `/en/`, `/cv/`, `/en/cv/` y ambas descargas. Comprueba las métricas desde un navegador normal: las pruebas automáticas no incrementan visitas. Confirma también el entorno `github-pages` limitado a `main`.
+
+El primer despliegue y la ejecución real del cron están pendientes hasta la aprobación del merge. Los controles validan el sitio antes de publicar, pero no sustituyen esa comprobación posterior.
 
 ### Dependencias de desarrollo
 
