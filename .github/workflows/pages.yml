@@ -51,12 +51,15 @@ jobs:
         run: npm run test:github
       - name: Validar HTML generado
         run: npm run check:html
+      # Solo las rutas de este sitio se comprueban como archivos de dist. Otras
+      # páginas del mismo dominio (p. ej. /pipeline-etl-retail/, dbt docs de otro
+      # repositorio) son sitios aparte y se revisan como enlaces externos.
       - name: Comprobar enlaces internos y anclas
         uses: lycheeverse/lychee-action@v2
         with:
           args: >-
             --offline --include-fragments
-            --remap 'https://anamedinaaguirre.github.io/(.*) file://${{ github.workspace }}/dist/$1'
+            --remap 'https://anamedinaaguirre\.github\.io/((?:en/|cv/|assets/|fonts/|css/|js/|_astro/|#).*|)$ file://${{ github.workspace }}/dist/$1'
             --root-dir "${{ github.workspace }}/dist" "dist/**/*.html"
           lycheeVersion: v0.24.2
           fail: true
@@ -65,7 +68,7 @@ jobs:
         with:
           args: >-
             --config lychee.toml
-            --remap 'https://anamedinaaguirre.github.io/(.*) file://${{ github.workspace }}/dist/$1'
+            --remap 'https://anamedinaaguirre\.github\.io/((?:en/|cv/|assets/|fonts/|css/|js/|_astro/|#).*|)$ file://${{ github.workspace }}/dist/$1'
             --root-dir "${{ github.workspace }}/dist" "dist/**/*.html"
           lycheeVersion: v0.24.2
           fail: true
