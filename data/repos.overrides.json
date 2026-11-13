@@ -6,5 +6,12 @@
     "en": {
       "description": "This portfolio as a data product: content from a single JSON source, CI/CD with quality checks, an automatically generated PDF résumé and anonymous metrics with Supabase."
     }
+  },
+  "pipeline-etl-retail": {
+    "en": {
+      "description": "Automated ELT pipeline for retail sales: Python + dbt + PostgreSQL (Neon), BCB/BCRP exchange rates, data quality tests and daily runs with GitHub Actions."
+    },
+    "estado": "en_desarrollo",
+    "linaje": "https://anamedinaaguirre.github.io/pipeline-etl-retail/"
   }
 }

@@ -33,6 +33,13 @@ const es = {
   contact: 'Contactar',
   newTab: '(se abre en una pestaña nueva)',
   about: 'Sobre mí',
+  /** Cifras y mini línea de tiempo de "Sobre mí" */
+  aboutStats: {
+    years: 'años de experiencia profesional',
+    proProjects: 'proyectos profesionales',
+    personalProjects: 'proyectos personales',
+  },
+  journey: 'Trayectoria',
   projects: 'Proyectos',
   projectsLede:
     'Trabajo realizado para empresas clientes. Los diagramas son ilustraciones propias: no muestran datos ni pantallas reales.',
@@ -44,6 +51,9 @@ const es = {
   projectUpdated: 'Última actualización',
   projectCode: 'Ver código',
   projectDemo: 'Ver demo',
+  projectLineage: 'Ver linaje (dbt docs)',
+  projectDashboard: 'Ver dashboard',
+  projectStatus: { en_desarrollo: 'En desarrollo', finalizado: 'Finalizado' },
   projectMetrics: 'Ver métricas en vivo',
   clientBadge: 'Proyecto para cliente',
   techUsed: 'Tecnologías usadas',
@@ -143,6 +153,12 @@ const en: UI = {
   contact: 'Get in touch',
   newTab: '(opens in a new tab)',
   about: 'About me',
+  aboutStats: {
+    years: 'years of professional experience',
+    proProjects: 'professional projects',
+    personalProjects: 'personal projects',
+  },
+  journey: 'Career path',
   projects: 'Projects',
   projectsLede:
     'Work delivered for client companies. The diagrams are my own illustrations: they show no real data or screens.',
@@ -154,6 +170,9 @@ const en: UI = {
   projectUpdated: 'Last updated',
   projectCode: 'View code',
   projectDemo: 'View demo',
+  projectLineage: 'View lineage (dbt docs)',
+  projectDashboard: 'View dashboard',
+  projectStatus: { en_desarrollo: 'In progress', finalizado: 'Completed' },
   projectMetrics: 'View live metrics',
   clientBadge: 'Client project',
   techUsed: 'Technologies used',

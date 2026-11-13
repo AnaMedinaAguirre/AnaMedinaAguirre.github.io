@@ -64,3 +64,27 @@ test('reconoce el repositorio del propio sitio y traduce su descripción', async
   assert.equal(localizeProject(other, 'en', overrides).description, 'Pipeline');
   assert.throws(() => localizeProject(site, 'en', { 'AnaMedinaAguirre.github.io': { en: { description: '  ' } } }));
 });
+
+test('estado del proyecto, linaje y dashboard desde los overrides', async () => {
+  const { localizeProject } = await import('../src/lib/github.mjs');
+  const docs = 'https://anamedinaaguirre.github.io/pipeline-etl-retail/';
+  const base = { name: 'pipeline-etl-retail', description: 'x', demoUrl: docs };
+  // En desarrollo: sin demo ni dashboard aunque exista la URL; el linaje sí
+  const dev = localizeProject(base, 'es', { 'pipeline-etl-retail': { estado: 'en_desarrollo', linaje: docs, dashboard: 'https://app.powerbi.com/x' } });
+  assert.equal(dev.status, 'en_desarrollo');
+  assert.equal(dev.demoUrl, null);
+  assert.equal(dev.dashboardUrl, null);
+  assert.equal(dev.lineageUrl, docs);
+  // Finalizado: aparece el dashboard; el sitio del repo no se repite como demo si es el linaje
+  const done = localizeProject(base, 'en', { 'pipeline-etl-retail': { estado: 'finalizado', linaje: docs, dashboard: 'https://app.powerbi.com/x' } });
+  assert.equal(done.dashboardUrl, 'https://app.powerbi.com/x');
+  assert.equal(done.demoUrl, null);
+  // Sin overrides: se conserva la demo de GitHub y no hay estado
+  const plain = localizeProject(base, 'es', {});
+  assert.equal(plain.status, null);
+  assert.equal(plain.demoUrl, docs);
+  // Valores inválidos hacen fallar el build
+  assert.throws(() => localizeProject(base, 'es', { 'pipeline-etl-retail': { estado: 'casi' } }));
+  assert.throws(() => localizeProject(base, 'es', { 'pipeline-etl-retail': { linaje: 'javascript:alert(1)' } }));
+  assert.throws(() => localizeProject(base, 'es', { 'pipeline-etl-retail': { estado: 'finalizado', dashboard: 'http://inseguro.example' } }));
+});

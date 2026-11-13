@@ -108,7 +108,21 @@ La descripción de GitHub está en un solo idioma. Para traducirla, agrega el re
 { "nombre-del-repo": { "es": { "description": "…" }, "en": { "description": "…" } } }
 ```
 
-Sin entrada para un idioma se muestra la descripción original. El repositorio de este sitio (`AnaMedinaAguirre.github.io`) se presenta como un proyecto más: en lugar de "Ver demo", que abriría la misma página, su tarjeta lleva a la sección de métricas en vivo (`#metricas`).
+Sin entrada para un idioma se muestra la descripción original.
+
+En el mismo archivo se indica el estado de un proyecto y sus enlaces extra:
+
+```json
+{ "pipeline-etl-retail": { "estado": "en_desarrollo", "linaje": "https://…/dbt-docs/", "dashboard": "https://…" } }
+```
+
+- `estado`: `en_desarrollo` muestra la etiqueta "En desarrollo" / "In progress" y oculta la demo y el dashboard; `finalizado` los habilita.
+- `linaje`: enlace secundario "Ver linaje (dbt docs)". Si el **Website** del repo es esa misma URL, no se repite como "Ver demo".
+- `dashboard`: botón "Ver dashboard", solo con `estado: "finalizado"`.
+
+Cuando el proyecto termine, basta con cambiar `estado` a `finalizado` y agregar `dashboard`. Un estado o una URL inválidos (que no sea https) hacen fallar el build.
+
+El repositorio de este sitio (`AnaMedinaAguirre.github.io`) se presenta como un proyecto más: en lugar de "Ver demo", que abriría la misma página, su tarjeta lleva a la sección de métricas en vivo (`#metricas`).
 
 Para añadir un proyecto sin modificar la web:
 

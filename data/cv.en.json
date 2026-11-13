@@ -33,11 +33,7 @@
     "I currently design and implement distributed Odoo 18 architectures for retail companies. My focus is on improving operational efficiency with scalable, results-oriented technology solutions."
   ],
   "ficha": [
-    { "etiqueta": "Degree", "valor": "Systems Engineering, tenth semester" },
-    { "etiqueta": "University", "valor": "Universidad César Vallejo, top 20% of class" },
-    { "etiqueta": "Current focus", "valor": "Distributed Odoo 18 architectures for retail" },
-    { "etiqueta": "Location", "valor": "Lima, Peru" },
-    { "etiqueta": "Availability", "valor": "Immediate" },
+    { "etiqueta": "Current focus", "valor": "Data & automation: ETL pipelines, Power BI and n8n / Power Automate workflows" },
     { "etiqueta": "Languages", "valor": "Spanish (native) · English (intermediate)" }
   ],
   "proyectosProfesionales": [

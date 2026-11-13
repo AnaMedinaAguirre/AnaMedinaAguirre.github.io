@@ -584,16 +584,61 @@ a:hover { text-decoration-thickness: 2px; }
 .facts dt { color: var(--muted); font-size: var(--fs-sm); }
 .facts dd { font-weight: 700; }
 
-/* Escritorio: foto | texto arriba; ficha completa (6 datos) a todo el ancho debajo */
+/* Escritorio: foto | texto */
 @media (min-width: 760px) {
-  .about { grid-template-columns: 260px minmax(0, 1fr); column-gap: 48px; row-gap: 48px; align-items: center; }
+  .about { grid-template-columns: 260px minmax(0, 1fr); column-gap: 48px; align-items: center; }
   .about-photo { width: calc(100% - 10px); }
-  .facts { grid-column: 1 / -1; grid-template-columns: repeat(2, 1fr); column-gap: 32px; }
 }
 @media (min-width: 1100px) {
   .about { grid-template-columns: 340px minmax(0, 1fr); column-gap: 72px; }
-  .facts { grid-template-columns: repeat(3, 1fr); column-gap: 40px; }
 }
+
+/* Cifras + ficha | mini línea de tiempo */
+.about-more { display: grid; gap: 48px; margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); }
+@media (min-width: 900px) { .about-more { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 64px; align-items: start; } }
+
+.about-stats {
+  display: grid; grid-template-columns: repeat(3, minmax(0, auto)); justify-content: start;
+  gap: 24px 44px;
+  padding-bottom: 28px; border-bottom: 1px solid var(--line);
+}
+.about-stats > div { display: flex; flex-direction: column; }
+.about-stats dd {
+  order: -1;
+  font-family: var(--font-display); font-weight: 800; font-stretch: 112%;
+  font-size: clamp(2.6rem, 2rem + 2.4vw, 3.6rem); line-height: 1; letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.about-stats dt { margin-top: 8px; max-width: 16ch; color: var(--muted); font-size: var(--fs-sm); font-weight: 700; line-height: 1.35; }
+/* El mérito es texto, no número: ocupa la fila completa */
+.about-stats .stat-merit { grid-column: 1 / -1; }
+.about-stats .stat-merit dd { font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.1rem); color: var(--event); }
+.about-stats .stat-merit dt { max-width: none; }
+@media (max-width: 479px) { .about-stats { gap: 22px 26px; } }
+
+.about-side .facts { margin-top: 8px; border-top: 0; }
+
+/* Mini línea de tiempo: un conector con nodos, como el resto del proceso */
+.journey-title { font-size: var(--fs-md); font-weight: 700; font-stretch: 110%; margin-bottom: 22px; }
+.journey { position: relative; padding-left: 30px; }
+.journey::before {
+  content: ""; position: absolute; left: 6px; top: 10px; bottom: 10px;
+  width: 2px; border-radius: 2px; background: var(--line);
+}
+.journey > li { position: relative; display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 2px 20px; align-items: baseline; }
+.journey > li + li { margin-top: 24px; }
+.j-dot {
+  position: absolute; left: -30px; top: .45em;
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid var(--line-strong); background: var(--bg);
+}
+.journey > li.is-now .j-dot { border-color: var(--event); background: var(--event); box-shadow: 0 0 0 5px var(--event-soft); }
+.j-years { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-sm); color: var(--muted); white-space: nowrap; }
+.journey > li.is-now .j-years { color: var(--event); }
+.j-title { font-weight: 700; line-height: 1.35; }
+.j-org { margin-top: 2px; color: var(--muted); font-size: var(--fs-sm); }
+@media (max-width: 479px) { .journey > li { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- Proyectos ---------- */
 .projects { display: grid; gap: 24px; }
@@ -668,7 +713,31 @@ a:hover { text-decoration-thickness: 2px; }
 .projects-empty-hint { margin-top: 4px; color: var(--muted); }
 .personal-project .project-title { overflow-wrap: anywhere; }
 .project-updated { color: var(--muted); font-size: var(--fs-sm); }
-.project-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.project-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+/* Enlace secundario (p. ej., linaje de dbt): texto, no botón */
+.project-link {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 40px;
+  color: var(--accent); font-weight: 700; font-size: 0.9375rem;
+  text-underline-offset: 3px;
+}
+.project-link .ic { width: 16px; height: 16px; }
+/* Estado "En desarrollo": punto ámbar que late unas veces (menos de 5 s) */
+.status-badge {
+  display: inline-flex; align-items: center; gap: 8px; justify-self: start;
+  padding: 4px 12px 4px 10px; border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--event) 55%, transparent);
+  background: var(--event-soft); color: var(--event);
+  font-size: var(--fs-sm); font-weight: 700;
+}
+.status-pulse { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--event); }
+@media (prefers-reduced-motion: no-preference) {
+  .status-pulse::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    background: var(--event);
+    animation: status-pulse 1.6s ease-out 3;
+  }
+}
+@keyframes status-pulse { from { transform: scale(1); opacity: .7; } to { transform: scale(2.8); opacity: 0; } }
 
 /* Métricas agregadas: el mismo tema y escala que el resto del sitio. */
 .site-metrics { padding-top: clamp(3rem, 2rem + 3vw, 4.5rem); padding-bottom: 48px; }

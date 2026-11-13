@@ -53,18 +53,48 @@ export async function loadPersonalProjects(owner, { fetchImpl = fetch, token = p
   throw new Error('GitHub excedió el límite de paginación; no se publicará una lista incompleta.');
 }
 
+const STATUSES = ['en_desarrollo', 'finalizado'];
+
 /**
- * Aplica las traducciones de data/repos.overrides.json: la descripción de GitHub
- * está en un solo idioma. Formato: { "<nombre del repo>": { "es": { "description": "…" }, "en": { … } } }.
- * Sin traducción se conserva la descripción original.
+ * Aplica data/repos.overrides.json a un proyecto. Formato por repositorio:
+ *   "es" / "en": { "description": "…" }  traducción (la de GitHub está en un idioma)
+ *   "estado": "en_desarrollo" | "finalizado"
+ *   "linaje": URL de la documentación de dbt (enlace secundario)
+ *   "dashboard": URL del dashboard publicado
+ * Reglas: en desarrollo no se muestra demo ni dashboard (aún no están listos);
+ * el dashboard aparece solo con "finalizado" y una URL. Si el sitio del repo
+ * (homepage de GitHub) es el linaje, no se presenta como demo.
+ * Valores inválidos hacen fallar el build.
  */
 export function localizeProject(project, lang, overrides = {}) {
-  const entry = Object.entries(overrides).find(([name]) => name.toLowerCase() === project.name.toLowerCase())?.[1];
-  const description = entry?.[lang]?.description;
+  const entry = Object.entries(overrides).find(([name]) => name.toLowerCase() === project.name.toLowerCase())?.[1] ?? {};
+  const where = `data/repos.overrides.json (${project.name})`;
+  const description = entry[lang]?.description;
   if (description !== undefined && (typeof description !== 'string' || !description.trim())) {
-    throw new Error(`data/repos.overrides.json: descripción inválida para ${project.name} (${lang})`);
+    throw new Error(`${where}: descripción inválida (${lang})`);
   }
-  return description ? { ...project, description: description.trim() } : project;
+  const status = entry.estado ?? null;
+  if (status !== null && !STATUSES.includes(status)) {
+    throw new Error(`${where}: "estado" debe ser ${STATUSES.join(' o ')}`);
+  }
+  const url = (key) => {
+    if (entry[key] === undefined || entry[key] === null) return null;
+    const safe = safeHomepage(entry[key]);
+    if (!safe || !safe.startsWith('https:')) throw new Error(`${where}: "${key}" debe ser una URL https`);
+    return safe;
+  };
+  const lineageUrl = url('linaje');
+  const dashboardUrl = status === 'finalizado' ? url('dashboard') : (url('dashboard'), null);
+  let demoUrl = project.demoUrl;
+  if (status === 'en_desarrollo' || (demoUrl && demoUrl === lineageUrl)) demoUrl = null;
+  return {
+    ...project,
+    description: description ? description.trim() : project.description,
+    status,
+    lineageUrl,
+    dashboardUrl,
+    demoUrl,
+  };
 }
 
 /** Comparte una consulta entre ES/EN durante el mismo build. Los errores hacen fallar el build. */

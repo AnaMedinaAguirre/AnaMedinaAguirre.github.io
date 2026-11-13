@@ -415,6 +415,36 @@
     apply();
   }
 
+  /* Cifras de "Sobre mí": cuentan desde 0 al entrar en pantalla (1,1 s,
+     con desaceleración). El HTML ya trae el valor final: sin JS o con
+     movimiento reducido no cambia nada, y el lector usa un texto aparte. */
+  var counters = document.querySelectorAll('[data-count]');
+  if (counters.length && 'IntersectionObserver' in window && !reduceMotion.matches) {
+    var runCount = function (el) {
+      var to = Number(el.getAttribute('data-count')), t0 = 0;
+      var tick = function (ts) {
+        if (!t0) t0 = ts;
+        var k = Math.min((ts - t0) / 1100, 1);
+        el.textContent = String(Math.round(to * (1 - Math.pow(1 - k, 3))));
+        if (k < 1) window.requestAnimationFrame(tick);
+      };
+      window.requestAnimationFrame(tick);
+    };
+    var countIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        countIO.unobserve(entry.target);
+        runCount(entry.target);
+      });
+    }, { threshold: 0.6 });
+    Array.prototype.forEach.call(counters, function (el) {
+      // Solo si todavía no está a la vista: así nunca se ve el valor final y luego un 0
+      if (el.getBoundingClientRect().top <= window.innerHeight) return;
+      el.textContent = '0';
+      countIO.observe(el);
+    });
+  }
+
   /* Tarjetas: la línea inferior se dibuja al entrar en pantalla */
   var fxCards = document.querySelectorAll('.fx-card');
   if ('IntersectionObserver' in window && !reduceMotion.matches) {
