@@ -445,6 +445,49 @@
     });
   }
 
+  /* Experiencia en pestañas (patrón tabs de WAI-ARIA, activación automática):
+     flechas arriba/abajo (o izquierda/derecha), Inicio y Fin; la píldora de
+     fondo se desliza a la pestaña elegida. En móvil o sin JS se usa el
+     acordeón (<details>), que no necesita código. */
+  var xp = document.querySelector('[data-xp]');
+  if (xp) {
+    var xpTabs = Array.prototype.slice.call(xp.querySelectorAll('[role="tab"]'));
+    var xpInd = xp.querySelector('.xp-ind');
+    var xpCur = 0;
+    var moveInd = function () {
+      var b = xpTabs[xpCur];
+      if (!b || !b.offsetHeight) return;
+      xpInd.style.transform = 'translateY(' + b.offsetTop + 'px)';
+      xpInd.style.height = b.offsetHeight + 'px';
+    };
+    var selectTab = function (i, focus) {
+      xpCur = i;
+      xpTabs.forEach(function (b, j) {
+        b.setAttribute('aria-selected', String(j === i));
+        b.tabIndex = j === i ? 0 : -1;
+        document.getElementById(b.getAttribute('aria-controls')).hidden = j !== i;
+      });
+      moveInd();
+      if (focus) xpTabs[i].focus();
+    };
+    xpTabs.forEach(function (b, i) {
+      b.addEventListener('click', function () { selectTab(i, false); });
+      b.addEventListener('keydown', function (e) {
+        var n = xpTabs.length, k = e.key, next = null;
+        if (k === 'ArrowDown' || k === 'ArrowRight') next = (i + 1) % n;
+        else if (k === 'ArrowUp' || k === 'ArrowLeft') next = (i - 1 + n) % n;
+        else if (k === 'Home') next = 0;
+        else if (k === 'End') next = n - 1;
+        if (next === null) return;
+        e.preventDefault();
+        selectTab(next, true);
+      });
+    });
+    window.addEventListener('resize', moveInd);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveInd);
+    moveInd();
+  }
+
   /* Tarjetas: la línea inferior se dibuja al entrar en pantalla */
   var fxCards = document.querySelectorAll('.fx-card');
   if ('IntersectionObserver' in window && !reduceMotion.matches) {

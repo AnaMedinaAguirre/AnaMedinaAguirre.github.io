@@ -82,6 +82,7 @@
   "experiencia": [
     {
       "cargo": "Functional Analyst",
+      "cargoCorto": "Functional Analyst",
       "empresa": "BOSON INNOVATION E.I.R.L.",
       "inicio": "2026-08",
       "fin": null,
@@ -93,10 +94,12 @@
         "Built executive dashboards (Sales, Purchasing, Inventory, Accounting and Expenses) with per-site indicators: total sales, electronic receipts, average ticket, credit notes and purchases by supplier.",
         "Synchronized catalogs and price lists between headquarters and each store through the API, with event traceability to keep data consistent.",
         "Standardized the deployment and remote management of sites with Debian, PostgreSQL, Nginx and Tailscale, replicated across several retail companies."
-      ]
+      ],
+      "tecnologias": ["Odoo 18", "Python", "PostgreSQL", "API / JSON-RPC", "Linux Debian", "Nginx", "Tailscale"]
     },
     {
       "cargo": "Automation and Digital Transformation Analyst",
+      "cargoCorto": "Automation",
       "empresa": "CasaLinda",
       "inicio": "2025-11",
       "fin": "2026-07",
@@ -109,10 +112,12 @@
         "Provided functional support for the Odoo 17 rollout: configuration, UAT and documentation.",
         "Set up monitoring, logs and alerts for critical automations; managed user access and backups.",
         "Trained users, wrote technical manuals and ran digital pilots."
-      ]
+      ],
+      "tecnologias": ["n8n", "Power Automate", "SharePoint", "Python", "Odoo 17", "WooCommerce", "BioTime", "Power BI", "BPMN"]
     },
     {
       "cargo": "Web Developer",
+      "cargoCorto": "Web development",
       "empresa": "CasaLinda",
       "inicio": "2025-02",
       "fin": "2025-11",
@@ -122,17 +127,20 @@
         "Developed new features, forms, landing pages and responsive design (UX/UI).",
         "Integrated the website with internal systems (Sistema PROGRESS).",
         "Improved technical SEO, page speed, security and technical documentation, with version control in Git."
-      ]
+      ],
+      "tecnologias": ["WordPress", "PROGRESS", "Git"]
     },
     {
       "cargo": "Web Developer",
+      "cargoCorto": "Web development",
       "empresa": "Consigue Ventas",
       "inicio": "2024-11",
       "fin": "2025-02",
       "ubicacion": "Lima, Peru",
       "logros": [
         "Designed responsive web pages with Elementor and WordPress for mobile, tablet and desktop."
-      ]
+      ],
+      "tecnologias": ["WordPress", "Elementor"]
     }
   ],
   "tecnologias": [

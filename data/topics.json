@@ -1,0 +1,15 @@
+{
+  "$comment": "Cómo se muestran el lenguaje y los topics de GitHub en las tarjetas de proyectos personales. Clave: topic o lenguaje en minúsculas. 'ocultar': genéricos o internos, no se muestran. 'nombre' solo: se usa el logo de la franja o el ícono de esa tecnología en el CV. 'logo' (public/assets/logos/, cuadrado) o 'glifo' (sprite, con color y colorClaro): logo propio, con su fuente y licencia. El build falla si un repositorio tiene un topic que no está aquí.",
+  "python": { "nombre": "Python" },
+  "postgresql": { "nombre": "PostgreSQL" },
+  "github-actions": { "nombre": "GitHub Actions" },
+  "power-bi": { "nombre": "Power BI" },
+  "dbt": { "nombre": "dbt" },
+  "supabase": { "nombre": "Supabase", "logo": "supabase.svg", "fuente": "Devicon 2.18.0", "licencia": "MIT" },
+  "astro": { "nombre": "Astro", "glifo": "astro", "color": "#E8EEF5", "colorClaro": "#17191E", "fuente": "Simple Icons 16.37, isotipo de Astro en monocromo (astro.build/press)", "licencia": "CC0" },
+  "portfolio": { "ocultar": true },
+  "etl": { "ocultar": true },
+  "elt": { "ocultar": true },
+  "data-engineering": { "ocultar": true },
+  "data-pipeline": { "ocultar": true }
+}

@@ -70,8 +70,13 @@ export const techStrip: BeltItem[] = items.map((i) => {
     if (!existsSync(resolve('public/assets/logos', i.logo))) {
       throw new Error(`data/franja.json: el logo "${i.logo}" no existe en public/assets/logos/.`);
     }
+    // Solo isotipos cuadrados: un logotipo ancho ("odoo", "NGINX") repetiría el nombre y rompería la fila
+    if (Math.abs(proporcion(i.logo) - 1) > 0.2) {
+      throw new Error(`data/franja.json: "${i.logo}" no es cuadrado; usa el isotipo de la marca o un glifo.`);
+    }
     const height = i.alto ?? ALTO_LOGO;
-    logo = { src: `/assets/logos/${i.logo}`, height, width: Math.round(height * proporcion(i.logo)) };
+    // Caja cuadrada exacta (el CSS centra el logo con object-fit: contain)
+    logo = { src: `/assets/logos/${i.logo}`, height, width: height };
     if (i.logoOscuro) {
       if (!existsSync(resolve('public/assets/logos', i.logoOscuro))) {
         throw new Error(`data/franja.json: el logo "${i.logoOscuro}" no existe en public/assets/logos/.`);

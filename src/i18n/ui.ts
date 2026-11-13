@@ -59,6 +59,8 @@ const es = {
   techUsed: 'Tecnologías usadas',
   experience: 'Experiencia',
   present: 'Presente',
+  /** Etiqueta del cargo vigente en Experiencia */
+  currentRole: 'Actual',
   technologies: 'Tecnologías',
   technologiesLede: 'Las herramientas con las que trabajo, agrupadas por área.',
   filterLabel: 'Filtrar tecnologías por área',
@@ -178,6 +180,7 @@ const en: UI = {
   techUsed: 'Technologies used',
   experience: 'Experience',
   present: 'Present',
+  currentRole: 'Current',
   technologies: 'Technologies',
   technologiesLede: 'The tools I work with, grouped by area.',
   filterLabel: 'Filter technologies by area',

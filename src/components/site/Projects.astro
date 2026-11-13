@@ -8,10 +8,14 @@ import Bpmn from '../diagrams/Bpmn.astro';
 import type { CV } from '../../lib/cv';
 import type { UI } from '../../i18n/ui';
 import { getPersonalProjects, localizeProject } from '../../lib/github.mjs';
+import { topicChips } from '../../lib/techchips';
+import TechChips from '../TechChips.astro';
 import repoOverrides from '../../../data/repos.overrides.json';
 interface Props { cv: CV; t: UI }
 const { cv, t } = Astro.props;
-const personal = (await getPersonalProjects(cv.contacto.github.usuario)).map((p) => localizeProject(p, cv.lang, repoOverrides));
+const personal = (await getPersonalProjects(cv.contacto.github.usuario))
+  .map((p) => localizeProject(p, cv.lang, repoOverrides))
+  .map((p) => ({ ...p, chips: topicChips(p.technologies, p.name) }));
 const dateFormatter = new Intl.DateTimeFormat(cv.lang === 'es' ? 'es-PE' : 'en-US', { dateStyle: 'medium', timeZone: 'UTC' });
 const diagrams = { multisede: Multisede, dashboards: Dashboards, sunat: Sunat, integraciones: Integraciones, bpmn: Bpmn };
 ---
@@ -55,7 +59,7 @@ const diagrams = { multisede: Multisede, dashboards: Dashboards, sunat: Sunat, i
             <h4 class="project-title" id={`repo-${p.id}`}>{p.name}</h4>
             {p.status === 'en_desarrollo' && <p class="status-badge"><span class="status-pulse" aria-hidden="true"></span>{t.projectStatus.en_desarrollo}</p>}
             <p>{p.description || t.projectDescriptionPending}</p>
-            {p.technologies.length > 0 && <ul class="tags" aria-label={t.techUsed}>{p.technologies.map((tech) => <li>{tech}</li>)}</ul>}
+            {p.chips.length > 0 && <TechChips chips={p.chips} label={t.techUsed} />}
             <p class="project-updated">{t.projectUpdated}: <time datetime={p.updatedAt}>{dateFormatter.format(new Date(p.updatedAt))}</time></p>
             <div class="project-actions">
               <a class="btn btn-ghost btn-sm" href={p.codeUrl} target="_blank" rel="noopener noreferrer">{t.projectCode}<span class="sr-only"> {p.name} {t.newTab}</span></a>
