@@ -2,6 +2,7 @@
 import Icon from '../Icon.astro';
 import type { CV } from '../../lib/cv';
 import type { UI } from '../../i18n/ui';
+import { usaLogoDbt } from '../../lib/strip';
 interface Props { cv: CV; t: UI }
 const { cv, t } = Astro.props;
 ---
@@ -9,6 +10,7 @@ const { cv, t } = Astro.props;
   <div class="wrap footer-inner">
     <p>© {new Date().getFullYear()} {cv.persona.nombre}</p>
     <p>{cv.persona.ubicacion}</p>
+    {usaLogoDbt && <p class="footer-legal">{t.strip.dbtNotice}</p>}
   </div>
 </footer>
 

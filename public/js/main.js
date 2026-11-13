@@ -325,6 +325,96 @@
     later(function () { step(0, 0); }, 500);
   }
 
+  /* Franja de tecnologías (idea tomada de la "cinta" de paulareixach.github.io):
+     avanza sola y sin huecos; se pausa con el cursor encima o con el foco
+     (Tab, o un toque en pantallas táctiles: tocar fuera la reanuda); se puede
+     arrastrar con el mouse o el dedo, y con el foco las flechas la mueven.
+     Con "reducir movimiento" queda quieta, centrada y en varias líneas (sin
+     .is-moving). Solo se anima mientras está en pantalla. Las copias del
+     bucle llevan aria-hidden: el lector de pantalla lee la lista una vez. */
+  var belt = document.querySelector('[data-belt]');
+  if (belt) setupBelt(belt);
+
+  function setupBelt(belt) {
+    var track = belt.querySelector('.belt-track');
+    var first = track.firstElementChild;
+    var SPEED = 38;      // px por segundo
+    var KEY_STEP = 160;  // px por pulsación de flecha
+    var x = 0, last = 0, raf = 0, drag = null;
+    var hover = false, focused = false, visible = true, lastPointer = '';
+
+    function fill(w) { // repite la lista hasta cubrir el ancho + una copia extra
+      var need = Math.ceil(belt.offsetWidth / w) + 1;
+      while (track.children.length < need) {
+        var copy = first.cloneNode(true);
+        copy.setAttribute('aria-hidden', 'true');
+        track.appendChild(copy);
+      }
+    }
+    function frame(ts) {
+      var w = first.offsetWidth;
+      var dt = last ? Math.min((ts - last) / 1000, 0.1) : 0;
+      last = ts;
+      if (w) {
+        fill(w);
+        if (!drag && !hover && !focused) x += SPEED * dt;
+        x = ((x % w) + w) % w;
+        track.style.transform = 'translate3d(' + (-x) + 'px,0,0)';
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function start() {
+      if (!raf && visible && !document.hidden && !reduceMotion.matches) { last = 0; raf = requestAnimationFrame(frame); }
+    }
+    function stop() { cancelAnimationFrame(raf); raf = 0; }
+    function apply() {
+      if (reduceMotion.matches) {
+        stop();
+        belt.classList.remove('is-moving');
+        track.style.transform = '';
+        while (track.children.length > 1) track.removeChild(track.lastElementChild);
+      } else {
+        belt.classList.add('is-moving');
+        start();
+      }
+    }
+
+    belt.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hover = true; });
+    belt.addEventListener('pointerleave', function () { hover = false; });
+    belt.addEventListener('pointerdown', function (e) {
+      lastPointer = e.pointerType;
+      if (!belt.classList.contains('is-moving') || e.button !== 0) return;
+      drag = { start: e.clientX, from: x };
+      belt.setPointerCapture(e.pointerId);
+      belt.classList.add('is-dragging');
+    });
+    belt.addEventListener('pointermove', function (e) { if (drag) x = drag.from - (e.clientX - drag.start); });
+    function endDrag() { drag = null; belt.classList.remove('is-dragging'); }
+    belt.addEventListener('pointerup', endDrag);
+    belt.addEventListener('pointercancel', endDrag);
+    belt.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    // Con el mouse, hacer clic no la deja pausada al salir (para eso está el hover)
+    belt.addEventListener('focus', function () {
+      focused = belt.matches(':focus-visible') || lastPointer === 'touch' || lastPointer === 'pen';
+    });
+    belt.addEventListener('blur', function () { focused = false; lastPointer = ''; });
+    belt.addEventListener('keydown', function (e) {
+      if (!belt.classList.contains('is-moving')) return;
+      if (e.key === 'ArrowRight') { x += KEY_STEP; e.preventDefault(); }
+      else if (e.key === 'ArrowLeft') { x -= KEY_STEP; e.preventDefault(); }
+    });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        if (visible) start(); else stop();
+      }).observe(belt);
+    }
+    document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+    if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', apply);
+    apply();
+  }
+
   /* Tarjetas: la línea inferior se dibuja al entrar en pantalla */
   var fxCards = document.querySelectorAll('.fx-card');
   if ('IntersectionObserver' in window && !reduceMotion.matches) {

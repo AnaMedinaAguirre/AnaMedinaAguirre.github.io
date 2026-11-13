@@ -940,6 +940,7 @@ html:not(.js) .metrics-body, html:not(.js) .metrics-state { display: none; }
 }
 /* En móvil el botón flotante "volver arriba" (44px a 16px del borde) quedaba sobre el
    texto del pie: se reserva su espacio debajo del contenido. */
+.footer-legal { flex-basis: 100%; font-size: .8125rem; }
 @media (max-width: 899px) { .footer-inner { padding-bottom: calc(32px + 44px + 16px); } }
 
 /* ---------- Volver arriba ---------- */
@@ -966,6 +967,72 @@ html:not(.js) .metrics-body, html:not(.js) .metrics-state { display: none; }
   }
   .js .reveal.is-visible { opacity: 1; transform: none; }
   .flow::after { transition: transform .15s linear; }
+}
+
+/* ---------- Franja de tecnologías (bajo el hero) ----------
+   De borde a borde de la pantalla, aunque está dentro de <main class="wrap">:
+   el margen negativo suma la sangría del contenido y el margen lateral del
+   contenedor centrado. (100vw incluye la barra de desplazamiento; lo que
+   sobra a la derecha lo recorta el overflow-x del body.)
+   Sin JS o con movimiento reducido: lista quieta, centrada, en varias líneas.
+   Con JS y sin movimiento reducido: una sola línea que avanza sola, con
+   los bordes difuminados; el movimiento y el arrastre están en main.js
+   (setupBelt). */
+.belt {
+  position: relative; z-index: 1;               /* tapa el conector del proceso */
+  width: 100vw;
+  margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  margin-left: calc(-1 * (var(--gutter) + var(--content-x)) - max(0px, (100vw - var(--wrap)) / 2));
+  padding-block: 20px;
+  background: color-mix(in srgb, var(--surface) 72%, var(--bg));
+  border-block: 1px solid var(--line);
+}
+.belt:focus-visible { outline-offset: -4px; border-radius: 0; }
+.belt-track { display: flex; }
+.belt-set {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 16px 40px; padding-inline: var(--gutter);
+}
+.belt-set li {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-weight: 700; color: var(--muted); white-space: nowrap;
+  transition: color .25s ease;
+}
+/* El tamaño sale de los atributos width/height (los calcula strip.ts) */
+.belt-logo { flex: none; pointer-events: none; }
+/* Logos con variante oficial para tema oscuro (Odoo): una u otra según el tema */
+.belt-logo--claro { display: none; }
+:root[data-theme="light"] .belt-logo--claro { display: block; }
+:root[data-theme="light"] .belt-logo--oscuro { display: none; }
+.belt-glyph { display: grid; place-items: center; width: 28px; height: 28px; flex: none; color: var(--c); }
+.belt-glyph .ic { width: 26px; height: 26px; }
+:root[data-theme="light"] .belt-glyph { color: var(--c-claro); }
+/* Logos oscuros (Tux, contorno de PostgreSQL): halo claro solo en tema oscuro */
+:root:not([data-theme="light"]) .has-contorno .belt-logo {
+  filter: drop-shadow(0 0 .6px rgba(232, 238, 245, .9)) drop-shadow(0 0 .6px rgba(232, 238, 245, .6));
+}
+.belt-set li:hover { color: var(--text); }
+:root[data-theme="light"] .belt-set li:hover { color: var(--accent); }
+
+/* Cursor y arrastre: dependen de .is-moving (la pone main.js) */
+.belt.is-moving { cursor: grab; touch-action: pan-y; -webkit-user-select: none; user-select: none; }
+.belt.is-moving.is-dragging { cursor: grabbing; }
+/* La disposición en una línea depende de .js (se pone en <head>, antes de
+   pintar): así no hay salto de diseño al arrancar el movimiento. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .belt-viewport {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .js .belt-track { width: max-content; will-change: transform; }
+  .js .belt-set { flex: none; flex-wrap: nowrap; gap: 48px; padding-inline: 0 48px; }
+}
+@media (max-width: 479px) {
+  .belt-set { gap: 14px 28px; }
+}
+@media (max-width: 479px) and (prefers-reduced-motion: no-preference) {
+  .js .belt-set { gap: 36px; padding-right: 36px; }
 }
 
 /* ---------- Efectos con el cursor ----------
@@ -1058,14 +1125,20 @@ html:not(.js) .metrics-body, html:not(.js) .metrics-state { display: none; }
   /* Botones principales con efecto imán (main.js fija el translate) */
   .btn-primary, .cv-btn { transition: background-color .2s ease, border-color .2s ease, transform .2s var(--ease), translate .35s var(--ease); }
   /* Logos de tecnologías: giran y crecen un poco */
-  .chips .ic { transition: transform .35s var(--ease); }
-  .chips li:hover .ic { transform: rotate(-8deg) scale(1.18); }
+  .chips .ic, .belt-logo, .belt-glyph { transition: transform .35s var(--ease); }
+  .chips li:hover .ic, .belt-set li:hover :is(.belt-logo, .belt-glyph) { transform: rotate(-8deg) scale(1.18); }
+  /* dbt y Odoo: sus reglas de marca no permiten rotar el logo; solo crece */
+  .belt-set li.is-intacto:hover .belt-logo { transform: scale(1.18); }
 }
 @media (prefers-reduced-motion: reduce) { .fx-spot, .fx-glow, .fx-ring { display: none; } }
 
 /* ---------- Impresión ---------- */
 @media print {
-  .site-header, .back-to-top, .filters, .skip-link, .fx-spot, .fx-glow, .fx-ring { display: none !important; }
+  .site-header, .back-to-top, .filters, .skip-link, .fx-spot, .fx-glow, .fx-ring, .belt-set[aria-hidden="true"] { display: none !important; }
+  .belt { width: auto; margin-left: 0; background: none; }
+  .belt-track { transform: none !important; width: auto !important; }
+  .belt-set { flex-wrap: wrap !important; }
+  .belt-viewport { -webkit-mask-image: none !important; mask-image: none !important; }
   .flow { padding-top: 0; }
   .js .reveal { opacity: 1 !important; transform: none !important; }
 }

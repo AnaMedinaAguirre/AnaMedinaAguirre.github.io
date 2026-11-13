@@ -1,0 +1,33 @@
+---
+import Icon from '../Icon.astro';
+import type { UI } from '../../i18n/ui';
+import { techStrip } from '../../lib/strip';
+interface Props { t: UI }
+const { t } = Astro.props;
+---
+<!-- Franja de tecnologías, de borde a borde de la pantalla.
+     Sin JS o con "reducir movimiento": lista fija, centrada, en varias líneas.
+     Con JS (main.js, setupBelt): avanza sola, se pausa con el cursor encima o
+     con el foco (Tab o un toque), y se puede arrastrar con el mouse o el dedo.
+     Las copias que hacen falta para el bucle las crea main.js con
+     aria-hidden: el lector de pantalla lee la lista una sola vez. -->
+<section class="belt" aria-label={t.strip.label} tabindex="0" data-belt>
+  <div class="belt-viewport">
+    <div class="belt-track">
+      <ul class="belt-set">
+        {techStrip.map((item) => (
+          <li class:list={[{ 'is-intacto': item.intacto, 'has-contorno': item.contorno }]}>
+            {item.logo && item.logo.srcOscuro && <>
+              <img class="belt-logo belt-logo--claro" src={item.logo.src} width={item.logo.width} height={item.logo.height} alt="" decoding="async" draggable="false" />
+              <img class="belt-logo belt-logo--oscuro" src={item.logo.srcOscuro} width={item.logo.width} height={item.logo.height} alt="" decoding="async" draggable="false" />
+            </>}
+            {item.logo && !item.logo.srcOscuro
+              ? <img class="belt-logo" src={item.logo.src} width={item.logo.width} height={item.logo.height} alt="" decoding="async" draggable="false" />
+              : !item.logo && <span class="belt-glyph" style={`--c:${item.glifo!.color};--c-claro:${item.glifo!.colorClaro}`}><Icon name={item.glifo!.id} class="ic" /></span>}
+            <span class="belt-name">{item.nombre}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
