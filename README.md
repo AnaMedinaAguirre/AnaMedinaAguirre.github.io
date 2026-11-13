@@ -37,7 +37,7 @@ npx playwright install chromium
 npm run dev
 ```
 
-Requiere **Node.js 22** (22.12 o posterior), la misma versión que usa Actions. El archivo `.nvmrc` la declara: con [nvm-windows](https://github.com/nvm-windows/nvm) en modo Shim y la detección automática activada, el proyecto usa Node 22 sin cambiar la versión del resto del equipo. Para instalarla: `nvm install 22` y `nvm use 22.x.x` (la versión exacta que muestre `nvm list`).
+Requiere **Node.js 22** (22.23.4 o posterior, el mínimo de Astro 7), la misma versión que usa Actions. El archivo `.nvmrc` la declara: con [nvm-windows](https://github.com/nvm-windows/nvm) en modo Shim y la detección automática activada, el proyecto usa Node 22 sin cambiar la versión del resto del equipo. Para instalarla: `nvm install 22` y `nvm use 22.x.x` (la versión exacta que muestre `nvm list`).
 
 Con nvm-windows en modo Shim, `npm` y `npx` son ejecutables (`npm.exe`, `npx.exe`): úsalos directamente en PowerShell, sin `.cmd`, y la política de scripts no los bloquea.
 
@@ -226,4 +226,11 @@ El primer despliegue y la ejecución real del cron están pendientes hasta la ap
 
 ### Dependencias de desarrollo
 
-La consulta `npm audit` del 12 de noviembre de 2026 reportó 14 avisos (1 bajo, 12 altos y 1 crítico), incluidos Astro y dependencias transitivas de Lighthouse CI. La web publicada es estática y no incluye `node_modules`, pero las herramientas de desarrollo requieren una revisión de actualización por separado. No se aplicó `npm audit fix --force`, ya que propone cambios de versión mayor. Este audit es informativo y no es uno de los controles bloqueantes del workflow.
+El sitio usa **Astro 7**. La actualización desde Astro 5 (12/11/2026) no cambió el resultado: las 16 capturas de comparación (4 rutas × escritorio/móvil × claro/oscuro) son idénticas píxel a píxel y el HTML solo difiere en la forma de escribir `&` en dos metadatos. Dos ajustes la hicieron posible:
+
+- `compressHTML: true` en `astro.config.mjs`: Astro 7 cambió el valor por defecto a `'jsx'`, que elimina espacios entre elementos en línea.
+- Zod 4 (`astro/zod`): `z.email()` y `z.url()` en lugar de los formatos obsoletos de `z.string()`.
+
+`npm audit` no reporta vulnerabilidades. Las que quedaban venían de `basic-ftp` 5.x, que Lighthouse CI arrastra a través de `proxy-agent` → `get-uri`; toda esa cadena ya está en su última versión y `get-uri` aún exige la 5.x. Por eso `package.json` incluye un `overrides` que fuerza `basic-ftp` 6.2.6 (corrige tres fallos de denegación de servicio del cliente FTP). Ese cliente solo se usaría al descargar por `ftp://`, algo que Lighthouse no hace aquí; se comprobó que carga correctamente y Lighthouse CI funciona igual. Cuando `get-uri` adopte la versión 6, el override se puede quitar.
+
+No uses `npm audit fix --force`: propone cambios de versión mayor sin control. El audit es informativo y no es un control bloqueante del workflow.

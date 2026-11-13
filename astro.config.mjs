@@ -8,4 +8,7 @@ export default defineConfig({
   trailingSlash: 'ignore',
   build: { format: 'directory' },
   devToolbar: { enabled: false },
+  // Astro 7 cambió el valor por defecto a 'jsx', que elimina espacios entre
+  // elementos en línea. Se mantiene el comportamiento anterior del sitio.
+  compressHTML: true,
 });
