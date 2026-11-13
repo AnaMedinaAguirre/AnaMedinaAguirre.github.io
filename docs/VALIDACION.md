@@ -70,5 +70,17 @@ Las capturas y los informes no se versionan. Las pruebas de métricas en navegad
 - Las pruebas locales se realizaron con Chromium; no se afirma cobertura de Safari o Firefox.
 - Las pruebas funcionales no certifican compatibilidad con todos los sistemas ATS; el CV utiliza HTML de una columna sin tablas y PDF etiquetado.
 - LinkedIn y WhatsApp están excluidos del verificador automático por sus bloqueos a bots y requieren comprobación manual.
-- Dependencias de desarrollo: `npm audit` reporta 14 avisos (1 bajo, 12 altos, 1 crítico) en Astro 5 y Lighthouse CI. El crítico afecta a la optimización de imágenes AVIF de Astro, que este sitio no usa. La actualización a Astro 7 se hará en una rama aparte.
+- Dependencias de desarrollo: actualizadas a Astro 7 el 12/11/2026, con un override de `basic-ftp` 6.2.6 para la cadena de Lighthouse CI. `npm audit`: 0 vulnerabilidades (antes 14: 1 bajo, 12 altos, 1 crítico).
+
+## Actualización a Astro 7 (rama `actualizacion-astro`)
+
+| Comprobación | Resultado |
+| --- | --- |
+| Regresión visual | 16 de 16 capturas idénticas píxel a píxel frente a Astro 5 (4 rutas × 1440/375 × claro/oscuro), con un control previo de estabilidad de las capturas |
+| HTML generado | Mismos archivos; contenido idéntico salvo `&#38;` → `&amp;` en dos metadatos en inglés (equivalentes) |
+| PDF | Mismo número de páginas y mismo texto en ES y EN |
+| Validación de datos (Zod 4) | Sigue rechazando email, URL y fechas inválidas con el mismo mensaje |
+| Pruebas | test:metrics 9/9, test:github 5/5, check-metrics.py 20/20, check-bilingual.py correcto, html-validate sin errores, verificación real de Supabase correcta |
+| Lighthouse | Umbral superado en las 12 mediciones; mínimo 97 (rendimiento de `/` en una pasada) y 100 en el resto |
+| npm audit | 0 vulnerabilidades |
 - Pendiente de GitHub Support: eliminar `refs/pull/1/head` y purgar las vistas en caché.
