@@ -49,6 +49,8 @@ jobs:
           REQUIRE_METRICS: ${{ github.ref == 'refs/heads/main' }}
       - name: Probar integración con GitHub
         run: npm run test:github
+      - name: Probar cifras y trayectoria de Sobre mí
+        run: npm run test:about
       - name: Validar HTML generado
         run: npm run check:html
       # Solo las rutas de este sitio se comprueban como archivos de dist. Otras

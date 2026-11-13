@@ -1,8 +1,21 @@
 ---
 import type { CV } from '../../lib/cv';
 import type { UI } from '../../i18n/ui';
+import { getPersonalProjects } from '../../lib/github.mjs';
+import { fullYearsSince, careerStart, meritValue, journey } from '../../lib/about.mjs';
 interface Props { cv: CV; t: UI }
 const { cv, t } = Astro.props;
+
+// Cifras: todas salen del CV (o de GitHub) en el momento del build.
+const personal = await getPersonalProjects(cv.contacto.github.usuario);
+const counts = [
+  { value: fullYearsSince(careerStart(cv.experiencia)), label: t.aboutStats.years },
+  { value: cv.proyectosProfesionales.length, label: t.aboutStats.proProjects },
+  { value: personal.length, label: t.aboutStats.personalProjects },
+].filter((s) => s.value > 0);
+const edu = cv.educacion[0];
+const merit = edu.meritos[0];
+const steps = journey(cv, t.present);
 ---
 <section class="step" id="sobre-mi" aria-labelledby="sobre-title">
   <header class="step-head reveal">
@@ -18,8 +31,42 @@ const { cv, t } = Astro.props;
     <div class="about-text reveal">
       {cv.perfil.map((p) => <p>{p}</p>)}
     </div>
-    <dl class="facts reveal">
-      {cv.ficha.map((f) => <div><dt>{f.etiqueta}</dt><dd>{f.valor}</dd></div>)}
-    </dl>
+  </div>
+
+  <div class="about-more">
+    <div class="about-side reveal">
+      <!-- Los números cuentan desde 0 al entrar en pantalla (main.js). El
+           valor real está siempre en el HTML y en el texto para lectores. -->
+      <dl class="about-stats">
+        {counts.map((s) => (
+          <div>
+            <dt>{s.label}</dt>
+            <dd><span class="count" data-count={s.value} aria-hidden="true">{s.value}</span><span class="sr-only">{s.value}</span></dd>
+          </div>
+        ))}
+        {merit && (
+          <div class="stat-merit">
+            <dt>{edu.institucion} · {merit.detalle}</dt>
+            <dd>{meritValue(merit.titulo)}</dd>
+          </div>
+        )}
+      </dl>
+      <dl class="facts">
+        {cv.ficha.map((f) => <div><dt>{f.etiqueta}</dt><dd>{f.valor}</dd></div>)}
+      </dl>
+    </div>
+
+    <div class="about-journey reveal">
+      <h3 class="journey-title">{t.journey}</h3>
+      <ol class="journey">
+        {steps.map((s) => (
+          <li class:list={[{ 'is-now': s.now }]}>
+            <span class="j-dot" aria-hidden="true"></span>
+            <span class="j-years">{s.years}</span>
+            <div><p class="j-title">{s.title}</p><p class="j-org">{s.org}</p></div>
+          </li>
+        ))}
+      </ol>
+    </div>
   </div>
 </section>

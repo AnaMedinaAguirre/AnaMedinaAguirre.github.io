@@ -1,0 +1,21 @@
+---
+/* Lista de chips con logos a color (los mismos de la franja). */
+import Icon from './Icon.astro';
+import type { TechChip } from '../lib/techchips';
+interface Props { chips: TechChip[]; label: string; class?: string }
+const { chips, label, class: cls } = Astro.props;
+---
+<ul class:list={['tech-chips', cls]} aria-label={label}>
+  {chips.map((c) => (
+    <li class:list={[{ 'is-intacto': c.intacto }]}>
+      {c.logo && c.logo.srcOscuro && <>
+        <img class="chip-logo belt-logo--claro" src={c.logo.src} width={c.logo.width} height={c.logo.height} alt="" loading="lazy" decoding="async" />
+        <img class="chip-logo belt-logo--oscuro" src={c.logo.srcOscuro} width={c.logo.width} height={c.logo.height} alt="" loading="lazy" decoding="async" />
+      </>}
+      {c.logo && !c.logo.srcOscuro && <img class="chip-logo" src={c.logo.src} width={c.logo.width} height={c.logo.height} alt="" loading="lazy" decoding="async" />}
+      {c.glifo && <span class="chip-glyph" style={`--c:${c.glifo.color};--c-claro:${c.glifo.colorClaro}`}><Icon name={c.glifo.id} class="ic" /></span>}
+      {c.icono && <Icon name={c.icono} class="ic chip-icon" />}
+      <span>{c.nombre}</span>
+    </li>
+  ))}
+</ul>

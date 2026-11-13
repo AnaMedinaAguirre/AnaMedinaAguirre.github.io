@@ -61,6 +61,10 @@ export const cvSchema = z.object({
       fin: yearMonth.nullable(),
       ubicacion: nonEmpty,
       logros: z.array(nonEmpty).min(1),
+      /** Tecnologías del cargo (nombres de producto, iguales en ES/EN); se validan en src/lib/techchips.ts */
+      tecnologias: z.array(nonEmpty).min(1),
+      /** Nombre corto del cargo para las pestañas de Experiencia */
+      cargoCorto: nonEmpty,
     }),
   ),
   tecnologias: z.array(
@@ -123,7 +127,7 @@ function checkParity(a: CV, b: CV) {
   const shape = (cv: CV) =>
     JSON.stringify({
       proyectos: cv.proyectosProfesionales.map((p) => [p.id, p.diagrama, p.tecnologias.length]),
-      experiencia: cv.experiencia.map((j) => [j.inicio, j.fin, j.logros.length]),
+      experiencia: cv.experiencia.map((j) => [j.inicio, j.fin, j.logros.length, j.tecnologias]),
       tecnologias: cv.tecnologias.map((g) => [g.id, g.items.map((i) => i.icono)]),
       competencias: cv.competencias.map((c) => c.icono),
       educacion: cv.educacion.map((e) => [e.inicio, e.fin, e.detalles.length, e.meritos.length]),

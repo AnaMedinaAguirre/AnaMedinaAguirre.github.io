@@ -1,6 +1,6 @@
 # Logos de la franja de tecnologías
 
-Los logos se descargaron una vez y se sirven desde el propio sitio
+Todos son isotipos cuadrados del mismo tamaño (el build rechaza logotipos anchos). Los logos se descargaron una vez y se sirven desde el propio sitio
 (`public/assets/logos/`, sin CDN). La lista y la validación están en
 `data/franja.json` y `src/lib/strip.ts`. El build falla si falta un archivo,
 un glifo o la fuente/licencia de algún ítem.
@@ -13,10 +13,12 @@ un glifo o la fuente/licencia de algún ítem.
 | WooCommerce | `woocommerce.svg` | Devicon 2.18.0, `original` | MIT |
 | Git | `git.svg` | Devicon 2.18.0, `original` | MIT |
 | GitHub Actions | `githubactions.svg` | Devicon 2.18.0, `original` | MIT |
-| Nginx | `nginx.svg` | Devicon 2.18.0, `original` (es un logotipo de texto: se recortó el margen vacío del `viewBox`) | MIT |
+| Nginx | glifo `nginx` del sprite | Simple Icons 16.37: isotipo cuadrado de NGINX (hexágono con la N), en su color #009639. Devicon solo tiene el logotipo de texto, que es ancho | CC0 |
 | Linux | `linux.png` | Devicon 2.18.0, `original`, rasterizado a 56 px (el SVG pesa 194 KB) | MIT |
 | dbt | `dbt.png` | Kit de marca oficial de dbt Labs (getdbt.com/brand-guidelines), `dbt-bit-standalone.png` reducido a 56 px de alto | Política de marca de dbt Labs (ver abajo) |
-| Odoo | `odoo.svg` (tema claro), `odoo-oscuro.svg` (tema oscuro) | Brand assets oficiales de Odoo (odoo.com/page/brand-assets), `odoo_logo.svg` y su versión invertida `odoo_logo_inverted.svg`; solo se recortó el margen vacío del `viewBox` (el mismo en ambos) | Ver abajo |
+| Odoo | glifo `modules` del sprite | Glifo propio en el color de Odoo. Odoo no publica un isotipo cuadrado: su logo oficial es el logotipo de texto "odoo", que es ancho y repetía el nombre | Propio |
+| Supabase (proyectos personales) | `supabase.svg` | Devicon 2.18.0, `original` | MIT |
+| Astro (proyectos personales) | glifo `astro` del sprite | Simple Icons 16.37, isotipo en monocromo claro u oscuro según el tema (como los logos monocromos de astro.build/press); el de Devicon es azul marino y no se ve en tema oscuro | CC0 |
 | Power BI, Excel, Power Automate, SharePoint | (glifos del sprite) | Glifos genéricos propios, no son los logos de Microsoft | Propios |
 
 Los logos de Devicon están bajo licencia MIT: Copyright (c) 2015 konpa, incluida en
@@ -35,11 +37,10 @@ perteneciendo a sus dueños.
 
   Además, el logo no se puede alterar salvo para escalarlo. Por eso, al pasar el cursor
   solo crece y no gira. El aviso de marca y de no afiliación está en el pie de página.
-- **Odoo (Odoo S.A.).** La página de brand assets publica el logo con estas reglas:
-  - usarlo solo en los colores provistos;
-  - no recrearlo.
-
-  No hay una licencia pública explícita para terceros. Al pasar el cursor solo crece.
+- **Odoo (Odoo S.A.).** No se usa su logo. Su único logo oficial es el logotipo de texto
+  "odoo", que es ancho, y la página de brand assets no publica un isotipo cuadrado. Sus
+  reglas, además, piden usarlo solo en los colores provistos y no recrearlo. Por eso se usa
+  un glifo propio, el mismo ícono de módulos que identifica a Odoo en el CV.
 - **Microsoft (Power BI, Excel, Power Automate, SharePoint).** No se usan los íconos
   oficiales, porque sus condiciones no cubren este uso:
   - Los íconos de Power Platform (learn.microsoft.com/power-platform/guidance/icons) se

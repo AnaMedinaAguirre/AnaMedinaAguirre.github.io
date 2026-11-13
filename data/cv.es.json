@@ -33,11 +33,7 @@
     "Actualmente diseño e implemento arquitecturas distribuidas en Odoo 18 para empresas del sector retail. Me enfoco en mejorar la eficiencia operativa con soluciones tecnológicas escalables y orientadas a resultados."
   ],
   "ficha": [
-    { "etiqueta": "Formación", "valor": "Ingeniería de Sistemas, décimo ciclo" },
-    { "etiqueta": "Universidad", "valor": "Universidad César Vallejo, Quinto Superior" },
-    { "etiqueta": "Foco actual", "valor": "Arquitecturas distribuidas en Odoo 18 para retail" },
-    { "etiqueta": "Ubicación", "valor": "Lima, Perú" },
-    { "etiqueta": "Disponibilidad", "valor": "Inmediata" },
+    { "etiqueta": "Foco actual", "valor": "Datos y automatización: pipelines ETL, Power BI y flujos con n8n y Power Automate" },
     { "etiqueta": "Idiomas", "valor": "Español nativo · Inglés intermedio" }
   ],
   "proyectosProfesionales": [
@@ -86,6 +82,7 @@
   "experiencia": [
     {
       "cargo": "Analista Funcional",
+      "cargoCorto": "Analista Funcional",
       "empresa": "BOSON INNOVATION E.I.R.L.",
       "inicio": "2026-08",
       "fin": null,
@@ -97,10 +94,12 @@
         "Desarrollo de dashboards ejecutivos (Ventas, Compras, Inventario, Contabilidad y Gastos) con indicadores por sede: ventas totales, comprobantes electrónicos, ticket promedio, notas de crédito y compras por proveedor.",
         "Sincronización de catálogos y listas de precios entre la sede central y cada tienda vía API, con trazabilidad de eventos para asegurar la consistencia de los datos.",
         "Estandarización del despliegue y la gestión remota de sedes con Debian, PostgreSQL, Nginx y Tailscale, replicada en distintas empresas del sector retail."
-      ]
+      ],
+      "tecnologias": ["Odoo 18", "Python", "PostgreSQL", "API / JSON-RPC", "Linux Debian", "Nginx", "Tailscale"]
     },
     {
       "cargo": "Analista de Automatización y Transformación Digital",
+      "cargoCorto": "Automatización",
       "empresa": "CasaLinda",
       "inicio": "2025-11",
       "fin": "2026-07",
@@ -113,10 +112,12 @@
         "Soporte funcional en la implementación de Odoo 17: parametrización, pruebas UAT y documentación.",
         "Implementación de monitoreo, logs y alertas para automatizaciones críticas; gestión de accesos y backups.",
         "Capacitación a usuarios, elaboración de manuales técnicos y ejecución de pilotos digitales."
-      ]
+      ],
+      "tecnologias": ["n8n", "Power Automate", "SharePoint", "Python", "Odoo 17", "WooCommerce", "BioTime", "Power BI", "BPMN"]
     },
     {
       "cargo": "Desarrolladora Web",
+      "cargoCorto": "Desarrollo web",
       "empresa": "CasaLinda",
       "inicio": "2025-02",
       "fin": "2025-11",
@@ -126,17 +127,20 @@
         "Desarrollo de nuevas funcionalidades, formularios, landings y diseño responsive (UX/UI).",
         "Integración del sitio web con sistemas internos (Sistema PROGRESS).",
         "Optimización SEO técnico, velocidad de carga, seguridad, documentación técnica y control de versiones con Git."
-      ]
+      ],
+      "tecnologias": ["WordPress", "PROGRESS", "Git"]
     },
     {
       "cargo": "Desarrolladora Web",
+      "cargoCorto": "Desarrollo web",
       "empresa": "Consigue Ventas",
       "inicio": "2024-11",
       "fin": "2025-02",
       "ubicacion": "Lima, Perú",
       "logros": [
         "Diseño de páginas web responsive con Elementor y WordPress para móviles, tablets y computadoras."
-      ]
+      ],
+      "tecnologias": ["WordPress", "Elementor"]
     }
   ],
   "tecnologias": [

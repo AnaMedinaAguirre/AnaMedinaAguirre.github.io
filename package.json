@@ -13,6 +13,7 @@
     "build:all": "astro build && node scripts/generate-pdfs.mjs",
     "check:html": "html-validate \"dist/**/*.html\"",
     "check:lighthouse": "lhci autorun",
+    "test:about": "node --test scripts/about.test.mjs",
     "test:github": "node --test scripts/github.test.mjs",
     "test:metrics": "node --test scripts/metrics.test.mjs"
   },

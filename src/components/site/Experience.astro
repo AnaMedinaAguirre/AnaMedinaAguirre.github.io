@@ -1,26 +1,72 @@
 ---
+import TechChips from '../TechChips.astro';
+import Icon from '../Icon.astro';
 import { formatMonth, type CV } from '../../lib/cv';
 import type { UI } from '../../i18n/ui';
+import { yearRange } from '../../lib/about.mjs';
+import { techChips } from '../../lib/techchips';
 interface Props { cv: CV; t: UI }
 const { cv, t } = Astro.props;
+const jobs = cv.experiencia.map((j, i) => ({
+  ...j,
+  i,
+  current: j.fin === null,
+  years: yearRange(j.inicio, j.fin, t.present),
+  chips: techChips(j.tecnologias, `data/cv.${cv.lang}.json (experiencia ${i + 1})`),
+}));
 ---
+<!-- Dos presentaciones del mismo contenido; solo una es visible (la otra
+     tiene display: none y no llega al lector de pantalla):
+     - pestañas (patrón tabs de WAI-ARIA) en escritorio, cuando hay JS;
+     - acordeón nativo (<details>) en móvil o sin JS. -->
 <section class="step" id="experiencia" aria-labelledby="exp-title">
   <header class="step-head reveal">
     <h2 id="exp-title">{t.experience}</h2>
   </header>
-  <ol class="timeline">
-    {cv.experiencia.map((j) => (
-      <li class:list={['job', 'reveal', { 'job--current': j.fin === null }]}>
-        <p class="job-date">
-          <time datetime={j.inicio}>{formatMonth(j.inicio, cv.lang)}</time> –{' '}
-          {j.fin ? <time datetime={j.fin}>{formatMonth(j.fin, cv.lang)}</time> : t.present}
-        </p>
-        <h3>{j.cargo}</h3>
-        <p class="job-org">{j.empresa}</p>
-        <ul class="job-list">
-          {j.logros.map((l) => <li>{l}</li>)}
-        </ul>
-      </li>
+
+  <div class="xp xp--tabs reveal" data-xp>
+    <div class="xp-tabs" role="tablist" aria-label={t.experience} aria-orientation="vertical">
+      <span class="xp-ind" aria-hidden="true"></span>
+      {jobs.map((j) => (
+        <button class="xp-tab" type="button" role="tab" id={`xp-tab-${j.i}`} aria-controls={`xp-panel-${j.i}`}
+          aria-selected={j.i === 0 ? 'true' : 'false'} tabindex={j.i === 0 ? 0 : -1}>
+          {j.empresa}<span class="xp-tab-role">{j.cargoCorto}</span><small>{j.years}</small>
+        </button>
+      ))}
+    </div>
+    <div class="xp-panels fx-card">
+      {jobs.map((j) => (
+        <div class="xp-panel" role="tabpanel" id={`xp-panel-${j.i}`} aria-labelledby={`xp-tab-${j.i}`} tabindex="0" hidden={j.i !== 0}>
+          <h3>{j.cargo} <span class="xp-at">@ {j.empresa}</span></h3>
+          <p class="xp-meta">
+            <span><time datetime={j.inicio}>{formatMonth(j.inicio, cv.lang)}</time> – {j.fin ? <time datetime={j.fin}>{formatMonth(j.fin, cv.lang)}</time> : t.present}</span>
+            <span><Icon name="pin" />{j.ubicacion}</span>
+            {j.current && <span class="now-pill">{t.currentRole}</span>}
+          </p>
+          <ul class="xp-points">{j.logros.map((l) => <li>{l}</li>)}</ul>
+          <TechChips chips={j.chips} label={t.techUsed} class="xp-stack" />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="xp-acc reveal">
+    {jobs.map((j) => (
+      <details class="xp-item" open={j.i === 0}>
+        <summary>
+          <span class="xp-sum-org">{j.empresa}{j.current && <span class="now-pill">{t.currentRole}</span>}</span>
+          <span class="xp-sum-role">{j.cargo}</span>
+          <small>{j.years}</small>
+        </summary>
+        <div class="xp-body">
+          <p class="xp-meta">
+            <span><time datetime={j.inicio}>{formatMonth(j.inicio, cv.lang)}</time> – {j.fin ? <time datetime={j.fin}>{formatMonth(j.fin, cv.lang)}</time> : t.present}</span>
+            <span><Icon name="pin" />{j.ubicacion}</span>
+          </p>
+          <ul class="xp-points">{j.logros.map((l) => <li>{l}</li>)}</ul>
+          <TechChips chips={j.chips} label={t.techUsed} class="xp-stack" />
+        </div>
+      </details>
     ))}
-  </ol>
+  </div>
 </section>
