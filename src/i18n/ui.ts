@@ -24,6 +24,12 @@ const es = {
   langSwitch: { short: 'EN', label: 'View this site in English', hreflang: 'en' },
   downloadCv: 'Descargar CV',
   downloadCvPdf: 'Descargar CV (PDF)',
+  /** Franja de tecnologías bajo el hero */
+  strip: {
+    label: 'Tecnologías con las que trabajo',
+    /** Exigido por la política de marca de dbt Labs al usar su logo */
+    dbtNotice: 'dbt y el logo de dbt son marcas de dbt Labs, LLC. Este sitio no está afiliado a dbt Labs.',
+  },
   contact: 'Contactar',
   newTab: '(se abre en una pestaña nueva)',
   about: 'Sobre mí',
@@ -130,6 +136,10 @@ const en: UI = {
   langSwitch: { short: 'ES', label: 'Ver este sitio en español', hreflang: 'es' },
   downloadCv: 'Download CV',
   downloadCvPdf: 'Download CV (PDF)',
+  strip: {
+    label: 'Technologies I work with',
+    dbtNotice: 'dbt and the dbt logo are trademarks of dbt Labs, LLC. This site is not affiliated with dbt Labs.',
+  },
   contact: 'Get in touch',
   newTab: '(opens in a new tab)',
   about: 'About me',

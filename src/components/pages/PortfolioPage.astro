@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Header from '../site/Header.astro';
 import Hero from '../site/Hero.astro';
+import TechStrip from '../site/TechStrip.astro';
 import About from '../site/About.astro';
 import Projects from '../site/Projects.astro';
 import Experience from '../site/Experience.astro';
@@ -37,6 +38,7 @@ const jsonLd = {
   <Header cv={cv} t={t} altHref={routes.home[other]} />
   <main id="contenido" class="flow wrap" tabindex="-1">
     <Hero cv={cv} t={t} />
+    <TechStrip t={t} />
     <About cv={cv} t={t} />
     <Projects cv={cv} t={t} />
     <Experience cv={cv} t={t} />

@@ -1,0 +1,19 @@
+{
+  "$comment": "Franja de tecnologías bajo el hero. El build falla si: un nombre no está en las tecnologías de cv.es.json, un logo no existe en public/assets/logos/, un glifo no existe en el sprite, o falta la fuente/licencia. 'intacto': la marca no permite rotar ni alterar el logo (al pasar el cursor solo crece). 'contorno': logo oscuro; en tema oscuro lleva un halo claro. 'glifo': ícono genérico propio (no es el logo de la marca) con el color principal del producto. Fuentes y licencias en docs/LOGOS.md. Son nombres de producto: iguales en ES y EN.",
+  "items": [
+    { "nombre": "Python", "logo": "python.svg", "fuente": "Devicon 2.18.0", "licencia": "MIT" },
+    { "nombre": "PostgreSQL", "logo": "postgresql.svg", "contorno": true, "fuente": "Devicon 2.18.0", "licencia": "MIT" },
+    { "nombre": "Power BI", "glifo": "powerbi", "color": "#F2C811", "colorClaro": "#8A6D00", "fuente": "Glifo propio", "licencia": "Propio" },
+    { "nombre": "Excel", "glifo": "excel", "color": "#33C481", "colorClaro": "#107C41", "fuente": "Glifo propio", "licencia": "Propio" },
+    { "nombre": "dbt", "logo": "dbt.png", "intacto": true, "fuente": "dbt Labs, kit de marca (getdbt.com/brand-guidelines)", "licencia": "Política de marca de dbt Labs (uso en un stack tecnológico, con aviso de no afiliación)" },
+    { "nombre": "n8n", "logo": "n8n.svg", "fuente": "Devicon 2.18.0", "licencia": "MIT" },
+    { "nombre": "Power Automate", "glifo": "powerautomate", "color": "#4C9BFF", "colorClaro": "#0058D6", "fuente": "Glifo propio", "licencia": "Propio" },
+    { "nombre": "SharePoint", "glifo": "sharepoint", "color": "#37C6D0", "colorClaro": "#036C70", "fuente": "Glifo propio", "licencia": "Propio" },
+    { "nombre": "Odoo", "logo": "odoo.svg", "logoOscuro": "odoo-oscuro.svg", "alto": 18, "intacto": true, "fuente": "Odoo S.A., brand assets (odoo.com/page/brand-assets)", "licencia": "Logo oficial; sin licencia pública explícita (reglas: no recrearlo, solo sus colores)" },
+    { "nombre": "WooCommerce", "logo": "woocommerce.svg", "fuente": "Devicon 2.18.0", "licencia": "MIT" },
+    { "nombre": "Git", "logo": "git.svg", "fuente": "Devicon 2.18.0", "licencia": "MIT" },
+    { "nombre": "GitHub Actions", "logo": "githubactions.svg", "fuente": "Devicon 2.18.0", "licencia": "MIT" },
+    { "nombre": "Linux", "logo": "linux.png", "contorno": true, "fuente": "Devicon 2.18.0 (rasterizado a PNG de 56 px)", "licencia": "MIT" },
+    { "nombre": "Nginx", "logo": "nginx.svg", "alto": 16, "fuente": "Devicon 2.18.0 (viewBox recortado al texto)", "licencia": "MIT" }
+  ]
+}

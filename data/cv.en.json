@@ -151,7 +151,8 @@
         { "nombre": "Dashboards", "icono": "powerbi" },
         { "nombre": "Advanced Excel", "icono": "excel" },
         { "nombre": "SQL (PostgreSQL)", "icono": "postgresql" },
-        { "nombre": "ETL", "icono": "etl" }
+        { "nombre": "ETL", "icono": "etl" },
+        { "nombre": "dbt", "icono": "layers" }
       ]
     },
     {
@@ -219,6 +220,7 @@
       "items": [
         { "nombre": "Git", "icono": "git" },
         { "nombre": "GitHub", "icono": "github" },
+        { "nombre": "GitHub Actions", "icono": "githubactions" },
         { "nombre": "Advanced Microsoft Office (Excel, Word, PowerPoint)", "icono": "doc" }
       ]
     }
