@@ -6,17 +6,28 @@ import type { CV } from '../../lib/cv';
 interface Props { cv: CV; t: UI }
 const { cv, t } = Astro.props;
 const { persona, contacto } = cv;
-const last = persona.stack.length - 1;
+// Línea de terminal: rota entre frases cortas (persona.frasesHero).
+const frases = persona.frasesHero;
 ---
 <section class="hero step" id="inicio" aria-labelledby="hero-title">
   <div class="hero-text">
     <h1 id="hero-title" tabindex="-1">{persona.nombre}</h1>
     <div class="hero-detail">
+      <p class="hero-badge"><span class="status-dot" aria-hidden="true"></span>{persona.disponibilidad}</p>
       <p class="hero-role">{persona.titulo}</p>
-      <p class="hero-stack">{persona.stack.map((s, i) => <Fragment><span>{i < last ? `${s} ·` : s}</span>{i < last && ' '}</Fragment>)}</p>
+      <!-- Enfocable para poder pausar la animación con teclado o al tocarla.
+           El lector de pantalla lee todas las frases una sola vez (sr-only);
+           la parte animada está oculta para él. -->
+      <p class="hero-term" tabindex="0" data-typer data-phrases={JSON.stringify(frases)}>
+        <span class="sr-only">{frases.join(', ')}</span>
+        <span class="term-prompt" aria-hidden="true">$</span>
+        <span class="term-line" aria-hidden="true">
+          {frases.map((f) => <span class="term-ghost">{f}</span>)}
+          <span class="term-typed"><span class="term-text" data-typer-text>{frases[0]}</span></span>
+        </span>
+      </p>
       <ul class="hero-meta">
         <li><Icon name="pin" />{persona.ubicacion}</li>
-        <li><span class="status-dot" aria-hidden="true"></span>{persona.disponibilidad}</li>
       </ul>
       <div class="hero-actions">
         <a class="btn btn-primary" href={cvPdfPath(cv.lang)} download>

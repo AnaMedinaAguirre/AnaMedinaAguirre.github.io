@@ -11,8 +11,8 @@ const { cv, t } = Astro.props;
   </header>
   <div class="edu">
     {cv.educacion.map((e, i) => (
-      <article class="edu-main reveal" aria-labelledby={`edu-degree-${i}`}>
-        <Icon name="grad" class="ic ic-lg" />
+      <article class="edu-main reveal fx-card" aria-labelledby={`edu-degree-${i}`}>
+        <Icon name="grad" class="ic ic-lg fx-icon" />
         <h3 id={`edu-degree-${i}`}>{e.titulo}</h3>
         <p class="edu-org">{e.institucion}</p>
         <p class="edu-date">
@@ -29,7 +29,7 @@ const { cv, t } = Astro.props;
         </ul>
       </article>
     ))}
-    <div class="edu-extra reveal">
+    <div class="edu-extra reveal fx-card">
       <h3>{t.courses}</h3>
       <ul class="courses">
         {cv.formacion.map((f) => (
