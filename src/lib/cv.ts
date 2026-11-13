@@ -25,6 +25,8 @@ export const cvSchema = z.object({
     nombreCorto: nonEmpty,
     titulo: nonEmpty,
     stack: z.array(nonEmpty).min(1),
+    /** Frases que rotan en la línea de terminal del hero; la primera es la que queda fija */
+    frasesHero: z.array(nonEmpty).min(1),
     ubicacion: nonEmpty,
     disponibilidad: nonEmpty,
     foto: z.object({ alt: nonEmpty }),
@@ -129,6 +131,7 @@ function checkParity(a: CV, b: CV) {
       idiomas: cv.idiomas.length,
       ficha: cv.ficha.length,
       perfil: cv.perfil.length,
+      frasesHero: cv.persona.frasesHero.length,
       contacto: cv.contacto.email + cv.contacto.telefono + cv.contacto.linkedin.url + cv.contacto.github.url,
     });
   if (shape(a) !== shape(b)) {

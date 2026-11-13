@@ -15,14 +15,14 @@ const idiomas = cv.idiomas
   </header>
   <ul class="skills">
     {cv.competencias.map((c) => (
-      <li class="skill reveal">
-        <Icon name={c.icono} class="ic ic-lg" />
+      <li class="skill reveal fx-card fx-row">
+        <Icon name={c.icono} class="ic ic-lg fx-icon" />
         <h3>{c.titulo}</h3>
         <p>{c.descripcion}</p>
       </li>
     ))}
-    <li class="skill reveal">
-      <Icon name="lang" class="ic ic-lg" />
+    <li class="skill reveal fx-card fx-row">
+      <Icon name="lang" class="ic ic-lg fx-icon" />
       <h3>{t.languages}</h3>
       <p>{idiomas}</p>
     </li>

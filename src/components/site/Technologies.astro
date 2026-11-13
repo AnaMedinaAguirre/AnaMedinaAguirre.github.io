@@ -21,7 +21,7 @@ const { cv, t } = Astro.props;
 
   <div class="tech-grid">
     {cv.tecnologias.map((g) => (
-      <div class="tech-group reveal" data-group={g.id}>
+      <div class="tech-group reveal fx-card" data-group={g.id}>
         <h3>{g.nombre}</h3>
         <ul class="chips">
           {g.items.map((it) => <li><Icon name={it.icono} />{it.nombre}</li>)}

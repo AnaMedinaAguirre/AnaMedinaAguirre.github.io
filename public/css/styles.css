@@ -54,6 +54,12 @@
   /* Marcas de gráfico (validadas: banda de luminosidad, croma, daltonismo y contraste) */
   --chart-1: #1E9AA3;
   --chart-2: #C4861E;
+  /* Efectos con el cursor: degradado cian → ámbar con tonos que mantienen
+     el ícono blanco legible, y luz de fondo */
+  --fx-grad: linear-gradient(135deg in oklch, #1E9AA3, #C4861E);
+  --fx-spot: radial-gradient(closest-side, rgba(63, 193, 201, 0.13), rgba(242, 184, 75, 0.05) 55%, transparent);
+  --fx-glow: rgba(63, 193, 201, 0.10);
+  --fx-ring: rgba(63, 193, 201, 0.75);
 }
 
 /* Claro */
@@ -76,6 +82,10 @@
   --photo-filter: grayscale(1) contrast(1.04);
   --chart-1: #008C99;
   --chart-2: #9A5F00;
+  --fx-grad: linear-gradient(135deg in oklch, #1E9AA3, #C4861E);
+  --fx-spot: radial-gradient(closest-side, rgba(11, 107, 116, 0.09), rgba(143, 90, 11, 0.04) 55%, transparent);
+  --fx-glow: rgba(11, 107, 116, 0.07);
+  --fx-ring: rgba(11, 107, 116, 0.60);
 }
 
 @media (min-width: 900px) {
@@ -177,6 +187,7 @@ a:hover { text-decoration-thickness: 2px; }
   font-family: var(--font-display); font-weight: 700; font-stretch: 112%;
   font-size: 1.0625rem; letter-spacing: .005em;
   margin-right: auto;
+  white-space: nowrap;
 }
 .brand-mark { width: 36px; height: 22px; fill: none; stroke-width: 2; }
 .brand-mark circle { stroke: var(--event); }
@@ -209,6 +220,29 @@ a:hover { text-decoration-thickness: 2px; }
 .icon-btn:hover { background: var(--surface); }
 .icon-btn .ic { width: 20px; height: 20px; }
 /* Botón de idioma: mismo formato que el de tema, con el código del otro idioma */
+/* Descarga del CV: siempre visible en el header */
+.cv-btn {
+  height: 44px; padding: 0 12px;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent); color: var(--on-accent);
+  border-radius: var(--r-md);
+  font-family: var(--font-display); font-weight: 700; font-size: 0.875rem; letter-spacing: 0.04em;
+  text-decoration: none;
+}
+.cv-btn:hover { background: color-mix(in srgb, var(--accent) 86%, var(--text)); }
+.cv-btn .ic { width: 18px; height: 18px; }
+/* Móvil: cuatro controles junto a la marca sin partir el nombre */
+@media (max-width: 479px) {
+  .nav-actions { gap: 6px; }
+  .icon-btn, .cv-btn { width: 40px; height: 40px; }
+  .cv-btn { padding: 0; justify-content: center; }
+  .cv-btn-text { display: none; }
+}
+@media (max-width: 359px) {
+  .nav { gap: 8px; }
+  .brand { font-size: 0.9375rem; }
+  .brand-mark { display: none; }
+}
 .lang-toggle {
   font-family: var(--font-display);
   font-weight: 700;
@@ -359,7 +393,8 @@ a:hover { text-decoration-thickness: 2px; }
   }
   .hero h1 { max-width: 14ch; }
   .hero-detail > :first-child { margin-top: 0; }
-  .hero-detail .hero-stack { margin-top: 10px; }
+  .hero-detail .hero-role { margin-top: 14px; }
+  .hero-detail .hero-term { margin-top: 12px; }
   .hero-detail .hero-meta { margin-top: 16px; }
   .hero-detail .hero-actions { margin-top: 22px; }
   .hero-canvas { padding: 28px 32px; }
@@ -385,8 +420,45 @@ a:hover { text-decoration-thickness: 2px; }
   color: var(--accent);
   max-width: 26ch;
 }
-.hero-stack { margin-top: 14px; color: var(--muted); font-size: var(--fs-base); max-width: 40rem; }
-.hero-stack span { white-space: nowrap; }
+/* Etiqueta de disponibilidad */
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 20px; padding: 6px 14px 6px 12px;
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  background: var(--surface);
+  font-size: var(--fs-sm); font-weight: 700;
+}
+/* Línea de terminal con frases que rotan. Todas las frases están apiladas
+   como "fantasmas" invisibles en la misma celda: el alto y el ancho reservados
+   son los de la frase más larga, así la animación no mueve el diseño. */
+.hero-term {
+  margin-top: 14px; max-width: 40rem;
+  display: flex; gap: 10px; align-items: baseline;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.9375rem; line-height: 1.6;
+  color: var(--muted);
+  border-radius: var(--r-sm);
+}
+.term-prompt { color: var(--event); font-weight: 700; }
+.term-line { display: grid; flex: 1; min-width: 0; }
+.term-ghost, .term-typed { grid-area: 1 / 1; }
+.term-ghost { visibility: hidden; }
+.term-ghost::after { content: ""; display: inline-block; width: 0.6em; margin-left: 2px; }
+.term-typed { color: var(--text); }
+/* Cursor de bloque: es el fondo del final del texto, no una caja aparte.
+   El texto empieza siempre en el mismo punto y solo crece, así que escribir
+   letra a letra no cuenta como desplazamiento de diseño (CLS 0). Parpadea
+   solo mientras la animación corre. */
+.term-text {
+  padding-right: calc(0.6em + 2px);
+  background: linear-gradient(var(--accent), var(--accent)) no-repeat right center / 0.6em 1.15em;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-term.is-animating:not(.is-paused) .term-text { animation: caret-blink 1s steps(1) infinite; }
+  /* Evita ver la primera frase un instante antes de que empiece a escribirse */
+  .js .hero-term:not(.is-animating):not(.is-done) .term-text { color: transparent; }
+}
+@keyframes caret-blink { 50% { background-size: 0 0; } }
 .hero-meta { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px 22px; color: var(--text); }
 .hero-meta li { display: inline-flex; align-items: center; gap: 8px; }
 .hero-meta .ic { color: var(--muted); }
@@ -786,11 +858,11 @@ html:not(.js) .metrics-body, html:not(.js) .metrics-state { display: none; }
 @media (min-width: 700px) { .skills { grid-template-columns: repeat(2, 1fr); column-gap: 40px; } }
 @media (min-width: 1100px) { .skills { grid-template-columns: repeat(3, 1fr); } }
 .skill {
-  display: grid; grid-template-columns: 28px 1fr; column-gap: 16px; row-gap: 4px;
+  display: grid; grid-template-columns: 48px 1fr; column-gap: 16px; row-gap: 4px;
   padding: 22px 0;
   border-bottom: 1px solid var(--line);
 }
-.skill .ic-lg { grid-row: span 2; color: var(--accent); }
+.skill .ic-lg { grid-row: span 2; }
 .skill h3 { font-size: var(--fs-md); font-weight: 700; font-stretch: 105%; }
 .skill p { color: var(--muted); }
 
@@ -842,10 +914,10 @@ html:not(.js) .metrics-body, html:not(.js) .metrics-state { display: none; }
 @media (min-width: 700px) { .step--end .step-head h2 { font-stretch: 115%; line-height: 1.12; } }
 .contact-list { display: grid; max-width: 46rem; border-top: 1px solid var(--line); }
 .contact-list li {
-  display: grid; grid-template-columns: 24px 1fr; gap: 6px 16px; align-items: center;
+  display: grid; grid-template-columns: 44px 1fr; gap: 6px 16px; align-items: center;
   padding: 18px 0; border-bottom: 1px solid var(--line);
 }
-.contact-list > li > .ic { color: var(--accent); width: 22px; height: 22px; }
+.contact-list > li > .ic { width: 22px; height: 22px; }
 .contact-info { display: grid; min-width: 0; }
 .contact-label { color: var(--muted); font-size: var(--fs-sm); }
 .contact-info a { color: var(--text); font-weight: 700; font-size: var(--fs-md); overflow-wrap: anywhere; }
@@ -854,7 +926,7 @@ html:not(.js) .metrics-body, html:not(.js) .metrics-state { display: none; }
 .copy-btn { grid-column: 2; justify-self: start; }
 .copy-btn.is-done { border-color: var(--accent); color: var(--accent); }
 @media (min-width: 560px) {
-  .contact-list li { grid-template-columns: 24px 1fr auto; }
+  .contact-list li { grid-template-columns: 44px 1fr auto; }
   .copy-btn { grid-column: auto; }
 }
 .contact-cta { margin-top: 32px; padding-bottom: clamp(4rem, 3rem + 4vw, 6rem); }
@@ -896,9 +968,104 @@ html:not(.js) .metrics-body, html:not(.js) .metrics-state { display: none; }
   .flow::after { transition: transform .15s linear; }
 }
 
+/* ---------- Efectos con el cursor ----------
+   Solo con mouse ((hover: hover) and (pointer: fine)). Con movimiento
+   reducido quedan solo los cambios de color. Todo lo que se mueve usa
+   transform, translate u opacity. main.js agrega la luz de fondo (.fx-spot)
+   y las capas de brillo (.fx-glow, .fx-ring) solo cuando corresponde. */
+.fx-card { position: relative; isolation: isolate; }
+
+/* Recuadro del ícono */
+.fx-icon {
+  box-sizing: content-box; padding: 10px;
+  border-radius: 12px;
+  background: var(--accent-soft); color: var(--accent);
+  transition: background-color .35s ease, color .35s ease, transform .45s var(--ease);
+}
+.contact-list > li > .fx-icon { padding: 11px; }
+/* Teclado: el foco dentro de la tarjeta da el mismo cambio de color que el cursor */
+.fx-card:has(:focus-visible) .fx-icon {
+  background: var(--fx-grad); color: #fff;
+  box-shadow: 0 12px 24px -12px var(--fx-ring);
+}
+
+/* Línea inferior: se dibuja al entrar en pantalla y se completa con el cursor o el foco */
+.fx-card::after {
+  content: ""; position: absolute; z-index: 3; pointer-events: none;
+  left: var(--r-lg); right: var(--r-lg); bottom: 0; height: 3px;
+  border-radius: 3px;
+  background: var(--fx-grad);
+  transform: scaleX(0); transform-origin: left;
+}
+.tech-group.fx-card::after { left: var(--r-md); right: var(--r-md); }
+.fx-row::after { left: 0; right: 0; bottom: -1px; height: 2px; }
+.fx-card.is-in::after { transform: scaleX(.18); }
+/* Pantallas táctiles (sin hover): la línea se dibuja completa al entrar */
+@media (hover: none), (pointer: coarse) { .fx-card.is-in::after { transform: scaleX(1); } }
+.fx-card:has(:focus-visible)::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: no-preference) {
+  .fx-card::after { transition: transform .9s var(--ease) .25s; }
+  .fx-card:has(:focus-visible)::after { transition-delay: 0s; }
+}
+
+/* Brillo dentro de la tarjeta (relleno) y en su borde (anillo) */
+.fx-glow, .fx-ring {
+  position: absolute; inset: 0; border-radius: inherit;
+  overflow: hidden; pointer-events: none;
+  opacity: 0; transition: opacity .35s ease;
+}
+.fx-glow { z-index: -1; }
+.fx-ring {
+  z-index: 2; padding: 1px;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+/* Las filas (habilidades, contacto) no tienen caja: el brillo se extiende un poco a los lados */
+.fx-row > .fx-glow, .fx-row > .fx-ring { inset: 0 -12px; border-radius: var(--r-md); }
+.fx-glow > i, .fx-ring > i {
+  position: absolute; left: 0; top: 0; border-radius: 50%;
+  will-change: transform;
+}
+.fx-glow > i { width: 440px; height: 440px; margin: -220px 0 0 -220px; background: radial-gradient(closest-side, var(--fx-glow), transparent); }
+.fx-ring > i { width: 320px; height: 320px; margin: -160px 0 0 -160px; background: radial-gradient(closest-side, var(--fx-ring), transparent); }
+
+/* Luz de fondo que sigue al cursor (detrás del contenido) */
+.fx-spot {
+  position: fixed; left: 0; top: 0; z-index: -1;
+  width: 680px; height: 680px; margin: -340px 0 0 -340px;
+  border-radius: 50%; pointer-events: none;
+  background: var(--fx-spot);
+  opacity: 0; transition: opacity .6s ease;
+  will-change: transform;
+}
+.fx-spot.is-on { opacity: 1; }
+
+@media (hover: hover) and (pointer: fine) {
+  .fx-card:hover .fx-icon {
+    background: var(--fx-grad); color: #fff;
+    box-shadow: 0 12px 24px -12px var(--fx-ring);
+  }
+  .fx-card:hover::after { transform: scaleX(1); transition-delay: 0s; }
+  .fx-card:hover > .fx-glow, .fx-card:hover > .fx-ring { opacity: 1; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  /* La tarjeta sube un poco (las filas no, para no mover sus separadores) */
+  .fx-card { transition: translate .35s var(--ease); }
+  .js .fx-card.reveal { transition: opacity .6s var(--ease), transform .6s var(--ease), translate .35s var(--ease); }
+  .fx-card:not(.fx-row):hover { translate: 0 -4px; }
+  .fx-card:hover .fx-icon { transform: rotate(-8deg) scale(1.06); }
+  /* Botones principales con efecto imán (main.js fija el translate) */
+  .btn-primary, .cv-btn { transition: background-color .2s ease, border-color .2s ease, transform .2s var(--ease), translate .35s var(--ease); }
+  /* Logos de tecnologías: giran y crecen un poco */
+  .chips .ic { transition: transform .35s var(--ease); }
+  .chips li:hover .ic { transform: rotate(-8deg) scale(1.18); }
+}
+@media (prefers-reduced-motion: reduce) { .fx-spot, .fx-glow, .fx-ring { display: none; } }
+
 /* ---------- Impresión ---------- */
 @media print {
-  .site-header, .back-to-top, .filters, .skip-link { display: none !important; }
+  .site-header, .back-to-top, .filters, .skip-link, .fx-spot, .fx-glow, .fx-ring { display: none !important; }
   .flow { padding-top: 0; }
   .js .reveal { opacity: 1 !important; transform: none !important; }
 }

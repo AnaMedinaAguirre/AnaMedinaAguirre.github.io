@@ -265,6 +265,143 @@
     });
   });
 
+  /* Línea de terminal del hero: escribe y borra frases cortas con ritmo
+     humano. Da 2 vueltas y se detiene en la primera frase con el cursor quieto
+     (WCAG 2.2.2). Se pausa con el mouse encima o con el foco. Con movimiento
+     reducido (o sin JS) queda fija la primera frase. El lector de pantalla lee
+     todas las frases una vez desde un span sr-only; esto es solo visual. */
+  var typer = document.querySelector('[data-typer]');
+  var typed = typer && typer.querySelector('[data-typer-text]');
+  var phrases = [];
+  try { phrases = JSON.parse(typer.getAttribute('data-phrases')); } catch (e) { phrases = []; }
+  if (typer && typed && phrases.length > 1 && !reduceMotion.matches) {
+    var TYPE_MS = 70, JITTER_MS = 20, HOLD_MS = 1800, ERASE_MS = 35, GAP_MS = 300, ROUNDS = 2;
+    var hovered = false, focused = false, pending = null;
+    var later = function (fn, ms) {
+      window.setTimeout(function () {
+        if (hovered || focused) { pending = fn; return; }   // en pausa: se retoma al salir
+        fn();
+      }, ms);
+    };
+    var setPaused = function () {
+      var paused = hovered || focused;
+      typer.classList.toggle('is-paused', paused);
+      if (!paused && pending) { var fn = pending; pending = null; fn(); }
+    };
+    typer.addEventListener('mouseenter', function () { hovered = true; setPaused(); });
+    typer.addEventListener('mouseleave', function () { hovered = false; setPaused(); });
+    typer.addEventListener('focus', function () { focused = true; setPaused(); });
+    typer.addEventListener('blur', function () { focused = false; setPaused(); });
+
+    var type = function (text, done) {
+      var n = typed.textContent.length;
+      if (n >= text.length) { done(); return; }
+      typed.textContent = text.slice(0, n + 1);
+      later(function () { type(text, done); }, TYPE_MS + Math.round((Math.random() * 2 - 1) * JITTER_MS));
+    };
+    var erase = function (done) {
+      var n = typed.textContent.length;
+      if (n === 0) { done(); return; }
+      typed.textContent = typed.textContent.slice(0, n - 1);
+      later(function () { erase(done); }, ERASE_MS);
+    };
+    var finish = function () {
+      typer.classList.remove('is-animating');
+      typer.classList.add('is-done');
+    };
+    var step = function (round, i) {
+      if (round === ROUNDS) { type(phrases[0], finish); return; }   // cierre: queda la primera
+      type(phrases[i], function () {
+        later(function () {
+          erase(function () {
+            var next = i + 1 < phrases.length ? [round, i + 1] : [round + 1, 0];
+            later(function () { step(next[0], next[1]); }, GAP_MS);
+          });
+        }, HOLD_MS);
+      });
+    };
+    typed.textContent = '';
+    typer.classList.add('is-animating');
+    later(function () { step(0, 0); }, 500);
+  }
+
+  /* Tarjetas: la línea inferior se dibuja al entrar en pantalla */
+  var fxCards = document.querySelectorAll('.fx-card');
+  if ('IntersectionObserver' in window && !reduceMotion.matches) {
+    var lineIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        lineIO.unobserve(entry.target);
+      });
+    }, { threshold: 0.3 });
+    Array.prototype.forEach.call(fxCards, function (el) { lineIO.observe(el); });
+  } else {
+    Array.prototype.forEach.call(fxCards, function (el) { el.classList.add('is-in'); });
+  }
+
+  /* Efectos con el cursor: solo con mouse y sin "reducir movimiento".
+     - luz de fondo que sigue al cursor con un leve retraso
+     - brillo dentro de la tarjeta y en su borde, bajo el cursor
+     - efecto imán en los botones principales
+     Un solo requestAnimationFrame que se detiene cuando el cursor está quieto;
+     solo se escriben transform y translate. */
+  var fineMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (fineMouse && !reduceMotion.matches) {
+    Array.prototype.forEach.call(fxCards, function (card) {
+      card.insertAdjacentHTML('beforeend',
+        '<span class="fx-glow" aria-hidden="true"><i></i></span><span class="fx-ring" aria-hidden="true"><i></i></span>');
+    });
+    var spot = document.createElement('div');
+    spot.className = 'fx-spot';
+    spot.setAttribute('aria-hidden', 'true');
+    document.body.insertBefore(spot, document.body.firstChild);
+
+    var MAGNET = '.btn-primary, .cv-btn';
+    var pos = { x: 0, y: 0 }, cur = { x: 0, y: 0 }, fxRAF = 0, fxCard = null, magEl = null;
+    var placeGlow = function (card) {
+      var layers = card.querySelectorAll('.fx-glow, .fx-ring');
+      for (var n = 0; n < layers.length; n++) {
+        var r = layers[n].getBoundingClientRect();
+        layers[n].firstChild.style.transform = 'translate3d(' + (pos.x - r.left) + 'px,' + (pos.y - r.top) + 'px,0)';
+      }
+    };
+    var fxFrame = function () {
+      cur.x += (pos.x - cur.x) * 0.12;
+      cur.y += (pos.y - cur.y) * 0.12;
+      spot.style.transform = 'translate3d(' + cur.x.toFixed(1) + 'px,' + cur.y.toFixed(1) + 'px,0)';
+      if (fxCard) placeGlow(fxCard);
+      if (magEl) {
+        var m = magEl.getBoundingClientRect();
+        var dx = Math.max(-0.5, Math.min(0.5, (pos.x - m.left) / m.width - 0.5));
+        var dy = Math.max(-0.5, Math.min(0.5, (pos.y - m.top) / m.height - 0.5));
+        magEl.style.translate = (dx * 10).toFixed(1) + 'px ' + (dy * 8).toFixed(1) + 'px';   // máx. 5 px y 4 px
+      }
+      var still = Math.abs(pos.x - cur.x) < 0.3 && Math.abs(pos.y - cur.y) < 0.3;
+      fxRAF = still ? 0 : window.requestAnimationFrame(fxFrame);
+    };
+    var kick = function () { if (!fxRAF) fxRAF = window.requestAnimationFrame(fxFrame); };
+    var releaseMagnet = function () { if (magEl) { magEl.style.translate = ''; magEl = null; } };
+
+    document.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      pos.x = e.clientX; pos.y = e.clientY;
+      if (!spot.classList.contains('is-on')) { cur.x = pos.x; cur.y = pos.y; spot.classList.add('is-on'); }
+      var t = e.target && e.target.closest ? e.target : null;
+      fxCard = t && t.closest('.fx-card');
+      var m = t && t.closest(MAGNET);
+      if (m !== magEl) { releaseMagnet(); magEl = m; }
+      kick();
+    }, { passive: true });
+    // Al hacer scroll la tarjeta se mueve bajo el cursor quieto: reubicar el brillo
+    window.addEventListener('scroll', function () { if (fxCard) window.requestAnimationFrame(function () { if (fxCard) placeGlow(fxCard); }); }, { passive: true });
+    document.documentElement.addEventListener('mouseleave', function () {
+      spot.classList.remove('is-on');
+      fxCard = null;
+      releaseMagnet();
+    });
+  }
+
   /* Skip link: mover el foco al contenido principal */
   var skip = document.querySelector('.skip-link');
   var main = document.getElementById('contenido');

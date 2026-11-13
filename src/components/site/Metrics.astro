@@ -14,7 +14,7 @@ const skeletonBars = Array.from({ length: 7 });
   data-state={config ? 'loading' : 'unavailable'}
   data-url={config?.url} data-key={config?.key} data-origin={Astro.site?.origin} data-lang={cv.lang}>
   <script type="application/json" data-metrics-i18n set:html={JSON.stringify(m)} />
-  <div class="metrics-panel">
+  <div class="metrics-panel fx-card">
     <header class="metrics-head">
       <h2 id="metrics-title">{m.title}</h2>
       <p class="metrics-since" data-since hidden></p>

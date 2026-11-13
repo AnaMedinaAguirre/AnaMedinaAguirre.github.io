@@ -27,7 +27,7 @@ const diagrams = { multisede: Multisede, dashboards: Dashboards, sunat: Sunat, i
       const Diagram = diagrams[p.diagrama];
       const hid = `pj-${p.id}`;
       return (
-        <article class:list={['project', 'reveal', { 'project--featured': p.destacado }]} aria-labelledby={hid}>
+        <article class:list={['project', 'reveal', 'fx-card', { 'project--featured': p.destacado }]} aria-labelledby={hid}>
           <Diagram lang={cv.lang} />
           <div class="project-body">
             <p class="project-client">
@@ -49,9 +49,9 @@ const diagrams = { multisede: Multisede, dashboards: Dashboards, sunat: Sunat, i
   {personal.length > 0 ? (
     <div class="projects personal-projects">
       {personal.map((p) => (
-        <article class="project personal-project reveal" aria-labelledby={`repo-${p.id}`}>
+        <article class="project personal-project reveal fx-card" aria-labelledby={`repo-${p.id}`}>
           <div class="project-body">
-            <Icon name="github" class="ic ic-lg" />
+            <Icon name="github" class="ic ic-lg fx-icon" />
             <h4 class="project-title" id={`repo-${p.id}`}>{p.name}</h4>
             <p>{p.description || t.projectDescriptionPending}</p>
             {p.technologies.length > 0 && <ul class="tags" aria-label={t.techUsed}>{p.technologies.map((tech) => <li>{tech}</li>)}</ul>}

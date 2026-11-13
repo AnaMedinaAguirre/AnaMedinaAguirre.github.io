@@ -1,7 +1,7 @@
 ---
 import Icon from '../Icon.astro';
 import type { CV } from '../../lib/cv';
-import type { UI } from '../../i18n/ui';
+import { cvPdfPath, type UI } from '../../i18n/ui';
 interface Props { cv: CV; t: UI; altHref: string }
 const { cv, t, altHref } = Astro.props;
 const links = Object.entries(t.nav) as [string, string][];
@@ -26,6 +26,9 @@ const links = Object.entries(t.nav) as [string, string][];
     </div>
 
     <div class="nav-actions">
+      <a class="cv-btn" href={cvPdfPath(cv.lang)} download aria-label={t.downloadCvPdf}>
+        <Icon name="download" /><span class="cv-btn-text" aria-hidden="true">CV</span>
+      </a>
       <a class="icon-btn lang-toggle" href={altHref} hreflang={t.langSwitch.hreflang} lang={t.langSwitch.hreflang}
         aria-label={t.langSwitch.label} data-lang={t.langSwitch.hreflang}>{t.langSwitch.short}</a>
       <button class="icon-btn theme-toggle" type="button" aria-label={t.themeToLight}

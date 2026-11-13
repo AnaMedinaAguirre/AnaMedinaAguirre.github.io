@@ -13,6 +13,7 @@
     "nombreCorto": "Ana Medina",
     "titulo": "Data & Process Automation Analyst",
     "stack": ["ETL", "Python", "SQL (PostgreSQL)", "Power BI", "n8n", "Power Automate", "Odoo"],
+    "frasesHero": ["Data Analyst", "ETL with Python & SQL", "Power BI dashboards", "Automation with n8n & Power Automate", "Odoo & API integrations"],
     "ubicacion": "Lima, Peru",
     "disponibilidad": "Available immediately",
     "foto": { "alt": "Portrait of Ana Patricia Medina Aguirre" }

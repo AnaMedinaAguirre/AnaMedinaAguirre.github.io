@@ -14,7 +14,12 @@ class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, *args):
         pass
 
-server = ThreadingHTTPServer(('127.0.0.1', 0), partial(QuietHandler, directory='dist'))
+class Server(ThreadingHTTPServer):
+    # La cola por defecto (5) se desborda en Windows cuando el navegador abre
+    # varias conexiones a la vez (precargas de fuentes, módulos) y rechaza alguna.
+    request_queue_size = 64
+
+server = Server(('127.0.0.1', 0), partial(QuietHandler, directory='dist'))
 Thread(target=server.serve_forever, daemon=True).start()
 BASE = f'http://127.0.0.1:{server.server_port}'
 OUT = Path('.lighthouseci/review-final')
