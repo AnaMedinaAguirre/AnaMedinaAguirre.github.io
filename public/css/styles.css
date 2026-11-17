@@ -22,6 +22,7 @@
   --wrap: 1180px;
   --gutter: 16px;
   --rail-x: 5px;        /* posición del conector dentro del contenedor */
+  --hero-pad: clamp(2.5rem, 1.5rem + 5vw, 5.5rem);  /* margen superior del hero */
   --content-x: 30px;    /* sangría del contenido respecto del conector */
   --header-h: 64px;
 
@@ -297,7 +298,9 @@ a:hover { text-decoration-thickness: 2px; }
   content: "";
   position: absolute;
   left: calc(var(--gutter) + var(--rail-x));
-  top: var(--rail-top, calc(var(--header-h) + 120px));
+  /* Antes de que main.js mida, el conector ya empieza donde quedará
+     (header + margen del hero + 28 px): así no salta al cargar (CLS 0). */
+  top: var(--rail-top, calc(var(--header-h) + var(--hero-pad) + 28px));
   height: var(--rail-height, calc(100% - 400px));
   width: 2px;
   border-radius: 2px;
@@ -380,7 +383,6 @@ a:hover { text-decoration-thickness: 2px; }
 
 /* ---------- Hero ---------- */
 .hero {
-  --hero-pad: clamp(2.5rem, 1.5rem + 5vw, 5.5rem);
   position: relative;
   padding-top: var(--hero-pad);
   display: grid;
@@ -1172,6 +1174,12 @@ html:not(.js) .metrics-body, html:not(.js) .metrics-state { display: none; }
   background: var(--surface); overflow: hidden;
 }
 .pj-art .project-art { border-bottom: 0; padding: clamp(14px, 1vw + 8px, 26px); }
+/* En la portada el diagrama comparte fila con el texto: la versión vertical
+   se lee mejor que la horizontal reducida (asistente, conteo y multisede). */
+@media (min-width: 700px) {
+  .pj-art .only-wide { display: none; }
+  .pj-art .only-narrow { display: block; max-width: 420px; margin-inline: auto; }
+}
 .pj-text { display: grid; gap: 14px; align-content: center; }
 .pj-kind {
   font-family: var(--font-display); font-weight: 700; font-size: 0.8125rem;

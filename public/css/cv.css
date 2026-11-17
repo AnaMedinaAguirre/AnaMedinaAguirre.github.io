@@ -82,6 +82,11 @@ a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; 
 .cv li::marker { color: var(--muted); }
 .cv section > p { text-align: left; }
 
+/* En pantalla los enlaces miden al menos 24 px de alto (área táctil); el PDF no cambia */
+@media screen {
+  .cv .cv-contact a, .cv .cv-link { display: inline-block; padding-block: 5px; }
+}
+
 @media (max-width: 640px) {
   .cv { padding: 24px 16px; box-shadow: none; }
   .cv-toolbar { margin-top: 16px; }
