@@ -5,10 +5,11 @@
 Portafolio estático de Datos y Automatización con Astro, español/inglés, tema claro/oscuro y CV generado desde los mismos datos que la web.
 
 ```
-data/cv.es.json, cv.en.json   contenido del portafolio y CV
-src/components/              secciones y diagramas
-src/i18n/                    textos de interfaz por idioma
-src/pages/                   /, /en/, /cv/, /en/cv/
+data/cv.es.json, cv.en.json   contenido del portafolio, casos de estudio y CV
+src/components/              secciones, diagramas SVG y páginas de caso
+src/i18n/                    textos de interfaz y de diagramas por idioma
+src/lib/                     validación (zod), proyectos y chips de tecnología
+src/pages/                   /, /en/, /cv/, /en/cv/, /proyectos/<caso>/, /en/projects/<caso>/
 public/                      estilos, JS, fuentes e imágenes
 scripts/generate-pdfs.mjs    generación de PDF A4
 supabase/                   esquema y verificación de métricas
@@ -54,6 +55,24 @@ npm run preview
 
 Usa `build:all` para publicar: `build` por sí solo no genera PDF. Los resultados están en `dist/`; los PDF en `dist/assets/`. Estos archivos generados no se versionan.
 
+## Casos de estudio
+
+Cada proyecto tiene su página: `/proyectos/<slug>/` y `/en/projects/<slug>/`. En la portada se muestran en zigzag (diagrama a un lado y texto al otro).
+
+- **Profesionales:** salen de `proyectosProfesionales` en los JSON. Cada caso indica su `diagrama` (`asistente`, `dashboards`, `inventario`, `multisede`, `integraciones` o `bpmn`), el cargo del que sale (`experiencia`, 1 = el primero) y qué logros de ese cargo forman "Mi trabajo" (`logros`, números desde 1). Año, rol y estado se toman del cargo. El orden del arreglo es el orden en la portada: el primero es el destacado.
+- **Personales:** salen de GitHub (ver más abajo). Su diagrama de flujo, problema, solución y enlaces se completan en `data/repos.overrides.json`.
+- **Diagramas:** son SVG propios en `src/components/diagrams/`, con textos en `src/i18n/diagrams.ts`. No muestran datos ni pantallas reales. Los diagramas grandes tienen una versión horizontal (`only-wide`) y otra vertical para pantallas angostas (`only-narrow`).
+
+El build falla si un caso apunta a un cargo o a un logro que no existe, si dos proyectos comparten slug o si una tecnología no está en la franja ni en las tecnologías del CV.
+
+## CV de una página
+
+La página `/cv/` y su PDF salen del bloque `cvDoc` de cada JSON: titular, perfil, experiencia (un cargo puede agrupar varios empleadores), proyectos, educación y habilidades. Es un texto aparte del portafolio porque está redactado para caber en una hoja.
+
+- zod comprueba que cada periodo de `cvDoc` coincida con un cargo de `experiencia`, para que el CV y la sección Experiencia no se contradigan en las fechas.
+- Las fechas se escriben como `AAAA-MM` y se muestran como "Ago 2026 – Actualidad" o "Feb – Nov 2025" (EN: "Present").
+- El PDF debe ocupar **una página A4** con letra de al menos **10 pt**. Si un cambio de texto lo pasa a dos páginas, reduce márgenes (`@page` en `public/css/cv.css`) o espaciado antes que la letra.
+
 ## CI/CD
 
 ```mermaid
@@ -71,7 +90,7 @@ El workflow valida cada push a `v2` o `main`, los PR hacia `main` y ejecuciones 
 
 - **HTML:** preset `html-validate:recommended`. Solo se exceptúan formato de elementos vacíos, espacios finales y longitud editorial del título; las reglas estructurales siguen activas.
 - **Enlaces:** lychee revisa archivos internos y anclas en modo offline, y después enlaces externos con reintentos. Las URLs absolutas del propio dominio se mapean a `dist/`, para comprobar el contenido nuevo antes de publicarlo. LinkedIn y WhatsApp quedan excluidos por sus bloqueos a verificadores y requieren revisión manual. No se envían correos ni se hacen llamadas para validar `mailto:` o `tel:`.
-- **Lighthouse CI:** tres mediciones de cada una de las cuatro páginas; mínimo **90** en rendimiento, accesibilidad, buenas prácticas y SEO, con la agregación predeterminada de Lighthouse CI. Los informes se guardan como artefactos de Actions durante siete días; no se suben al almacenamiento público de Lighthouse.
+- **Lighthouse CI:** tres mediciones de cada una de las ocho páginas configuradas en `lighthouserc.cjs` (portada, CV y casos de estudio, en ES y EN), con el perfil móvil; mínimo **90** en rendimiento, accesibilidad, buenas prácticas y SEO, con la agregación predeterminada de Lighthouse CI. Los informes se guardan como artefactos de Actions durante siete días; no se suben al almacenamiento público de Lighthouse.
 
 Si algún control falla, no se crea el artefacto de Pages ni se ejecuta el despliegue. La validación solo tiene permisos de lectura; los permisos de publicación están limitados al job `deploy`.
 
@@ -82,7 +101,13 @@ npm run check:html
 npm run check:lighthouse
 ```
 
-Lighthouse necesita Chrome instalado; define `CHROME_PATH` si no lo encuentra automáticamente. Los informes locales están en `.lighthouseci/` (ignorado por Git).
+Lighthouse necesita Chrome instalado; define `CHROME_PATH` si no lo encuentra automáticamente (sirve el Chromium de Playwright). Para medir también en escritorio:
+
+```sh
+npx lhci autorun --collect.settings.preset=desktop
+```
+
+Los informes locales están en `.lighthouseci/` (ignorado por Git).
 
 La prueba visual `python scripts/check-bilingual.py` requiere Playwright para Python y su Chromium. Genera capturas en `.lighthouseci/review-final/`, fuera del directorio publicado.
 

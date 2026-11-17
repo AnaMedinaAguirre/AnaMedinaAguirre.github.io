@@ -4,8 +4,10 @@ import type { CV } from '../../lib/cv';
 import type { UI } from '../../i18n/ui';
 interface Props { cv: CV; t: UI }
 const { cv, t } = Astro.props;
+// "Nativo" → "nativo", pero "B2 — …" queda igual
+const lower = (s: string) => (/^\p{Lu}\p{Ll}/u.test(s) ? s.charAt(0).toLowerCase() + s.slice(1) : s);
 const idiomas = cv.idiomas
-  .map((i) => (cv.lang === 'es' ? `${i.idioma} ${i.nivel.toLowerCase()}.` : `${i.idioma} (${i.nivel.toLowerCase()}).`))
+  .map((i) => (cv.lang === 'es' ? `${i.idioma} ${lower(i.nivel)}.` : `${i.idioma} (${lower(i.nivel)}).`))
   .join(' ');
 ---
 <section class="step" id="habilidades" aria-labelledby="hab-title">

@@ -2,7 +2,12 @@ module.exports = {
   ci: {
     collect: {
       staticDistDir: './dist',
-      url: ['http://localhost/', 'http://localhost/en/', 'http://localhost/cv/', 'http://localhost/en/cv/'],
+      url: [
+        'http://localhost/', 'http://localhost/en/',
+        'http://localhost/cv/', 'http://localhost/en/cv/',
+        'http://localhost/proyectos/asistente-ia/', 'http://localhost/en/projects/asistente-ia/',
+        'http://localhost/proyectos/multisede/', 'http://localhost/en/projects/pipeline-etl-retail/',
+      ],
       numberOfRuns: 3,
       settings: { chromeFlags: '--headless --no-sandbox' },
     },

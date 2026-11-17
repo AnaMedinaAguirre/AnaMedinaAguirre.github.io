@@ -60,8 +60,8 @@ jobs:
         uses: lycheeverse/lychee-action@v2
         with:
           args: >-
-            --offline --include-fragments
-            --remap 'https://anamedinaaguirre\.github\.io/((?:en/|cv/|assets/|fonts/|css/|js/|_astro/|#).*|)$ file://${{ github.workspace }}/dist/$1'
+            --offline --include-fragments --index-files index.html
+            --remap 'https://anamedinaaguirre\.github\.io/((?:en/|cv/|proyectos/|assets/|fonts/|css/|js/|_astro/|#).*|)$ file://${{ github.workspace }}/dist/$1'
             --root-dir "${{ github.workspace }}/dist" "dist/**/*.html"
           lycheeVersion: v0.24.2
           fail: true
@@ -69,14 +69,14 @@ jobs:
         uses: lycheeverse/lychee-action@v2
         with:
           args: >-
-            --config lychee.toml
-            --remap 'https://anamedinaaguirre\.github\.io/((?:en/|cv/|assets/|fonts/|css/|js/|_astro/|#).*|)$ file://${{ github.workspace }}/dist/$1'
+            --config lychee.toml --index-files index.html
+            --remap 'https://anamedinaaguirre\.github\.io/((?:en/|cv/|proyectos/|assets/|fonts/|css/|js/|_astro/|#).*|)$ file://${{ github.workspace }}/dist/$1'
             --root-dir "${{ github.workspace }}/dist" "dist/**/*.html"
           lycheeVersion: v0.24.2
           fail: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - name: Lighthouse en las cuatro páginas
+      - name: Lighthouse en portada, CV y páginas de caso
         run: npm run check:lighthouse
         env:
           CHROME_PATH: /usr/bin/google-chrome

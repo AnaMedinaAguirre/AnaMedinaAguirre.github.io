@@ -1,0 +1,148 @@
+---
+// Ilustración propia; no muestra datos del cliente.
+import { diagramText } from '../../i18n/diagrams';
+import type { Lang } from '../../lib/cv';
+interface Props { lang?: Lang }
+const d = diagramText(Astro.props.lang ?? 'es');
+---
+<figure class="project-art">
+            <svg class="diagram only-wide" viewBox="0 0 680 320" role="img" aria-labelledby="pj-ia-title pj-ia-desc">
+              <title id="pj-ia-title">{d.iaTitle}</title>
+              <desc id="pj-ia-desc">{d.iaDesc}</desc>
+              <defs>
+                <marker id="arrow-ia" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 10 5 0 10z" class="d-arrowhead" />
+                </marker>
+                <marker id="arrow-ia-e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 10 5 0 10z" class="d-arrowhead-event" />
+                </marker>
+              </defs>
+              <!-- Pregunta → asistente → consulta registrada → ERP → respuesta → gerencia -->
+              <g class="d-links" marker-end="url(#arrow-ia)">
+                <path d="M158 98H184" />
+                <path d="M326 98H352" />
+                <path d="M494 98H520" />
+                <path d="M592 156V198" />
+                <path d="M384 268H160" />
+              </g>
+              <!-- Rama del resumen diario -->
+              <g class="d-links-event" marker-end="url(#arrow-ia-e)">
+                <path class="d-dashed" d="M256 156V174" />
+                <path d="M186 213H160" />
+              </g>
+
+              <g class="d-node">
+                <rect x="18" y="40" width="140" height="260" rx="12" />
+                <use href="#i-users" x="34" y="54" width="24" height="24" class="d-icon" />
+                <text class="d-label" x="34" y="104">{d.iaBoss}</text>
+                <text class="d-sub" x="34" y="126">{d.iaAsk1}</text>
+                <text class="d-sub" x="34" y="144">{d.iaAsk2}</text>
+              </g>
+              <g class="d-node d-node--accent">
+                <rect x="186" y="40" width="140" height="116" rx="12" />
+                <use href="#i-ai" x="202" y="54" width="24" height="24" class="d-icon" />
+                <text class="d-label" x="202" y="104">{d.iaBot}</text>
+                <text class="d-sub d-sub--sm" x="202" y="126">{d.iaBotSub1}</text>
+                <text class="d-sub d-sub--sm" x="202" y="141">{d.iaBotSub2}</text>
+              </g>
+              <g class="d-node">
+                <rect x="354" y="40" width="140" height="116" rx="12" />
+                <use href="#i-checklist" x="370" y="54" width="22" height="22" class="d-icon" />
+                <text class="d-label d-label--sm" x="370" y="98">{d.iaQueriesA}</text>
+                <text class="d-label d-label--sm" x="370" y="114">{d.iaQueriesB}</text>
+                <text class="d-sub d-sub--sm" x="370" y="134">{d.iaQueries1}</text>
+                <text class="d-sub d-sub--sm" x="370" y="148">{d.iaQueries2}</text>
+              </g>
+              <g class="d-node">
+                <rect x="522" y="40" width="140" height="116" rx="12" />
+                <use href="#i-modules" x="538" y="54" width="22" height="22" class="d-icon" />
+                <text class="d-label" x="538" y="104">{d.iaErp}</text>
+                <text class="d-sub d-sub--sm" x="538" y="126">{d.iaPerms1}</text>
+                <text class="d-sub d-sub--sm" x="538" y="141">{d.iaPerms2}</text>
+              </g>
+              <g class="d-node d-node--event">
+                <rect x="186" y="176" width="140" height="74" rx="12" />
+                <use href="#i-clock" x="202" y="186" width="20" height="20" class="d-icon d-icon--event" />
+                <text class="d-label d-label--sm" x="202" y="224">{d.iaDaily}</text>
+                <text class="d-sub d-sub--sm" x="202" y="241">{d.iaDailyTime}</text>
+              </g>
+              <g class="d-node">
+                <rect x="386" y="200" width="276" height="100" rx="12" />
+                <text class="d-label" x="402" y="230">{d.iaAnswer}</text>
+                <text class="d-sub d-sub--sm" x="402" y="250">{d.iaAnswerSub}</text>
+              </g>
+              <!-- Cifra (barra abstracta) y mini gráfico: sin datos -->
+              <rect class="d-accent-fill" x="402" y="264" width="84" height="18" rx="4" />
+              <g class="d-accent-fill">
+                <rect x="546" y="262" width="14" height="26" rx="2" />
+                <rect x="566" y="248" width="14" height="40" rx="2" />
+                <rect x="586" y="254" width="14" height="34" rx="2" />
+                <rect x="606" y="238" width="14" height="50" rx="2" />
+                <rect x="626" y="258" width="14" height="30" rx="2" />
+              </g>
+            </svg>
+
+            <svg class="diagram only-narrow" viewBox="0 0 340 528" role="img" aria-labelledby="pj-ia-v-title pj-ia-v-desc">
+              <title id="pj-ia-v-title">{d.iaTitle}</title>
+              <desc id="pj-ia-v-desc">{d.iaDesc}</desc>
+              <defs>
+                <marker id="arrow-iav" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 10 5 0 10z" class="d-arrowhead" />
+                </marker>
+              </defs>
+              <g class="d-links" marker-end="url(#arrow-iav)">
+                <path d="M190 74V94" />
+                <path d="M190 156V176" />
+                <path d="M190 238V258" />
+                <path d="M190 320V340" />
+                <path d="M52 386H26V45H50" />
+              </g>
+              <g class="d-links-event">
+                <path class="d-dashed" d="M52 466H26V386" />
+              </g>
+
+              <g class="d-node">
+                <rect x="52" y="16" width="276" height="58" rx="10" />
+                <use href="#i-users" x="66" y="34" width="22" height="22" class="d-icon" />
+                <text class="d-label d-label--sm" x="98" y="41">{d.iaBoss}</text>
+                <text class="d-sub d-sub--sm" x="98" y="60">{d.iaAsk1} {d.iaAsk2}</text>
+              </g>
+              <g class="d-node d-node--accent">
+                <rect x="52" y="98" width="276" height="58" rx="10" />
+                <use href="#i-ai" x="66" y="116" width="22" height="22" class="d-icon" />
+                <text class="d-label d-label--sm" x="98" y="123">{d.iaBot}</text>
+                <text class="d-sub d-sub--sm" x="98" y="142">{d.iaBotSub1} {d.iaBotSub2}</text>
+              </g>
+              <g class="d-node">
+                <rect x="52" y="180" width="276" height="58" rx="10" />
+                <use href="#i-checklist" x="66" y="198" width="22" height="22" class="d-icon" />
+                <text class="d-label d-label--sm" x="98" y="205">{d.iaQueriesA} {d.iaQueriesB}</text>
+                <text class="d-sub d-sub--sm" x="98" y="224">{d.iaQueries1} {d.iaQueries2}</text>
+              </g>
+              <g class="d-node">
+                <rect x="52" y="262" width="276" height="58" rx="10" />
+                <use href="#i-modules" x="66" y="280" width="22" height="22" class="d-icon" />
+                <text class="d-label d-label--sm" x="98" y="287">{d.iaErp}</text>
+                <text class="d-sub d-sub--sm" x="98" y="306">{d.iaPerms1} {d.iaPerms2}</text>
+              </g>
+              <g class="d-node">
+                <rect x="52" y="344" width="276" height="84" rx="10" />
+                <text class="d-label d-label--sm" x="66" y="369">{d.iaAnswer}</text>
+                <text class="d-sub d-sub--sm" x="66" y="388">{d.iaAnswerSub}</text>
+              </g>
+              <rect class="d-accent-fill" x="66" y="400" width="80" height="16" rx="4" />
+              <g class="d-accent-fill">
+                <rect x="222" y="396" width="12" height="22" rx="2" />
+                <rect x="240" y="384" width="12" height="34" rx="2" />
+                <rect x="258" y="390" width="12" height="28" rx="2" />
+                <rect x="276" y="376" width="12" height="42" rx="2" />
+                <rect x="294" y="392" width="12" height="26" rx="2" />
+              </g>
+              <g class="d-node d-node--event">
+                <rect x="52" y="444" width="276" height="44" rx="10" />
+                <use href="#i-clock" x="66" y="456" width="20" height="20" class="d-icon d-icon--event" />
+                <text class="d-label d-label--sm" x="96" y="471">{d.iaDaily} · {d.iaDailyTime}</text>
+              </g>
+              <text class="d-sub d-sub--sm" x="52" y="512">{d.iaDailyNote}</text>
+            </svg>
+          </figure>
