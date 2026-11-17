@@ -1,21 +1,26 @@
 {
   "lang": "es",
   "meta": {
-    "title": "Ana Medina Aguirre | Analista de Datos y Automatización de Procesos",
-    "description": "Portafolio de Ana Patricia Medina Aguirre, analista de datos y automatización de procesos en Lima, Perú. ETL, Python, SQL (PostgreSQL), Power BI, n8n, Power Automate y Odoo.",
-    "ogDescription": "ETL, Python, SQL (PostgreSQL), Power BI, n8n, Power Automate y Odoo. Lima, Perú. Disponibilidad inmediata.",
-    "ogImageAlt": "Ana Medina Aguirre, Analista de Datos y Automatización de Procesos",
+    "title": "Ana Medina Aguirre | Analista de Datos y Automatización",
+    "description": "Portafolio de Ana Patricia Medina Aguirre, analista de datos y automatización en Lima, Perú. Power BI, SQL, Python, Power Automate, n8n y Odoo.",
+    "ogDescription": "Power BI, SQL, Python, Power Automate, n8n y Odoo: asistentes de IA, tableros y automatizaciones para retail. Lima, Perú.",
+    "ogImageAlt": "Ana Medina Aguirre, Analista de Datos y Automatización",
     "cvTitle": "CV | Ana Patricia Medina Aguirre",
-    "cvDescription": "Currículum de Ana Patricia Medina Aguirre, analista de datos y automatización de procesos en Lima, Perú."
+    "cvDescription": "Currículum de Ana Patricia Medina Aguirre, analista de datos y automatización en Lima, Perú."
   },
   "persona": {
     "nombre": "Ana Patricia Medina Aguirre",
     "nombreCorto": "Ana Medina",
-    "titulo": "Analista de Datos y Automatización de Procesos",
+    "titulo": "Analista de Datos y Automatización",
     "stack": ["ETL", "Python", "SQL (PostgreSQL)", "Power BI", "n8n", "Power Automate", "Odoo"],
-    "frasesHero": ["Analista de Datos", "ETL con Python y SQL", "Dashboards en Power BI", "Automatización con n8n y Power Automate", "Integraciones con Odoo y APIs"],
+    "frasesHero": [
+      "Analista de Datos",
+      "ETL con Python y SQL",
+      "Dashboards en Power BI",
+      "Automatización con n8n y Power Automate",
+      "Integraciones con Odoo y APIs"
+    ],
     "ubicacion": "Lima, Perú",
-    "disponibilidad": "Disponibilidad inmediata",
     "foto": { "alt": "Retrato de Ana Patricia Medina Aguirre" }
   },
   "contacto": {
@@ -28,39 +33,67 @@
     "cierre": "¿Buscas a alguien que convierta procesos manuales en flujos automatizados y datos en decisiones? Conversemos."
   },
   "perfil": [
-    "Estudiante de Ingeniería de Sistemas de décimo ciclo en la Universidad César Vallejo (Quinto Superior), con experiencia en automatización de procesos, integración de sistemas empresariales y transformación digital.",
-    "He desarrollado soluciones con n8n, Power Automate, Python y Odoo 17/18, optimizando operaciones de ventas, almacén, finanzas y RRHH. Tengo experiencia en análisis de datos y dashboards en Power BI.",
-    "Actualmente diseño e implemento arquitecturas distribuidas en Odoo 18 para empresas del sector retail. Me enfoco en mejorar la eficiencia operativa con soluciones tecnológicas escalables y orientadas a resultados."
+    "Analista de datos y automatización con experiencia en retail. Trabajo desde el levantamiento del proceso hasta la puesta en producción, con Power BI, Python, Power Automate, n8n y Odoo.",
+    "En Boson Innovation desarrollé un asistente de IA sobre Odoo que responde en lenguaje natural las consultas de la gerencia, el tablero de ventas consolidado que usan 4 empresas y 12 sedes, y un módulo de conteo de inventario desde el celular; además, participé en la implementación de una arquitectura multisede en Odoo 18. Antes, en CasaLinda, automaticé reportes y procesos que tomaban semanas con Power BI, Power Automate, n8n y Python.",
+    "Soy estudiante de décimo ciclo de Ingeniería de Sistemas en la Universidad César Vallejo (Quinto Superior)."
   ],
   "ficha": [
     { "etiqueta": "Foco actual", "valor": "Datos y automatización: pipelines ETL, Power BI y flujos con n8n y Power Automate" },
-    { "etiqueta": "Idiomas", "valor": "Español nativo · Inglés intermedio" }
+    { "etiqueta": "Idiomas", "valor": "Español nativo · Inglés B2" }
   ],
   "proyectosProfesionales": [
     {
-      "id": "multisede",
-      "diagrama": "multisede",
+      "id": "asistente-ia",
+      "diagrama": "asistente",
       "destacado": true,
       "cliente": "Boson Innovation",
-      "titulo": "Arquitectura multisede offline-first en Odoo 18",
-      "descripcion": "VPS central y base de datos PostgreSQL local por sede, sincronizadas vía API / JSON-RPC. Un módulo de sincronización centralizado gestiona por sede la conexión API, el almacén remoto, la lista de precios y el punto de venta, para escalar a nuevas tiendas de forma estandarizada.",
-      "tecnologias": ["Odoo 18", "Python", "PostgreSQL", "API JSON-RPC", "Debian", "Nginx", "Tailscale"]
+      "titulo": "Asistente de IA para Odoo",
+      "descripcion": "Asistente dentro de Odoo que responde en lenguaje natural, por texto o voz, las consultas de la gerencia y envía cada mañana un resumen de la operación. La IA no genera SQL: elige entre consultas registradas que leen el ERP con los permisos del usuario.",
+      "tipo": "IA",
+      "problema": "La gerencia esperaba varios días por reportes consolidados: cada área exportaba su Excel y se unían a mano.",
+      "solucion": "Un asistente en Odoo que entiende preguntas por texto o voz, elige la consulta registrada que corresponde y responde con los datos del ERP, respetando los permisos de quien pregunta. Cada mañana envía a la gerencia un resumen de la operación.",
+      "experiencia": 1,
+      "logros": [1],
+      "tecnologias": ["Odoo 18", "Python", "OWL"]
     },
     {
       "id": "dashboards",
       "diagrama": "dashboards",
       "cliente": "Boson Innovation",
-      "titulo": "Dashboards ejecutivos multisede",
-      "descripcion": "Dashboards de Ventas, Compras, Inventario, Contabilidad y Gastos con indicadores por sede: ventas totales, comprobantes electrónicos, ticket promedio, notas de crédito y compras por proveedor. Dan a la gerencia una vista consolidada de todas las tiendas.",
+      "titulo": "Tablero de ventas y márgenes multiempresa",
+      "descripcion": "Tablero de ventas consolidado del servidor central: ventas, unidades, transacciones, productos y márgenes por familia, marca y punto de venta, con exportación a Excel. Lo usan las 4 empresas cliente y sus 12 sedes.",
+      "tipo": "BI",
+      "problema": "La gerencia necesitaba ver las ventas y los márgenes de todas las empresas y sedes juntas, no cada una por separado.",
+      "solucion": "Un tablero en el servidor central con filtro multiempresa que solo cuenta comprobantes aceptados por SUNAT: ventas, unidades, transacciones, productos y márgenes por familia, marca y punto de venta, con exportación a Excel.",
+      "experiencia": 1,
+      "logros": [2],
       "tecnologias": ["Power BI", "Power Query", "DAX", "PostgreSQL"]
     },
     {
-      "id": "sunat",
-      "diagrama": "sunat",
+      "id": "conteo-inventario",
+      "diagrama": "inventario",
       "cliente": "Boson Innovation",
-      "titulo": "Facturación electrónica SUNAT y sincronización de stock",
-      "descripcion": "Módulos personalizados en Python sobre Odoo para facturación electrónica SUNAT vía OSE, sincronización de catálogo, precios y stock entre sedes con trazabilidad de eventos, y reportes de liquidación por formas de pago.",
-      "tecnologias": ["Python", "Odoo", "SUNAT / OSE", "API"]
+      "titulo": "Conteo de inventario móvil",
+      "descripcion": "Módulo para contar inventario desde el celular: escaneo con cámara, conteo ciego, aprobación del supervisor y ajuste de stock que respeta las ventas ocurridas durante el conteo, con alertas automáticas.",
+      "tipo": "Operaciones",
+      "problema": "Contar inventario en tienda sin dejar de vender: un ajuste que reemplaza el stock por lo contado borra las ventas hechas durante el conteo, y las diferencias grandes o el stock negativo pasaban sin aviso.",
+      "solucion": "Un módulo de Odoo para el celular: se escanea con la cámara sin ver el stock esperado (conteo ciego), el supervisor aprueba y el ajuste se aplica por diferencia, así las ventas hechas durante el conteo se respetan. Envía alertas automáticas por stock negativo y diferencias grandes.",
+      "experiencia": 1,
+      "logros": [3],
+      "tecnologias": ["Odoo 18", "Python", "OWL"]
+    },
+    {
+      "id": "multisede",
+      "diagrama": "multisede",
+      "cliente": "Boson Innovation",
+      "titulo": "Arquitectura multisede en Odoo 18",
+      "descripcion": "Participé en la implementación de una arquitectura multisede en Odoo 18 para 4 empresas retail (12 sedes): VPS central y base PostgreSQL local por sede, con catálogo, precios y stock sincronizados vía API.",
+      "tipo": "Arquitectura",
+      "problema": "Cada tienda necesitaba seguir operando con su propia base de datos y, a la vez, mantener catálogo, precios y stock alineados con la sede central. Además, sumar una tienda nueva tenía que ser un proceso estándar.",
+      "solucion": "Un VPS central y una base PostgreSQL local por sede, sincronizadas vía API / JSON-RPC con un módulo centralizado (conexión, almacén remoto, lista de precios y punto de venta por sede), y un despliegue estandarizado con Debian, Nginx y Tailscale. Participé en su implementación.",
+      "experiencia": 1,
+      "logros": [4],
+      "tecnologias": ["Odoo 18", "Python", "PostgreSQL", "API / JSON-RPC", "Debian", "Nginx", "Tailscale"]
     },
     {
       "id": "integraciones",
@@ -68,7 +101,12 @@
       "cliente": "CasaLinda",
       "titulo": "Automatización e integración de sistemas",
       "descripcion": "Flujos de integración y transformación de datos (ETL) que conectan Odoo 17, WooCommerce y BioTime para sincronizar stock, pedidos y asistencia, reduciendo tareas manuales. Incluye monitoreo, logs y alertas para automatizaciones críticas.",
-      "tecnologias": ["n8n", "Power Automate", "Python", "APIs"]
+      "tipo": "Automatización",
+      "problema": "Stock, pedidos y asistencia se movían entre Odoo 17, WooCommerce y BioTime con trabajo manual.",
+      "solucion": "Flujos de integración y ETL con n8n, Power Automate y Python que conectan los tres sistemas, con monitoreo, logs y alertas para las automatizaciones críticas.",
+      "experiencia": 2,
+      "logros": [2, 4, 5],
+      "tecnologias": ["n8n", "Power Automate", "Python", "Power BI", "API"]
     },
     {
       "id": "bpmn",
@@ -76,6 +114,11 @@
       "cliente": "CasaLinda",
       "titulo": "Rediseño de procesos de negocio",
       "descripcion": "Modelamiento AS-IS / TO-BE en BPMN para las áreas de ventas, almacén, finanzas y RRHH, con soporte funcional en la implementación de Odoo 17: parametrización, pruebas UAT y documentación.",
+      "tipo": "Procesos",
+      "problema": "Ventas, almacén, finanzas y RRHH necesitaban procesos documentados y rediseñados para la implementación de Odoo 17.",
+      "solucion": "Modelamiento AS-IS / TO-BE en BPMN y soporte funcional en Odoo 17: parametrización, pruebas UAT y documentación.",
+      "experiencia": 2,
+      "logros": [6],
       "tecnologias": ["BPMN", "Odoo 17", "UAT"]
     }
   ],
@@ -88,14 +131,12 @@
       "fin": null,
       "ubicacion": "Lima, Perú",
       "logros": [
-        "Diseño e implementación de una arquitectura distribuida multisede en Odoo 18 (VPS central y base de datos PostgreSQL local por sede) con sincronización vía API / JSON-RPC.",
-        "Desarrollo de módulos personalizados en Python sobre Odoo para facturación electrónica SUNAT vía OSE, sincronización de catálogo y stock entre sedes y reportes de liquidación por formas de pago.",
-        "Implementación de un módulo de sincronización centralizado en el VPS que gestiona por sede la conexión API, el almacén remoto, la lista de precios y el punto de venta, para escalar la solución a nuevas tiendas.",
-        "Desarrollo de dashboards ejecutivos (Ventas, Compras, Inventario, Contabilidad y Gastos) con indicadores por sede: ventas totales, comprobantes electrónicos, ticket promedio, notas de crédito y compras por proveedor.",
-        "Sincronización de catálogos y listas de precios entre la sede central y cada tienda vía API, con trazabilidad de eventos para asegurar la consistencia de los datos.",
-        "Estandarización del despliegue y la gestión remota de sedes con Debian, PostgreSQL, Nginx y Tailscale, replicada en distintas empresas del sector retail."
+        "Desarrollé un asistente de IA para Odoo que responde en lenguaje natural, por texto o voz, las consultas de la gerencia y envía cada mañana un resumen de la operación. Reemplaza reportes consolidados que tardaban varios días (cada área exportaba su Excel y se unían a mano). Por seguridad, la IA no genera SQL: elige entre consultas registradas que leen el ERP con los permisos del usuario.",
+        "Desarrollé el tablero de ventas consolidado del servidor central (ventas, unidades, transacciones, productos y márgenes por familia, marca y punto de venta, con exportación a Excel), usado por las 4 empresas cliente y sus 12 sedes, con filtro multiempresa y solo comprobantes aceptados por SUNAT.",
+        "Desarrollé un módulo de conteo de inventario desde el celular: escaneo con cámara, conteo ciego, aprobación del supervisor y ajuste de stock que respeta las ventas ocurridas durante el conteo, con alertas automáticas por stock negativo y diferencias grandes.",
+        "Participé en la implementación de una arquitectura multisede en Odoo 18 en 4 empresas retail (12 sedes): VPS central y base de datos PostgreSQL local por sede, un módulo de sincronización centralizado para catálogo, precios y stock vía API / JSON-RPC, y un despliegue estandarizado con Debian, Nginx y Tailscale."
       ],
-      "tecnologias": ["Odoo 18", "Python", "PostgreSQL", "API / JSON-RPC", "Linux Debian", "Nginx", "Tailscale"]
+      "tecnologias": ["Odoo 18", "Python", "OWL", "PostgreSQL", "API / JSON-RPC", "Linux Debian", "Nginx", "Tailscale"]
     },
     {
       "cargo": "Analista de Automatización y Transformación Digital",
@@ -105,13 +146,12 @@
       "fin": "2026-07",
       "ubicacion": "Lima, Perú",
       "logros": [
-        "Automatización de procesos empresariales con n8n, Power Automate (con SharePoint) y Python, reduciendo tareas manuales y tiempos operativos.",
-        "Integración de sistemas vía API (Odoo 17, WooCommerce, BioTime), asegurando la sincronización de stock, pedidos, asistencia y datos críticos.",
-        "Modelamiento y rediseño de procesos (AS-IS / TO-BE, BPMN) para las áreas de ventas, almacén, finanzas y RRHH.",
-        "Desarrollo de dashboards ejecutivos en Power BI, garantizando la consistencia y trazabilidad de los datos.",
-        "Soporte funcional en la implementación de Odoo 17: parametrización, pruebas UAT y documentación.",
-        "Implementación de monitoreo, logs y alertas para automatizaciones críticas; gestión de accesos y backups.",
-        "Capacitación a usuarios, elaboración de manuales técnicos y ejecución de pilotos digitales."
+        "Desarrollé dashboards en Power BI para todas las áreas: reportes que tomaban semanas en prepararse pasaron a generarse automáticamente.",
+        "Automaticé el seguimiento de mercadería entre Mayorista, Comercial y Almacén con Power Automate y SharePoint: el jefe de tienda llena un formulario y el sistema envía los correos a los responsables y notifica cada cambio de estado, reemplazando correos sueltos sin seguimiento.",
+        "Desarrollé una aplicación web para el área de Prevención que centraliza notas de crédito y productos robados de las tiendas, con permisos para que cada usuario vea solo lo suyo; reemplazó archivos Excel que se compartían manualmente.",
+        "Automaticé la atención de tickets de Sistemas y Mantenimiento: registro por formulario en SharePoint y aviso automático al usuario cuando su caso se resuelve.",
+        "Integré Odoo 17, WooCommerce y BioTime vía API con n8n y Python para sincronizar stock, pedidos y asistencia, con monitoreo, logs y alertas para las automatizaciones críticas.",
+        "Levanté y documenté los procesos AS-IS / TO-BE (BPMN) para el cambio de sistema a Odoo 17, con soporte en parametrización, pruebas UAT, manuales y capacitación a usuarios."
       ],
       "tecnologias": ["n8n", "Power Automate", "SharePoint", "Python", "Odoo 17", "WooCommerce", "BioTime", "Power BI", "BPMN"]
     },
@@ -137,9 +177,7 @@
       "inicio": "2024-11",
       "fin": "2025-02",
       "ubicacion": "Lima, Perú",
-      "logros": [
-        "Diseño de páginas web responsive con Elementor y WordPress para móviles, tablets y computadoras."
-      ],
+      "logros": ["Diseño de páginas web responsive con Elementor y WordPress para móviles, tablets y computadoras."],
       "tecnologias": ["WordPress", "Elementor"]
     }
   ],
@@ -171,10 +209,12 @@
     },
     {
       "id": "erp",
-      "nombre": "ERP",
+      "nombre": "ERP e IA",
       "items": [
         { "nombre": "Odoo 17 y 18", "icono": "modules" },
         { "nombre": "Módulos personalizados en Python", "icono": "python" },
+        { "nombre": "OWL", "icono": "code" },
+        { "nombre": "Asistentes de IA con consultas controladas", "icono": "ai" },
         { "nombre": "API / JSON-RPC", "icono": "api" }
       ]
     },
@@ -184,7 +224,6 @@
       "items": [
         { "nombre": "WooCommerce", "icono": "cart" },
         { "nombre": "BioTime", "icono": "fingerprint" },
-        { "nombre": "SUNAT (facturación electrónica vía OSE)", "icono": "invoice" },
         { "nombre": "Sistema PROGRESS", "icono": "server" },
         { "nombre": "SharePoint", "icono": "sharepoint" }
       ]
@@ -230,12 +269,24 @@
     }
   ],
   "competencias": [
-    { "icono": "search", "titulo": "Análisis funcional", "descripcion": "Diseño de arquitectura e integración de sistemas multisede para retail." },
+    {
+      "icono": "search",
+      "titulo": "Análisis funcional",
+      "descripcion": "Levantamiento de procesos y requerimientos para soluciones en Odoo y sistemas multisede en retail."
+    },
     { "icono": "bpmn", "titulo": "Modelado de procesos", "descripcion": "Procesos AS-IS / TO-BE en BPMN para ventas, almacén, finanzas y RRHH." },
     { "icono": "checklist", "titulo": "Implementación y pruebas", "descripcion": "Parametrización, pruebas UAT y soporte funcional en Odoo 17." },
-    { "icono": "etl", "titulo": "Integración y automatización", "descripcion": "Pipelines ETL y flujos entre sistemas, con monitoreo, logs y alertas para automatizaciones críticas." },
-    { "icono": "shield", "titulo": "Administración de sistemas", "descripcion": "Despliegue estandarizado de servidores, gestión de accesos y backups." },
-    { "icono": "users", "titulo": "Documentación y capacitación", "descripcion": "Manuales técnicos, capacitación a usuarios y ejecución de pilotos digitales." }
+    {
+      "icono": "etl",
+      "titulo": "Integración y automatización",
+      "descripcion": "Pipelines ETL y flujos entre sistemas, con monitoreo, logs y alertas para automatizaciones críticas."
+    },
+    {
+      "icono": "shield",
+      "titulo": "Administración de sistemas",
+      "descripcion": "Despliegue estandarizado de sedes con Debian, PostgreSQL, Nginx y Tailscale, como parte de la arquitectura multisede."
+    },
+    { "icono": "users", "titulo": "Documentación y capacitación", "descripcion": "Manuales, documentación de procesos y capacitación a usuarios." }
   ],
   "educacion": [
     {
@@ -243,7 +294,7 @@
       "institucion": "Universidad César Vallejo",
       "inicio": "2022-04",
       "fin": "2026-12",
-      "nota": "egreso previsto",
+      "nota": "graduación prevista",
       "ubicacion": "Lima, Perú",
       "detalles": ["Estudiante de décimo ciclo."],
       "meritos": [
@@ -258,7 +309,83 @@
   ],
   "idiomas": [
     { "idioma": "Español", "nivel": "Nativo" },
-    { "idioma": "Inglés", "nivel": "Intermedio" }
+    { "idioma": "Inglés", "nivel": "B2 — lectura técnica y comunicación escrita" }
   ],
-  "referencias": "Referencias disponibles a solicitud"
+  "cvDoc": {
+    "titular": "Analista de Datos y Automatización | Power BI · SQL · Python · Power Automate · Odoo",
+    "portafolio": "https://anamedinaaguirre.github.io",
+    "perfil": "Analista de datos y automatización con experiencia en retail. He desarrollado un asistente de IA sobre Odoo, dashboards usados en 4 empresas y 12 sedes, y automatizaciones que convirtieron reportes de semanas en procesos automáticos. Trabajo desde el levantamiento del proceso hasta la puesta en producción, con Power BI, Python, Power Automate, n8n y Odoo. Estudiante de 10.° ciclo de Ingeniería de Sistemas (UCV, Quinto Superior).",
+    "experiencia": [
+      {
+        "cargo": "Analista Funcional",
+        "ubicacion": "Lima",
+        "empleadores": [
+          { "empresa": "Boson Innovation E.I.R.L.", "inicio": "2026-08", "fin": null }
+        ],
+        "logros": [
+          "Desarrollé un asistente de IA para Odoo que responde en lenguaje natural, por texto o voz, las consultas de la gerencia y envía cada mañana un resumen de la operación. Reemplaza reportes consolidados que tardaban varios días (cada área exportaba su Excel y se unían a mano). Por seguridad, la IA no genera SQL: elige entre consultas registradas que leen el ERP con los permisos del usuario.",
+          "Desarrollé el tablero de ventas consolidado del servidor central (ventas, unidades, transacciones, productos y márgenes por familia, marca y punto de venta, con exportación a Excel), usado por las 4 empresas cliente y sus 12 sedes, con filtro multiempresa y solo comprobantes aceptados por SUNAT.",
+          "Desarrollé un módulo de conteo de inventario desde el celular: escaneo con cámara, conteo ciego, aprobación del supervisor y ajuste de stock que respeta las ventas ocurridas durante el conteo, con alertas automáticas por stock negativo y diferencias grandes.",
+          "Participé en la implementación de una arquitectura multisede en Odoo 18 en 4 empresas retail (12 sedes), con sincronización de catálogo, precios y stock vía API."
+        ]
+      },
+      {
+        "cargo": "Analista de Automatización y Transformación Digital",
+        "ubicacion": "Lima",
+        "empleadores": [
+          { "empresa": "CasaLinda", "inicio": "2025-11", "fin": "2026-07" }
+        ],
+        "logros": [
+          "Desarrollé dashboards en Power BI para todas las áreas: reportes que tomaban semanas en prepararse pasaron a generarse automáticamente.",
+          "Automaticé el seguimiento de mercadería entre Mayorista, Comercial y Almacén con Power Automate y SharePoint: el jefe de tienda llena un formulario y el sistema envía los correos a los responsables y notifica cada cambio de estado, reemplazando correos sueltos sin seguimiento.",
+          "Desarrollé una aplicación web para el área de Prevención que centraliza notas de crédito y productos robados de las tiendas, con permisos para que cada usuario vea solo lo suyo; reemplazó archivos Excel que se compartían manualmente.",
+          "Automaticé la atención de tickets de Sistemas y Mantenimiento: registro por formulario en SharePoint y aviso automático al usuario cuando su caso se resuelve.",
+          "Integré Odoo 17, WooCommerce y BioTime vía API con n8n y Python para sincronizar stock, pedidos y asistencia.",
+          "Levanté y documenté los procesos AS-IS / TO-BE (BPMN) para el cambio de sistema a Odoo 17, con soporte en parametrización, pruebas UAT y capacitación."
+        ]
+      },
+      {
+        "cargo": "Desarrolladora Web",
+        "empleadores": [
+          { "empresa": "CasaLinda", "inicio": "2025-02", "fin": "2025-11" },
+          { "empresa": "Consigue Ventas", "inicio": "2024-11", "fin": "2025-02" }
+        ],
+        "logros": [
+          "Sitios WordPress responsive, integración del sitio con el sistema interno PROGRESS, SEO técnico y control de versiones con Git."
+        ]
+      }
+    ],
+    "proyectos": [
+      {
+        "titulo": "Pipeline ETL de ventas retail",
+        "estado": "en desarrollo",
+        "url": "https://github.com/AnaMedinaAguirre/pipeline-etl-retail",
+        "logros": [
+          "Pipeline diario con Python, dbt y PostgreSQL (Neon) orquestado con GitHub Actions: modelo estrella con 138 tests de calidad de datos, conversión de moneda con APIs del BCB y BCRP, y dashboard en Power BI."
+        ]
+      }
+    ],
+    "educacion": [
+      {
+        "titulo": "Ingeniería de Sistemas",
+        "institucion": "Universidad César Vallejo",
+        "inicio": "2022-04",
+        "fin": "2026-12",
+        "nota": "graduación prevista",
+        "logros": ["Quinto Superior (puesto 418 de 2466) · Décimo Superior 2026-I (puesto 24 de 254)."]
+      }
+    ],
+    "formacion": {
+      "etiqueta": "Formación en curso",
+      "items": ["Microsoft Azure Data Fundamentals (DP-900)", "Databricks Fundamentals"]
+    },
+    "habilidades": [
+      { "grupo": "Datos y BI", "items": "Power BI (DAX, Power Query), SQL / PostgreSQL, dbt, modelado dimensional, Excel" },
+      { "grupo": "Automatización e integración", "items": "Power Automate, SharePoint, n8n, Python, APIs REST / JSON-RPC" },
+      { "grupo": "ERP e IA", "items": "Odoo 17/18 (módulos en Python y OWL), asistentes de IA con consultas controladas" },
+      { "grupo": "Procesos", "items": "BPMN (AS-IS / TO-BE), pruebas UAT" },
+      { "grupo": "Herramientas", "items": "Git, GitHub, Linux (Debian)" },
+      { "grupo": "Idiomas", "items": "Español nativo · Inglés B2 — lectura técnica y comunicación escrita" }
+    ]
+  }
 }

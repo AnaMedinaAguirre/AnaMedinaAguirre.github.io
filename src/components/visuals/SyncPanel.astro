@@ -1,0 +1,51 @@
+---
+/* Visual de "Arquitectura multisede": panel de estado de sincronización.
+   El HTML trae el estado FINAL (todas las sedes OK y el evento nuevo en el
+   registro): es lo que se ve sin JS o con movimiento reducido. main.js lo
+   "arma" (Sede Sur sincronizando con 37 pendientes) y lo reproduce una vez
+   al entrar en pantalla. Datos ilustrativos. */
+import Icon from '../Icon.astro';
+import type { Lang } from '../../lib/cv';
+import { visualText } from '../../i18n/visuals';
+interface Props { lang: Lang }
+const v = visualText(Astro.props.lang);
+const s = v.sync;
+---
+<figure class="pv pv-sync" data-visual="sync">
+  <div class="pv-bar">
+    <p class="pv-title"><Icon name="server" class="ic" />{s.title}</p>
+    <p class="pv-live"><span class="pv-dot is-ok" aria-hidden="true"></span>{s.live}</p>
+  </div>
+  <table class="pv-table">
+    <caption class="sr-only">{s.caption} ({v.illustrative})</caption>
+    <thead>
+      <tr>
+        <th scope="col">{s.cols.site}</th>
+        <th scope="col">{s.cols.status}</th>
+        <th scope="col" class="pv-opt"><span class="pv-long">{s.cols.last}</span><span class="pv-short">{s.cols.lastShort}</span></th>
+        <th scope="col" class="pv-num"><span class="pv-long">{s.cols.pending}</span><span class="pv-short">{s.cols.pendingShort}</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {s.rows.map((r) => (
+        <tr class:list={[{ 'pv-live-row': r.live }]} data-sync-row={r.live ? '' : undefined}>
+          <th scope="row">{r.site}</th>
+          <td>
+            <span class="pv-state pv-state--ok"><span class="pv-dot is-ok" aria-hidden="true"></span>{s.ok}</span>
+            {r.live && <span class="pv-state pv-state--busy" aria-hidden="true"><span class="pv-dot is-busy"></span>{s.syncing}</span>}
+          </td>
+          <td class="pv-opt pv-mono"><span class="pv-when">{r.last}</span>{r.lastBefore && <span class="pv-when-before" aria-hidden="true">{r.lastBefore}</span>}</td>
+          <td class="pv-num pv-mono"><span data-count-from={r.from}>0</span></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <div class="pv-log-wrap">
+    <p class="pv-log-title">{s.log}</p>
+    <ol class="pv-log pv-mono">
+      {s.events.map((e) => <li><time>{e[0]}</time><span class="pv-log-site">{e[1]}</span><span class="pv-log-ev">{e[2]}</span><span class="pv-log-msg">{e[3]}</span></li>)}
+      <li class="pv-log-new"><time>{s.newEvent[0]}</time><span class="pv-log-site">{s.newEvent[1]}</span><span class="pv-log-ev pv-log-ok">{s.newEvent[2]}</span><span class="pv-log-msg">{s.newEvent[3]}</span></li>
+    </ol>
+  </div>
+  <figcaption class="pv-tag">{v.illustrative}</figcaption>
+</figure>

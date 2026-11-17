@@ -1,0 +1,42 @@
+---
+/* Visual de "Procesos BPMN": carriles con los pasos reales del proceso y
+   pestañas AS-IS / TO-BE (patrón tabs de WAI-ARIA). En TO-BE los pasos que
+   se eliminan quedan tachados y aparece "−N pasos". El HTML trae TO-BE
+   (estado final); main.js activa las pestañas y, al entrar en pantalla,
+   muestra AS-IS y pasa a TO-BE una vez. Datos ilustrativos. */
+import type { Lang } from '../../lib/cv';
+import { visualText } from '../../i18n/visuals';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const v = visualText(lang);
+const s = v.bpmn;
+const removed = s.steps.filter((x) => x.removed).length;
+const id = `bpmn-${lang}`;
+---
+<figure class="pv pv-bpmn" data-visual="bpmn" data-view="tobe">
+  <div class="pv-bar">
+    <p class="pv-title">{s.title}</p>
+    <div class="pv-tabs" role="tablist" aria-label={s.tabsLabel} hidden>
+      <button type="button" role="tab" id={`${id}-asis`} aria-controls={`${id}-panel`} aria-selected="false" tabindex="-1" data-view-tab="asis">{s.tabs.asis}</button>
+      <button type="button" role="tab" id={`${id}-tobe`} aria-controls={`${id}-panel`} aria-selected="true" tabindex="0" data-view-tab="tobe">{s.tabs.tobe}</button>
+    </div>
+    <p class="pv-chip pv-nojs-label">{s.tabs.tobe}</p>
+  </div>
+  <div class="pv-lanes" id={`${id}-panel`} role="tabpanel" aria-labelledby={`${id}-tobe`}>
+    {s.lanes.map((lane, li) => (
+      <div class="pv-lane">
+        <p class="pv-lane-name">{lane}</p>
+        <ol class="pv-lane-steps">
+          {s.steps.map((step, i) => step.lane === li && (
+            <li class:list={['pv-step', { 'is-removed': step.removed }]} style={`--col:${i + 1}`}>
+              <span class="pv-step-n pv-mono" aria-hidden="true">{i + 1}</span>
+              <span class="pv-step-text">{step.text}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ))}
+  </div>
+  <p class="pv-bpmn-delta"><span class="pv-mono">−{removed}</span> {s.removedLabel}<span class="sr-only"> ({s.removedSr})</span></p>
+  <figcaption class="pv-tag">{v.illustrative}</figcaption>
+</figure>

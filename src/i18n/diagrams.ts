@@ -32,8 +32,6 @@ const es = {
   siteStack: 'PostgreSQL, almacén y POS',
   // Dashboards
   dashTitle: 'Ilustración de un reporte con filtro por sede, indicadores y gráficos',
-  // SUNAT
-  sunatTitle: 'Comprobante emitido en Odoo, enviado a través del OSE a SUNAT, y stock sincronizado entre sedes',
   receipt: 'Comprobante',
   siteA: 'Sede A',
   siteB: 'Sede B',
@@ -74,7 +72,6 @@ const en: typeof es = {
   addedWith: 'Added with the same standard',
   siteStack: 'PostgreSQL, warehouse & POS',
   dashTitle: 'Illustration of a report with a site filter, indicators and charts',
-  sunatTitle: 'Receipt issued in Odoo, sent through the OSE to SUNAT, and stock synchronized across sites',
   receipt: 'Receipt',
   siteA: 'Site A',
   siteB: 'Site B',

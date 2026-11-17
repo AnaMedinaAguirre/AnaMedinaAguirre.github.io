@@ -1,0 +1,127 @@
+---
+/* Visual de "Automatización CasaLinda": imita el editor de n8n (lienzo
+   punteado, nodos con ícono, conectores curvos con contador de items, rama
+   IF true/false y rama de error hacia una alerta), sin logos. Sigue el tema
+   del sitio (modo claro u oscuro de n8n).
+   El HTML trae el estado FINAL: flujo ejecutado, nodo WooCommerce abierto y
+   su salida en el panel inferior. src/scripts/sim.js lo reproduce con un
+   cursor. Dos vistas del mismo flujo: lienzo (escritorio) y columna (móvil).
+   Datos ilustrativos. */
+import Icon from '../Icon.astro';
+import type { Lang } from '../../lib/cv';
+import { simText } from '../../i18n/sims';
+interface Props { lang: Lang }
+const t = simText(Astro.props.lang);
+const n = t.n8n;
+const W = 1000, H = 460, HALF = 48;
+const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(3)}%`;
+// Conector curvo de la salida de un nodo a la entrada del siguiente (coordenadas del lienzo)
+const curve = (e: (typeof n.edges)[number]) => {
+  const a = n.nodes[e.from], b = n.nodes[e.to];
+  if (e.error) {
+    // Salida de error: segunda salida a la derecha del nodo, hacia abajo
+    const x1 = a.x + HALF, y1 = a.y + 30, x2 = b.x - HALF, y2 = b.y;
+    return { d: `M${x1} ${y1} C${x1 + 50} ${y1} ${x2 - 70} ${y2} ${x2} ${y2}`, mx: (x1 + x2) / 2 + 4, my: (y1 + y2) / 2 + 26 };
+  }
+  const x1 = a.x + HALF, y1 = a.y, x2 = b.x - HALF, y2 = b.y, dx = Math.max(40, (x2 - x1) / 2);
+  return { d: `M${x1} ${y1} C${x1 + dx} ${y1} ${x2 - dx} ${y2} ${x2} ${y2}`, mx: (x1 + x2) / 2, my: (y1 + y2) / 2 };
+};
+const order = [0, 1, 2, 3]; // columna principal en móvil
+---
+<figure class="sim sim-n8n is-done is-open" data-sim="n8n">
+  <div class="n8n-bar">
+    <p class="n8n-name">{n.workflow}</p>
+    <p class="n8n-active"><span class="n8n-switch" aria-hidden="true"></span>{n.active}</p>
+    <span class="n8n-exec" data-sim-target>{n.execute}</span>
+  </div>
+
+  <!-- Lienzo (escritorio) -->
+  <div class="n8n-canvas n8n-wide">
+    <div class="n8n-stage" role="img" aria-label={n.caption}>
+      <svg class="n8n-edges" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <defs>
+          <marker id="n8n-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 10 5 0 10z" class="n8n-arrowhead" />
+          </marker>
+        </defs>
+        {n.edges.map((e, i) => <path class:list={['n8n-edge', { 'is-error': e.error }]} data-edge={i} d={curve(e).d} marker-end="url(#n8n-arrow)" vector-effect="non-scaling-stroke" />)}
+      </svg>
+      {n.edges.map((e, i) => {
+        const c = curve(e);
+        return (
+          <span class:list={['n8n-items', { 'is-error': e.error }]} data-items={i} aria-hidden="true"
+            style={`--l:${pct(c.mx, W)};--t:${pct(c.my, H)}`}>
+            {e.branch && <em>{e.branch}</em>}{e.items}
+          </span>
+        );
+      })}
+      {n.nodes.map((node, i) => (
+        <span class:list={['n8n-node', { 'is-ok': !node.idle, 'is-idle': node.idle, 'is-trigger': node.trigger }]} data-node={i}
+          style={`--l:${pct(node.x - HALF, W)};--t:${pct(node.y - HALF, H)}`} aria-hidden="true">
+          <span class="n8n-box"><Icon name={node.icon} class="ic" /><span class="n8n-check"><Icon name="check" class="ic" /></span></span>
+          <span class="n8n-label"><b>{node.name}</b><small>{node.sub}</small></span>
+        </span>
+      ))}
+    </div>
+    <p class="n8n-toast"><Icon name="check" class="ic" />{n.toast}</p>
+  </div>
+
+  <!-- Columna (móvil) -->
+  <div class="n8n-canvas n8n-narrow" aria-hidden="true">
+    <ol class="n8n-col">
+      {order.map((i, k) => (
+        <li>
+          {k > 0 && <span class="n8n-vlink"><span class="n8n-items" data-items={i - 1}>{n.edges[i - 1].items}</span></span>}
+          <span class="n8n-node is-ok" data-node={i}>
+            <span class="n8n-box"><Icon name={n.nodes[i].icon} class="ic" /><span class="n8n-check"><Icon name="check" class="ic" /></span></span>
+            <span class="n8n-label"><b>{n.nodes[i].name}</b><small>{n.nodes[i].sub}</small></span>
+          </span>
+        </li>
+      ))}
+    </ol>
+    <div class="n8n-fork">
+      {[3, 4].map((ei) => (
+        <div>
+          <span class="n8n-vlink"><span class="n8n-items" data-items={ei}><em>{n.edges[ei].branch}</em>{n.edges[ei].items}</span></span>
+          <span class="n8n-node is-ok" data-node={n.edges[ei].to}>
+            <span class="n8n-box"><Icon name={n.nodes[n.edges[ei].to].icon} class="ic" /><span class="n8n-check"><Icon name="check" class="ic" /></span></span>
+            <span class="n8n-label"><b>{n.nodes[n.edges[ei].to].name}</b><small>{n.nodes[n.edges[ei].to].sub}</small></span>
+          </span>
+        </div>
+      ))}
+    </div>
+    <p class="n8n-errline"><span class="n8n-items is-error">error</span> {n.nodes[1].name} → {n.nodes[6].name}</p>
+    <p class="n8n-toast"><Icon name="check" class="ic" />{n.toast}</p>
+  </div>
+
+  <!-- Panel de salida del nodo abierto -->
+  <div class="n8n-panel">
+    <div class="n8n-panel-head">
+      <p><b>{n.output.title}</b> · {n.output.label}</p>
+      <p class="n8n-tabs" aria-hidden="true"><span class="is-on">{n.output.tabs[0]}</span><span>{n.output.tabs[1]}</span></p>
+      <p class="n8n-count">{n.output.count}</p>
+    </div>
+    <div class="n8n-out">
+      <table class="n8n-table">
+        <caption class="sr-only">{n.output.title} · {n.output.label} ({t.illustrative})</caption>
+        <thead><tr>{n.output.cols.map((c, i) => <th scope="col" class:list={[`c${i}`]}>{c.split('_').map((part, k, all) => <>{part}{k < all.length - 1 && <>_<wbr /></>}</>)}</th>)}</tr></thead>
+        <tbody>
+          {n.output.rows.map((r, ri) => (
+            <tr class:list={[`r${ri}`]}>{r.map((v, i) => <td class:list={[`c${i}`, { num: typeof v === 'number' }]}>{v}</td>)}</tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="n8n-empty" aria-hidden="true">{n.output.empty}</p>
+    </div>
+  </div>
+
+  <button type="button" class="sim-replay" data-sim-replay aria-label={t.replayLabel} hidden><span aria-hidden="true">↻</span> {t.replay}</button>
+  <span class="sim-cursor" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M5 3 19 12.5l-6.2 1.3 3.6 6.8-2.7 1.4-3.6-6.8L5 19.6z" /></svg>
+    <i class="sim-click"></i>
+  </span>
+  <figcaption class="sim-tag">{t.illustrative}</figcaption>
+</figure>
+<script>
+  import '../../scripts/sim.js';
+</script>

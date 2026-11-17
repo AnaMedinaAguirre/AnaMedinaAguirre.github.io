@@ -1,0 +1,163 @@
+---
+/* Página de caso de estudio de un proyecto (profesional o personal). */
+import Base from '../../layouts/Base.astro';
+import Header from '../site/Header.astro';
+import Footer from '../site/Footer.astro';
+import Icon from '../Icon.astro';
+import TechChips from '../TechChips.astro';
+import FlowDiagram from '../FlowDiagram.astro';
+import Multisede from '../diagrams/Multisede.astro';
+import Dashboards from '../diagrams/Dashboards.astro';
+import Integraciones from '../diagrams/Integraciones.astro';
+import Bpmn from '../diagrams/Bpmn.astro';
+import SyncPanel from '../visuals/SyncPanel.astro';
+import PbiReport from '../visuals/PbiReport.astro';
+import N8nCanvas from '../visuals/N8nCanvas.astro';
+import ProcessTabs from '../visuals/ProcessTabs.astro';
+import PendingVisual from '../visuals/PendingVisual.astro';
+import DbtTerminal from '../visuals/DbtTerminal.astro';
+import { getCV, type Lang } from '../../lib/cv';
+import { useUI, routes, projectPath } from '../../i18n/ui';
+import { diagramText } from '../../i18n/diagrams';
+import { getProjects, type Project } from '../../lib/projects';
+
+interface Props { lang: Lang; slug: string }
+const { lang, slug } = Astro.props;
+const cv = getCV(lang);
+const t = useUI(lang);
+const other: Lang = lang === 'es' ? 'en' : 'es';
+const all = await getProjects(cv, t);
+const p = all.find((x) => x.slug === slug) as Project;
+const more = all.filter((x) => x.slug !== slug);
+const home = routes.home[lang];
+const d = diagramText(lang);
+const diagrams: Record<string, typeof Multisede> = { multisede: Multisede, dashboards: Dashboards, integraciones: Integraciones, bpmn: Bpmn };
+const captions: Record<string, string> = { multisede: d.multiDesc, dashboards: d.dashTitle, integraciones: d.integTitle, bpmn: d.bpmnTitle };
+const visuals: Record<string, typeof SyncPanel> = { asistente: PendingVisual, dashboards: PbiReport, inventario: PendingVisual, multisede: SyncPanel, integraciones: N8nCanvas, bpmn: ProcessTabs };
+// Proyectos personales con visual propio (por slug)
+const personalVisuals: Record<string, typeof SyncPanel> = { 'pipeline-etl-retail': DbtTerminal };
+const Visual = p.diagrama ? visuals[p.diagrama] : personalVisuals[p.slug] ?? null;
+const Diagram = p.diagrama && !Visual ? diagrams[p.diagrama] : null;
+const title = `${p.title} | ${cv.persona.nombreCorto}`;
+const description = p.problema ?? p.descripcion;
+const status = p.status ? t.projectStatus[p.status] : null;
+---
+<Base cv={cv} title={title} description={description} path={projectPath(lang, slug)}
+  alternates={{ es: projectPath('es', slug), en: projectPath('en', slug) }}>
+  <Header cv={cv} t={t} altHref={projectPath(other, slug)} base={home} />
+  <main id="contenido" class="case" tabindex="-1">
+   <div class="wrap case-content">
+    <section class="case-hero" aria-labelledby="case-title">
+      <a class="case-back" href={`${home}#proyectos`}><span aria-hidden="true">←</span> {t.caseStudy.back}</a>
+      <p class="pj-kind">{p.label}{p.tipo && <span> · {p.tipo}</span>}</p>
+      <div class="case-head">
+        <div>
+          <h1 id="case-title">{p.title}</h1>
+          {p.client && <p class="case-sub">{p.client}</p>}
+        </div>
+        {p.kind === 'pro'
+          ? <p class="client-badge case-badge"><Icon name="lock" />{t.clientBadge}</p>
+          : p.status === 'en_desarrollo' && <p class="status-badge"><span class="status-pulse" aria-hidden="true"></span>{status}</p>}
+      </div>
+
+      {Visual && (
+        <div class="case-figure">
+          <div class="case-art fx-card">
+            <div class="pv-stage pv-stage--case"><Visual lang={lang} /></div>
+          </div>
+          <p class="case-figure-note">{p.kind === 'pro' ? t.caseStudy.illustrativeNote : t.caseStudy.terminalNote}</p>
+        </div>
+      )}
+      {Diagram && (
+        <figure class="case-figure">
+          <div class="case-art fx-card"><Diagram lang={lang} /></div>
+          <figcaption>{captions[p.diagrama!]} {t.caseStudy.illustration}</figcaption>
+        </figure>
+      )}
+      {!Diagram && !Visual && p.flujo.length > 0 && (
+        <figure class="case-figure">
+          <div class="case-art case-art--flow fx-card"><FlowDiagram nodes={p.flujo} label={p.title} pending={t.caseStudy.pending} /></div>
+          {p.flujoNota && <figcaption>{p.flujoNota}</figcaption>}
+        </figure>
+      )}
+    </section>
+
+    <div class="case-body">
+      <div class="case-main">
+        <section class="case-block" aria-labelledby="case-summary">
+          <h2 id="case-summary">{t.caseStudy.summary}</h2>
+          {p.problema || p.solucion ? (
+            <div class="case-ps">
+              {p.problema && <div><h3>{t.caseStudy.problem}</h3><p>{p.problema}</p></div>}
+              {p.solucion && <div><h3>{t.caseStudy.solution}</h3><p>{p.solucion}</p></div>}
+            </div>
+          ) : <p>{p.descripcion}</p>}
+        </section>
+
+        {p.trabajo.length > 0 && (
+          <section class="case-block" aria-labelledby="case-work">
+            <h2 id="case-work">{t.caseStudy.myWork}</h2>
+            <ul class="work-list">
+              {p.trabajo.map((w) => <li><span class="work-check" aria-hidden="true"><Icon name="check" /></span><span>{w}</span></li>)}
+            </ul>
+          </section>
+        )}
+      </div>
+
+      <aside class="case-facts fx-card" aria-labelledby="case-details">
+        <h2 id="case-details">{t.caseStudy.details}</h2>
+        <dl>
+          {p.tipo && <div><dt>{t.caseStudy.type}</dt><dd>{p.tipo}</dd></div>}
+          <div><dt>{t.caseStudy.year}</dt><dd>{p.year}</dd></div>
+          <div><dt>{t.caseStudy.role}</dt><dd>{p.role}</dd></div>
+          {status && <div><dt>{t.caseStudy.status}</dt><dd><span class:list={['status-dot-inline', `is-${p.status}`]} aria-hidden="true"></span>{status}</dd></div>}
+        </dl>
+        <h3>{t.caseStudy.stack}</h3>
+        <TechChips chips={p.chips} label={t.caseStudy.stack} />
+        {(p.links.code || p.links.metrics) && (
+          <div class="case-links">
+            {p.links.code && <a class="btn btn-primary btn-sm" href={p.links.code} target="_blank" rel="noopener noreferrer"><Icon name="github" />{t.projectCode}<span class="sr-only"> {t.newTab}</span></a>}
+            {p.links.dashboard && <a class="btn btn-ghost btn-sm" href={p.links.dashboard} target="_blank" rel="noopener noreferrer"><Icon name="powerbi" />{t.projectDashboard}<span class="sr-only"> {t.newTab}</span></a>}
+            {p.links.demo && <a class="btn btn-ghost btn-sm" href={p.links.demo} target="_blank" rel="noopener noreferrer">{t.projectDemo}<span class="sr-only"> {t.newTab}</span></a>}
+            {p.links.metrics && <a class="btn btn-ghost btn-sm" href={p.links.metrics}><Icon name="powerbi" />{t.projectMetrics}</a>}
+            {p.links.lineage && <a class="project-link" href={p.links.lineage} target="_blank" rel="noopener noreferrer">{t.projectLineage}<Icon name="external" /><span class="sr-only"> {t.newTab}</span></a>}
+          </div>
+        )}
+      </aside>
+    </div>
+
+   </div>
+
+    <!-- Fin del caso. "Más proyectos" y el cierre van en una banda aparte, de
+         borde a borde, para que no parezcan parte del mismo caso. -->
+    <div class="case-band">
+     <div class="wrap">
+    <section class="case-more" aria-labelledby="case-more">
+      <p class="eyebrow">{t.caseStudy.keepExploring}</p>
+      <h2 class="section-title" id="case-more">{t.caseStudy.more}</h2>
+      <ul class="more-grid">
+        {more.map((m) => (
+          <li class="more-card fx-card">
+            <p class="pj-kind">{m.label}{m.tipo && <span> · {m.tipo}</span>}</p>
+            <p class="more-title">{m.title}</p>
+            {m.client && <p class="more-sub">{m.client}</p>}
+            <a class="view-link" href={m.href}>{t.caseStudy.view}<span class="sr-only">: {m.title}</span><span class="view-arrow" aria-hidden="true">→</span></a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="case-cta fx-card" aria-labelledby="case-cta">
+      <div>
+        <h2 id="case-cta">{t.caseStudy.ctaTitle}</h2>
+        <p>{cv.contacto.cierre}</p>
+      </div>
+      <a class="btn btn-primary" href={`${home}#contacto`}><Icon name="mail" />{t.contact}</a>
+    </section>
+     </div>
+    </div>
+  </main>
+  <Footer cv={cv} t={t} />
+  <script type="application/json" id="ui-strings" set:html={JSON.stringify(t.js)} />
+  <script is:inline src="/js/main.js" defer></script>
+</Base>

@@ -44,6 +44,7 @@ export async function loadPersonalProjects(owner, { fetchImpl = fetch, token = p
         description: typeof repo.description === 'string' ? repo.description.trim() : '',
         technologies: uniqueTags([repo.language, ...repo.topics.filter(t => t !== 'portfolio')]),
         updatedAt: repo.updated_at,
+        createdAt: typeof repo.created_at === 'string' && Number.isFinite(Date.parse(repo.created_at)) ? repo.created_at : repo.updated_at,
         codeUrl: `https://github.com/${owner}/${repo.name}`,
         demoUrl: safeHomepage(repo.homepage),
       });
@@ -53,7 +54,16 @@ export async function loadPersonalProjects(owner, { fetchImpl = fetch, token = p
   throw new Error('GitHub excedió el límite de paginación; no se publicará una lista incompleta.');
 }
 
-const STATUSES = ['en_desarrollo', 'finalizado'];
+const STATUSES = ['en_desarrollo', 'en_curso', 'finalizado'];
+
+/** Slug de la página de caso: el del override o el nombre del repo en minúsculas. */
+export function projectSlug(name, slug) {
+  const s = slug ?? name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s)) throw new Error(`data/repos.overrides.json (${name}): slug inválido "${s}"`);
+  return s;
+}
+
+const isText = (v) => typeof v === 'string' && v.trim().length > 0;
 
 /**
  * Aplica data/repos.overrides.json a un proyecto. Formato por repositorio:
@@ -61,6 +71,10 @@ const STATUSES = ['en_desarrollo', 'finalizado'];
  *   "estado": "en_desarrollo" | "finalizado"
  *   "linaje": URL de la documentación de dbt (enlace secundario)
  *   "dashboard": URL del dashboard publicado
+ *   "slug": nombre de la página de caso (por defecto, el del repo)
+ *   "es" / "en": además, "tipo", "problema", "solucion", "trabajo" (lista),
+ *                "flujo" (nodos del diagrama: { texto, tech? | icono?, pendiente? })
+ *                y "flujoNota" (pie del diagrama), para la página de caso
  * Reglas: en desarrollo no se muestra demo ni dashboard (aún no están listos);
  * el dashboard aparece solo con "finalizado" y una URL. Si el sitio del repo
  * (homepage de GitHub) es el linaje, no se presenta como demo.
@@ -85,6 +99,17 @@ export function localizeProject(project, lang, overrides = {}) {
   };
   const lineageUrl = url('linaje');
   const dashboardUrl = status === 'finalizado' ? url('dashboard') : (url('dashboard'), null);
+  const text = entry[lang] ?? {};
+  for (const key of ['tipo', 'problema', 'solucion', 'flujoNota']) {
+    if (text[key] !== undefined && !isText(text[key])) throw new Error(`${where}: "${key}" inválido (${lang})`);
+  }
+  if (text.trabajo !== undefined && !(Array.isArray(text.trabajo) && text.trabajo.length && text.trabajo.every(isText))) {
+    throw new Error(`${where}: "trabajo" debe ser una lista de textos (${lang})`);
+  }
+  const flujo = text.flujo ?? [];
+  if (!Array.isArray(flujo) || flujo.some((n) => !n || !isText(n.texto) || (n.tech !== undefined && !isText(n.tech)) || (n.icono !== undefined && !isText(n.icono)))) {
+    throw new Error(`${where}: "flujo" inválido (${lang})`);
+  }
   let demoUrl = project.demoUrl;
   if (status === 'en_desarrollo' || (demoUrl && demoUrl === lineageUrl)) demoUrl = null;
   return {
@@ -94,6 +119,14 @@ export function localizeProject(project, lang, overrides = {}) {
     lineageUrl,
     dashboardUrl,
     demoUrl,
+    slug: projectSlug(project.name, entry.slug),
+    year: new Date(project.createdAt ?? project.updatedAt).getUTCFullYear(),
+    tipo: text.tipo ?? null,
+    problema: text.problema ?? null,
+    solucion: text.solucion ?? null,
+    trabajo: text.trabajo ?? [],
+    flujo,
+    flujoNota: text.flujoNota ?? null,
   };
 }
 

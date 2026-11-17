@@ -189,14 +189,6 @@
     Array.prototype.forEach.call(reveals, function (el) { el.classList.add('is-visible'); });
   }
 
-  /* Pausar la animación del hero cuando no está a la vista */
-  var canvas = document.querySelector('.hero-canvas');
-  if (canvas && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (entries) {
-      canvas.classList.toggle('is-paused', !entries[0].isIntersecting);
-    }).observe(canvas);
-  }
-
   /* ---------- Filtros de tecnologías ---------- */
   var filters = Array.prototype.slice.call(document.querySelectorAll('.filter'));
   var groups = Array.prototype.slice.call(document.querySelectorAll('.tech-group'));
@@ -487,6 +479,217 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveInd);
     moveInd();
   }
+
+  /* Visuales de proyectos (data-visual): el HTML trae el estado final. Si hay
+     movimiento, se "arman" con su estado inicial, se reproducen una vez al
+     entrar en pantalla y se repiten con el cursor o el foco en su tarjeta. */
+  var visuals = document.querySelectorAll('[data-visual]');
+  var numFmt = function (lang, decimals) {
+    return new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-PE', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  };
+  var tween = function (ms, onFrame, onEnd) {
+    var t0 = 0;
+    var tick = function (ts) {
+      if (!t0) t0 = ts;
+      var k = Math.min((ts - t0) / ms, 1);
+      onFrame(1 - Math.pow(1 - k, 3));
+      if (k < 1) window.requestAnimationFrame(tick); else if (onEnd) onEnd();
+    };
+    window.requestAnimationFrame(tick);
+  };
+  var visualKinds = {
+    sync: {
+      arm: function (el) {
+        el.classList.remove('is-played');
+        el.classList.add('is-armed');
+        Array.prototype.forEach.call(el.querySelectorAll('[data-count-from]'), function (n) { n.textContent = n.getAttribute('data-count-from'); });
+      },
+      play: function (el, done) {
+        el.classList.add('is-playing');
+        var counters = el.querySelectorAll('[data-count-from]');
+        window.setTimeout(function () {
+          tween(1300, function (k) {
+            Array.prototype.forEach.call(counters, function (n) {
+              // Mientras sincroniza nunca baja de 1: llega a 0 justo al pasar a OK
+              var left = Number(n.getAttribute('data-count-from')) * (1 - k);
+              n.textContent = String(k < 1 ? Math.max(1, Math.ceil(left)) : 0);
+            });
+          }, function () {
+            el.classList.remove('is-armed', 'is-playing');
+            el.classList.add('is-played');
+            window.setTimeout(done, 450);
+          });
+        }, 300);
+      },
+    },
+    dash: {
+      arm: function (el) {
+        el.classList.remove('is-playing');
+        el.classList.add('is-armed');
+        Array.prototype.forEach.call(el.querySelectorAll('[data-count-to]'), function (n) { n.textContent = '0'; });
+      },
+      play: function (el, done) {
+        var lang = el.getAttribute('data-lang');
+        // La línea se dibuja y las barras crecen (CSS); los números cuentan (aquí)
+        void el.getBoundingClientRect();
+        el.classList.remove('is-armed');
+        el.classList.add('is-playing');
+        var end = done;
+        done = function () { window.setTimeout(function () { el.classList.remove('is-playing'); end(); }, 700); };
+        var counters = Array.prototype.slice.call(el.querySelectorAll('[data-count-to]'));
+        counters.forEach(function (n, i) {
+          var to = Number(n.getAttribute('data-count-to')), f = numFmt(lang, Number(n.getAttribute('data-decimals')) || 0);
+          window.setTimeout(function () {
+            tween(1100, function (k) { n.textContent = f.format(to * k); }, i === counters.length - 1 ? done : null);
+          }, i * 120);
+        });
+      },
+    },
+    runs: {
+      arm: function (el) {
+        el.classList.remove('is-entered', 'is-played', 'is-playing');
+        el.classList.add('is-armed');
+        Array.prototype.forEach.call(el.querySelectorAll('[data-count-to]'), function (n) { n.textContent = '0'; });
+      },
+      play: function (el, done) {
+        var lang = el.getAttribute('data-lang');
+        void el.getBoundingClientRect();
+        el.classList.add('is-entered', 'is-playing');
+        var counter = el.querySelector('[data-count-to]'), to = Number(counter.getAttribute('data-count-to')), f = numFmt(lang, 0);
+        window.setTimeout(function () {
+          tween(1600, function (k) { counter.textContent = f.format(to * k); }, function () {
+            el.classList.remove('is-armed', 'is-playing');
+            el.classList.add('is-played');
+            window.setTimeout(done, 450);
+          });
+        }, 450);
+      },
+    },
+    bpmn: {
+      arm: function (el) { el.removeAttribute('data-user'); setBpmnView(el, 'asis'); },
+      play: function (el, done) {
+        // Si la persona eligió una pestaña mientras tanto, se respeta su elección
+        window.setTimeout(function () { if (!el.hasAttribute('data-user')) setBpmnView(el, 'tobe'); window.setTimeout(done, 900); }, 1000);
+      },
+    },
+    term: {
+      arm: function (el) {
+        el.classList.add('is-armed');
+        var p = el.querySelector('.pv-term-prompt');
+        if (!p.hasAttribute('data-text')) p.setAttribute('data-text', p.textContent);
+        p.textContent = '$';
+        Array.prototype.forEach.call(el.querySelectorAll('.pv-term-line'), function (l) { l.classList.remove('is-shown'); });
+      },
+      play: function (el, done) {
+        var p = el.querySelector('.pv-term-prompt'), text = p.getAttribute('data-text'), i = 1;
+        var lines = el.querySelectorAll('.pv-term-line');
+        var typeTick = function () {
+          i += 1; p.textContent = text.slice(0, i);
+          if (i < text.length) { window.setTimeout(typeTick, 22); return; }
+          Array.prototype.forEach.call(lines, function (l, k) {
+            window.setTimeout(function () {
+              l.classList.add('is-shown');
+              if (k === lines.length - 1) window.setTimeout(function () { el.classList.remove('is-armed'); done(); }, 300);
+            }, 200 + k * 210);
+          });
+        };
+        window.setTimeout(typeTick, 250);
+      },
+    },
+  };
+  /* Pestañas AS-IS / TO-BE del visual BPMN (funcionan con o sin movimiento) */
+  function setBpmnView(el, view) {
+    el.setAttribute('data-view', view);
+    var panel = el.querySelector('[role="tabpanel"]');
+    Array.prototype.forEach.call(el.querySelectorAll('[data-view-tab]'), function (b) {
+      var on = b.getAttribute('data-view-tab') === view;
+      b.setAttribute('aria-selected', String(on));
+      b.tabIndex = on ? 0 : -1;
+      if (on) panel.setAttribute('aria-labelledby', b.id);
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.pv-bpmn'), function (el) {
+    var list = el.querySelector('[role="tablist"]');
+    var tabs = Array.prototype.slice.call(el.querySelectorAll('[data-view-tab]'));
+    list.hidden = false;
+    tabs.forEach(function (b, i) {
+      b.addEventListener('click', function () { el.setAttribute('data-user', '1'); setBpmnView(el, b.getAttribute('data-view-tab')); });
+      b.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'Home' && e.key !== 'End') return;
+        e.preventDefault();
+        el.setAttribute('data-user', '1');
+        var n = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        setBpmnView(el, tabs[n].getAttribute('data-view-tab'));
+        tabs[n].focus();
+      });
+    });
+  });
+  if (visuals.length && !reduceMotion.matches && 'IntersectionObserver' in window) {
+    var playVisual = function (el) {
+      var kind = visualKinds[el.getAttribute('data-visual')];
+      if (!kind || el.getAttribute('data-busy') === '1') return;
+      el.setAttribute('data-busy', '1');
+      kind.arm(el);
+      kind.play(el, function () { el.removeAttribute('data-busy'); el.setAttribute('data-played', '1'); });
+    };
+    var visualIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        visualIO.unobserve(entry.target);
+        playVisual(entry.target);
+      });
+    }, { threshold: 0.4 });
+    Array.prototype.forEach.call(visuals, function (el) {
+      var kind = visualKinds[el.getAttribute('data-visual')];
+      if (!kind) return;
+      // Fuera de pantalla: dejarlo armado para que no se vea el final antes de tiempo
+      if (el.getBoundingClientRect().top > window.innerHeight) kind.arm(el);
+      visualIO.observe(el);
+      var host = el.closest('.pj-row, .case-figure') || el;
+      var again = function () { if (el.getAttribute('data-played') === '1' && !el.hasAttribute('data-user')) playVisual(el); };
+      host.addEventListener('mouseenter', again);
+      host.addEventListener('focusin', function (e) { if (!e.target.closest('[data-pv-chart], [role="tablist"]')) again(); });
+    });
+  }
+
+  /* Gráfico del mini dashboard: guía vertical y valor del mes con el cursor,
+     el foco o las flechas del teclado (no depende del movimiento). */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-pv-chart]'), function (chart) {
+    var values = JSON.parse(chart.getAttribute('data-values'));
+    var months = JSON.parse(chart.getAttribute('data-months'));
+    var xs = JSON.parse(chart.getAttribute('data-xs'));
+    var ys = JSON.parse(chart.getAttribute('data-ys'));
+    var guide = chart.querySelector('.pv-guide'), tip = chart.querySelector('.pv-tip');
+    var current = xs.length - 1;
+    var show = function (i) {
+      current = i;
+      var w = chart.clientWidth, h = chart.clientHeight;
+      var x = xs[i] * w;
+      guide.style.transform = 'translateX(' + x.toFixed(1) + 'px)';
+      tip.querySelector('b').textContent = values[i];
+      tip.querySelector('small').textContent = months[i];
+      var tw = tip.offsetWidth;
+      var left = Math.max(0, Math.min(w - tw, x - tw / 2));
+      var top = Math.max(-8, ys[i] * h - tip.offsetHeight - 10);
+      tip.style.transform = 'translate(' + left.toFixed(1) + 'px,' + top.toFixed(1) + 'px)';
+      chart.classList.add('is-hover');
+    };
+    var hide = function () { chart.classList.remove('is-hover'); };
+    chart.addEventListener('pointermove', function (e) {
+      var r = chart.getBoundingClientRect(), ratio = (e.clientX - r.left) / r.width, best = 0;
+      xs.forEach(function (x, i) { if (Math.abs(x - ratio) < Math.abs(xs[best] - ratio)) best = i; });
+      show(best);
+    });
+    chart.addEventListener('pointerleave', function () { if (document.activeElement !== chart) hide(); });
+    chart.addEventListener('focus', function () { show(current); });
+    chart.addEventListener('blur', hide);
+    chart.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        show(Math.max(0, Math.min(xs.length - 1, current + (e.key === 'ArrowRight' ? 1 : -1))));
+      }
+    });
+  });
 
   /* Tarjetas: la línea inferior se dibuja al entrar en pantalla */
   var fxCards = document.querySelectorAll('.fx-card');

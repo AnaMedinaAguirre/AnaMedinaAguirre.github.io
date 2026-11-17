@@ -53,7 +53,32 @@ const es = {
   projectDemo: 'Ver demo',
   projectLineage: 'Ver linaje (dbt docs)',
   projectDashboard: 'Ver dashboard',
-  projectStatus: { en_desarrollo: 'En desarrollo', finalizado: 'Finalizado' },
+  projectStatus: { en_desarrollo: 'En desarrollo', en_curso: 'En curso', finalizado: 'Finalizado' },
+  /** Proyectos y páginas de caso de estudio */
+  caseStudy: {
+    proLabel: 'Caso profesional',
+    personalLabel: 'Proyecto personal',
+    view: 'Ver proyecto',
+    back: 'Todos los proyectos',
+    summary: 'Resumen',
+    problem: 'Problema',
+    solution: 'Solución',
+    myWork: 'Mi trabajo',
+    details: 'Detalles',
+    type: 'Tipo',
+    year: 'Año',
+    role: 'Rol',
+    status: 'Estado',
+    stack: 'Stack',
+    links: 'Enlaces',
+    more: 'Más proyectos',
+    keepExploring: 'Sigue explorando',
+    illustration: 'Ilustración propia; no muestra datos del cliente.',
+    illustrativeNote: 'Fragmento de interfaz con datos ilustrativos: nombres, montos y fechas no corresponden al cliente.',
+    terminalNote: 'Salida de dbt build con los modelos reales del repositorio; horas ilustrativas.',
+    pending: 'pendiente',
+    ctaTitle: 'Conversemos',
+  },
   projectMetrics: 'Ver métricas en vivo',
   clientBadge: 'Proyecto para cliente',
   techUsed: 'Tecnologías usadas',
@@ -114,16 +139,12 @@ const es = {
   cv: {
     backToSite: 'Volver al portafolio',
     download: 'Descargar PDF',
-    phone: 'Teléfono',
-    email: 'Email',
-    location: 'Ubicación',
-    profile: 'Perfil profesional',
+    profile: 'Perfil',
     experience: 'Experiencia laboral',
+    projects: 'Proyectos',
     education: 'Educación',
-    courses: 'Formación complementaria',
     skills: 'Habilidades',
-    languages: 'Idiomas',
-    references: 'Referencias',
+    present: 'Actualidad',
   },
 };
 
@@ -174,7 +195,31 @@ const en: UI = {
   projectDemo: 'View demo',
   projectLineage: 'View lineage (dbt docs)',
   projectDashboard: 'View dashboard',
-  projectStatus: { en_desarrollo: 'In progress', finalizado: 'Completed' },
+  projectStatus: { en_desarrollo: 'In progress', en_curso: 'Ongoing', finalizado: 'Completed' },
+  caseStudy: {
+    proLabel: 'Professional case',
+    personalLabel: 'Personal project',
+    view: 'View project',
+    back: 'All projects',
+    summary: 'Overview',
+    problem: 'Problem',
+    solution: 'Solution',
+    myWork: 'My work',
+    details: 'Details',
+    type: 'Type',
+    year: 'Year',
+    role: 'Role',
+    status: 'Status',
+    stack: 'Stack',
+    links: 'Links',
+    more: 'More projects',
+    keepExploring: 'Keep exploring',
+    illustration: 'Original illustration; it shows no client data.',
+    illustrativeNote: 'Interface fragment with illustrative data: names, amounts and dates do not belong to the client.',
+    terminalNote: 'dbt build output with the repository’s real models; times are illustrative.',
+    pending: 'pending',
+    ctaTitle: "Let's talk",
+  },
   projectMetrics: 'View live metrics',
   clientBadge: 'Client project',
   techUsed: 'Technologies used',
@@ -232,16 +277,12 @@ const en: UI = {
   cv: {
     backToSite: 'Back to portfolio',
     download: 'Download PDF',
-    phone: 'Phone',
-    email: 'Email',
-    location: 'Location',
-    profile: 'Professional summary',
+    profile: 'Summary',
     experience: 'Work experience',
+    projects: 'Projects',
     education: 'Education',
-    courses: 'Additional training',
     skills: 'Skills',
-    languages: 'Languages',
-    references: 'References',
+    present: 'Present',
   },
 };
 
@@ -256,6 +297,11 @@ export const routes = {
   home: { es: '/', en: '/en/' },
   cv: { es: '/cv/', en: '/en/cv/' },
 } as const;
+
+/** Página de caso de estudio de un proyecto (mismo slug en ES y EN). */
+export function projectPath(lang: Lang, slug: string): string {
+  return lang === 'en' ? `/en/projects/${slug}/` : `/proyectos/${slug}/`;
+}
 
 /** Nombre del PDF del CV por idioma. */
 export function cvPdfPath(lang: Lang): string {

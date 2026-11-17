@@ -1,0 +1,93 @@
+---
+/* Visual de "Dashboards ejecutivos": imita un reporte de Power BI (lienzo
+   claro, segmentador de mosaicos, tarjetas, gráfico de líneas y de barras),
+   sin logos. El HTML trae el estado FINAL (filtrado por la sede Sur); es lo
+   que se ve sin JS o con movimiento reducido. src/scripts/sim.js lo
+   reproduce: un cursor hace clic en "Sur" y el reporte se filtra.
+   Datos ilustrativos. */
+import type { Lang } from '../../lib/cv';
+import { simText, pbiData } from '../../i18n/sims';
+import { fmt } from '../../i18n/visuals';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = simText(lang);
+const p = t.pbi;
+const d = pbiData.site;
+
+const W = 300, H = 120, PADX = 10, TOP = 8, BOTTOM = 104;
+const xs = d.months.map((_, i) => PADX + (i * (W - 2 * PADX)) / (d.months.length - 1));
+const yOf = (v: number, s = d) => BOTTOM - ((v - s.min) / (s.max - s.min)) * (BOTTOM - TOP);
+const path = (s = d) => s.months.map((v, i) => `${i ? 'L' : 'M'}${xs[i].toFixed(1)} ${yOf(v, s).toFixed(1)}`).join(' ');
+const money = (n: number) => `S/ ${fmt(lang, n)}`;
+const kpiText = [money(d.kpis[0]), `S/ ${fmt(lang, d.kpis[1], 2)}`, fmt(lang, d.kpis[2])];
+const pct = (n: number) => { const s = fmt(lang, n, Number.isInteger(n) ? 0 : 1); return lang === 'en' ? `${s}%` : `${s} %`; };
+const axisText = (a: number) => `${fmt(lang, a, 2)} M`;
+const maxSite = Math.max(...pbiData.bySite);
+const config = {
+  lang, xs: xs.map((x) => x / W), W, H, TOP, BOTTOM,
+  all: pbiData.all, site: pbiData.site,
+};
+---
+<figure class="sim sim-pbi" data-sim="pbi" data-config={JSON.stringify(config)}>
+  <div class="pbi-page">
+    <div class="pbi-head">
+      <p class="pbi-title">{p.page}</p>
+      <div class="pbi-slicer" role="group" aria-label={p.slicer}>
+        <span class="pbi-slicer-label">{p.slicer}</span>
+        <div class="pbi-tiles">
+          <span class="pbi-tile" data-tile="all">{p.all}</span>
+          {p.sites.map((s, i) => <span class:list={['pbi-tile', { 'is-on': i === pbiData.targetIndex }]} data-tile={i}>{s}</span>)}
+        </div>
+      </div>
+      <p class="pbi-dropdown"><span>{p.period}</span><b>{p.periodValue}</b></p>
+    </div>
+
+    <div class="pbi-cards">
+      {p.kpis.map((label, i) => (
+        <div class="pbi-card">
+          <p class="pbi-card-value" data-kpi={i}>{kpiText[i]}</p>
+          <p class="pbi-card-label">{label}</p>
+          <p class:list={['pbi-card-delta', d.deltas[i].good ? 'is-good' : 'is-bad']} data-delta={i}>
+            <span aria-hidden="true">{d.deltas[i].up ? '▲' : '▼'}</span> {pct(d.deltas[i].v)}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <div class="pbi-visuals">
+      <div class="pbi-visual">
+        <p class="pbi-visual-title">{p.lineTitle}</p>
+        <div class="pbi-line">
+          <ol class="pbi-yaxis" aria-hidden="true">{d.axis.map((a, i) => <li data-axis={i} style={`--y:${(yOf(a) / H).toFixed(4)}`}>{axisText(a)}</li>)}</ol>
+          <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+            {d.axis.map((a, i) => <line class="pbi-grid" data-grid={i} x1="0" x2={W} y1={yOf(a).toFixed(1)} y2={yOf(a).toFixed(1)} />)}
+            <path class="pbi-path" d={path()} />
+            {xs.map((x, i) => <circle class="pbi-dot" data-dot={i} cx={x.toFixed(1)} cy={yOf(d.months[i]).toFixed(1)} r="2.8" />)}
+          </svg>
+        </div>
+        <ol class="pbi-xaxis" aria-hidden="true">{p.months.map((m, i) => <li style={`--x:${(xs[i] / W).toFixed(4)}`}>{m}</li>)}</ol>
+      </div>
+      <div class="pbi-visual">
+        <p class="pbi-visual-title">{p.barTitle}</p>
+        <ul class="pbi-bars">
+          {p.sites.map((s, i) => (
+            <li class:list={[{ 'is-dim': i !== pbiData.targetIndex }]} data-bar={i}>
+              <span class="pbi-bar-label">{s}</span>
+              <span class="pbi-bar-track"><span class="pbi-bar-fill" style={`--w:${(pbiData.bySite[i] / maxSite).toFixed(3)}`}></span></span>
+              <span class="pbi-bar-val">{fmt(lang, Math.round(pbiData.bySite[i] / 1000))} K</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="sim-replay" data-sim-replay aria-label={t.replayLabel} hidden><span aria-hidden="true">↻</span> {t.replay}</button>
+  <span class="sim-cursor" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M5 3 19 12.5l-6.2 1.3 3.6 6.8-2.7 1.4-3.6-6.8L5 19.6z" /></svg>
+    <i class="sim-click"></i>
+  </span>
+  <figcaption class="sim-tag">{t.illustrative}<span class="sr-only">: {p.caption}</span></figcaption>
+</figure>
+<script>
+  import '../../scripts/sim.js';
+</script>

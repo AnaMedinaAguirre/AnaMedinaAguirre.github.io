@@ -1,0 +1,26 @@
+---
+/* Visual del pipeline personal: ventana de terminal con la salida de
+   dbt build. El HTML trae la salida completa; main.js escribe las líneas
+   una a una y termina en "138 of 138 PASS", una vez. Modelos reales del
+   repositorio; tiempos ilustrativos. */
+import type { Lang } from '../../lib/cv';
+import { visualText } from '../../i18n/visuals';
+interface Props { lang: Lang }
+const v = visualText(Astro.props.lang);
+const s = v.term;
+---
+<figure class="pv pv-term" data-visual="term">
+  <div class="pv-bar pv-term-bar">
+    <span class="pv-term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <p class="pv-term-title pv-mono">{s.title}</p>
+  </div>
+  <ol class="pv-term-body pv-mono">
+    <li class="pv-term-prompt">{s.prompt}</li>
+    {s.lines.map((l) => (
+      <li class="pv-term-line"><time>{l[0]}</time><span class:list={['pv-term-st', l[1] === 'PASS' ? 'is-pass' : 'is-ok']}>{l[1]}</span><span class="pv-term-msg">{l[2]}</span></li>
+    ))}
+    <li class="pv-term-line pv-term-done">{s.done}</li>
+    <li class="pv-term-line pv-term-sum">{s.summary}</li>
+  </ol>
+  <figcaption class="pv-tag">{v.illustrative}</figcaption>
+</figure>

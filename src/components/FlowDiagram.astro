@@ -1,0 +1,26 @@
+---
+/* Diagrama de flujo de un proyecto personal: nodos con su ícono, unidos por
+   flechas. Horizontal en escritorio y vertical en móvil. Un nodo "pendiente"
+   (p. ej., Power BI antes de publicar el dashboard) va con borde discontinuo. */
+import Icon from './Icon.astro';
+import type { FlowNode } from '../lib/projects';
+interface Props { nodes: FlowNode[]; label: string; pending: string }
+const { nodes, label, pending } = Astro.props;
+---
+<ol class="cflow-diagram" aria-label={label}>
+  {nodes.map((n) => (
+    <li class:list={['cflow-node', { 'is-pending': n.pendiente }]}>
+      <span class="cflow-icon" aria-hidden="true">
+        {n.chip?.logo && n.chip.logo.srcOscuro && <>
+          <img class="chip-logo belt-logo--claro" src={n.chip.logo.src} width="28" height="28" alt="" loading="lazy" decoding="async" />
+          <img class="chip-logo belt-logo--oscuro" src={n.chip.logo.srcOscuro} width="28" height="28" alt="" loading="lazy" decoding="async" />
+        </>}
+        {n.chip?.logo && !n.chip.logo.srcOscuro && <img class="chip-logo" src={n.chip.logo.src} width="28" height="28" alt="" loading="lazy" decoding="async" />}
+        {n.chip?.glifo && <span class="chip-glyph" style={`--c:${n.chip.glifo.color};--c-claro:${n.chip.glifo.colorClaro}`}><Icon name={n.chip.glifo.id} class="ic" /></span>}
+        {n.chip?.icono && <Icon name={n.chip.icono} class="ic chip-icon" />}
+        {!n.chip && n.icono && <Icon name={n.icono} class="ic chip-icon" />}
+      </span>
+      <span class="cflow-text">{n.texto}{n.pendiente && <small> ({pending})</small>}</span>
+    </li>
+  ))}
+</ol>
