@@ -189,14 +189,6 @@
     Array.prototype.forEach.call(reveals, function (el) { el.classList.add('is-visible'); });
   }
 
-  /* Pausar la animación del hero cuando no está a la vista */
-  var canvas = document.querySelector('.hero-canvas');
-  if (canvas && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (entries) {
-      canvas.classList.toggle('is-paused', !entries[0].isIntersecting);
-    }).observe(canvas);
-  }
-
   /* ---------- Filtros de tecnologías ---------- */
   var filters = Array.prototype.slice.call(document.querySelectorAll('.filter'));
   var groups = Array.prototype.slice.call(document.querySelectorAll('.tech-group'));

@@ -3,12 +3,16 @@
 Uso: npm.cmd run build:all, luego python scripts/check-bilingual.py.
 Requiere Playwright para Python y Chromium instalados.
 """
+import json
 from pathlib import Path
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from functools import partial
 from threading import Thread
 from urllib.parse import urlsplit
 from playwright.sync_api import sync_playwright
+
+# Un caso por proyecto profesional del CV
+PRO_CASES = len(json.loads(Path('data/cv.es.json').read_text(encoding='utf-8'))['proyectosProfesionales'])
 
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, *args):
@@ -42,7 +46,7 @@ with sync_playwright() as p:
                 assert page.locator('link[hreflang="en"]').count() == 1
                 assert page.locator('link[rel="canonical"]').get_attribute('href').endswith(route)
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Desbordamiento horizontal'
-                assert page.locator('.project:not(.personal-project)').count() == 5
+                assert page.locator('.pj-row').count() == PRO_CASES
                 page.screenshot(path=str(OUT / f'{lang}-{theme}-{width}.png'), full_page=True)
                 page.locator('.theme-toggle').click()
                 assert page.locator('html').get_attribute('data-theme') != theme

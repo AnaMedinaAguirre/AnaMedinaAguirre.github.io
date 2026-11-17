@@ -1,0 +1,12 @@
+---
+import CasePage from '../../../components/pages/CasePage.astro';
+import { getCV } from '../../../lib/cv';
+import { useUI } from '../../../i18n/ui';
+import { getProjects } from '../../../lib/projects';
+export async function getStaticPaths() {
+  const projects = await getProjects(getCV('en'), useUI('en'));
+  return projects.map((p) => ({ params: { slug: p.slug } }));
+}
+const { slug } = Astro.params;
+---
+<CasePage lang="en" slug={slug!} />

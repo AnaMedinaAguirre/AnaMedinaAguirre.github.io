@@ -1,0 +1,123 @@
+---
+// Ilustración propia; no muestra datos del cliente.
+import { diagramText } from '../../i18n/diagrams';
+import type { Lang } from '../../lib/cv';
+interface Props { lang?: Lang }
+const d = diagramText(Astro.props.lang ?? 'es');
+---
+<figure class="project-art">
+            <svg class="diagram only-wide" viewBox="0 0 680 320" role="img" aria-labelledby="pj-inv-title pj-inv-desc">
+              <title id="pj-inv-title">{d.invTitle}</title>
+              <desc id="pj-inv-desc">{d.invDesc}</desc>
+              <defs>
+                <marker id="arrow-inv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 10 5 0 10z" class="d-arrowhead" />
+                </marker>
+                <marker id="arrow-inv-e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 10 5 0 10z" class="d-arrowhead-event" />
+                </marker>
+              </defs>
+              <!-- Celular → zonas → supervisor → ajuste → alertas -->
+              <g class="d-links" marker-end="url(#arrow-inv)">
+                <path d="M214 95H240" />
+                <path d="M438 95H464" />
+                <path d="M564 150V188" />
+              </g>
+              <g class="d-links-event" marker-end="url(#arrow-inv-e)">
+                <path d="M330 245H292" />
+              </g>
+
+              <g class="d-node">
+                <rect x="18" y="40" width="196" height="110" rx="12" />
+                <use href="#i-phone" x="34" y="54" width="24" height="24" class="d-icon" />
+                <text class="d-label" x="34" y="102">{d.invPhone}</text>
+                <text class="d-sub d-sub--sm" x="34" y="122">{d.invScan}</text>
+                <text class="d-sub d-sub--sm" x="34" y="137">{d.invBlind}</text>
+              </g>
+              <g class="d-node">
+                <rect x="242" y="40" width="196" height="110" rx="12" />
+                <use href="#i-pin" x="258" y="54" width="22" height="22" class="d-icon" />
+                <text class="d-label" x="258" y="102">{d.invZones}</text>
+              </g>
+              <g class="d-bars-soft">
+                <rect x="258" y="116" width="48" height="20" rx="4" />
+                <rect x="314" y="116" width="48" height="20" rx="4" />
+                <rect x="370" y="116" width="48" height="20" rx="4" />
+              </g>
+              <g class="d-node">
+                <rect x="466" y="40" width="196" height="110" rx="12" />
+                <use href="#i-users" x="482" y="54" width="24" height="24" class="d-icon" />
+                <text class="d-label" x="482" y="102">{d.invSupervisor}</text>
+                <text class="d-sub d-sub--sm" x="482" y="122">{d.invNote1}</text>
+                <text class="d-sub d-sub--sm" x="482" y="137">{d.invNote2}</text>
+              </g>
+              <g class="d-node d-node--accent">
+                <rect x="330" y="190" width="332" height="110" rx="12" />
+                <use href="#i-checklist" x="346" y="204" width="22" height="22" class="d-icon" />
+                <text class="d-label" x="376" y="221">{d.invAdjust}</text>
+                <rect class="d-chip" x="346" y="244" width="300" height="40" rx="6" />
+                <text class="d-chip-txt" x="496" y="269" text-anchor="middle">{d.invFormula1} {d.invFormula2}</text>
+              </g>
+              <g class="d-node d-node--event">
+                <rect x="18" y="190" width="272" height="110" rx="12" />
+                <use href="#i-bell" x="34" y="204" width="22" height="22" class="d-icon d-icon--event" />
+                <text class="d-label" x="64" y="221">{d.invAlerts}</text>
+                <text class="d-sub" x="34" y="254">{d.invNegative}</text>
+                <text class="d-sub" x="34" y="276">{d.invBigDiff}</text>
+              </g>
+            </svg>
+
+            <svg class="diagram only-narrow" viewBox="0 0 340 452" role="img" aria-labelledby="pj-inv-v-title pj-inv-v-desc">
+              <title id="pj-inv-v-title">{d.invTitle}</title>
+              <desc id="pj-inv-v-desc">{d.invDesc}</desc>
+              <defs>
+                <marker id="arrow-invv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 10 5 0 10z" class="d-arrowhead" />
+                </marker>
+                <marker id="arrow-invv-e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 10 5 0 10z" class="d-arrowhead-event" />
+                </marker>
+              </defs>
+              <g class="d-links" marker-end="url(#arrow-invv)">
+                <path d="M190 74V94" />
+                <path d="M190 138V158" />
+                <path d="M190 216V236" />
+              </g>
+              <g class="d-links-event" marker-end="url(#arrow-invv-e)">
+                <path d="M190 330V350" />
+              </g>
+
+              <g class="d-node">
+                <rect x="52" y="16" width="276" height="58" rx="10" />
+                <use href="#i-phone" x="66" y="34" width="22" height="22" class="d-icon" />
+                <text class="d-label d-label--sm" x="98" y="41">{d.invPhone}</text>
+                <text class="d-sub d-sub--sm" x="98" y="60">{d.invScan} · {d.invBlind}</text>
+              </g>
+              <g class="d-node">
+                <rect x="52" y="96" width="276" height="42" rx="10" />
+                <use href="#i-pin" x="66" y="107" width="20" height="20" class="d-icon" />
+                <text class="d-label d-label--sm" x="98" y="122">{d.invZones}</text>
+              </g>
+              <g class="d-node">
+                <rect x="52" y="160" width="276" height="56" rx="10" />
+                <use href="#i-users" x="66" y="177" width="22" height="22" class="d-icon" />
+                <text class="d-label d-label--sm" x="98" y="183">{d.invSupervisor}</text>
+                <text class="d-sub d-sub--sm" x="98" y="202">{d.invNote1} {d.invNote2}</text>
+              </g>
+              <g class="d-node d-node--accent">
+                <rect x="52" y="238" width="276" height="92" rx="10" />
+                <use href="#i-checklist" x="66" y="252" width="20" height="20" class="d-icon" />
+                <text class="d-label d-label--sm" x="96" y="267">{d.invAdjust}</text>
+                <rect class="d-chip" x="66" y="280" width="248" height="40" rx="6" />
+                <text class="d-chip-txt" x="190" y="296" text-anchor="middle">{d.invFormula1}</text>
+                <text class="d-chip-txt" x="190" y="312" text-anchor="middle">{d.invFormula2}</text>
+              </g>
+              <g class="d-node d-node--event">
+                <rect x="52" y="352" width="276" height="78" rx="10" />
+                <use href="#i-bell" x="66" y="366" width="20" height="20" class="d-icon d-icon--event" />
+                <text class="d-label d-label--sm" x="96" y="381">{d.invAlerts}</text>
+                <text class="d-sub d-sub--sm" x="66" y="404">{d.invNegative}</text>
+                <text class="d-sub d-sub--sm" x="66" y="420">{d.invBigDiff}</text>
+              </g>
+            </svg>
+          </figure>

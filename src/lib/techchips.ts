@@ -95,3 +95,14 @@ export function topicChips(tags: string[], repo: string): TechChip[] {
   }
   return chips;
 }
+
+/** Ícono para un nodo de diagrama: tecnología del CV/franja o, si no, un topic mapeado. */
+export function chipFor(nombre: string, where: string): TechChip {
+  try {
+    return techChip(nombre, where);
+  } catch {
+    const [chip] = topicChips([nombre.toLowerCase().replace(/\s+/g, '-')], where);
+    if (!chip) throw new Error(`${where}: "${nombre}" no tiene ícono.`);
+    return { ...chip, nombre };
+  }
+}

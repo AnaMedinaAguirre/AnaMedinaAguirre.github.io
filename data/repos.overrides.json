@@ -1,17 +1,163 @@
 {
   "AnaMedinaAguirre.github.io": {
+    "slug": "portafolio",
+    "estado": "en_curso",
     "es": {
-      "description": "Este portafolio como producto de datos: contenido desde una sola fuente JSON, CI/CD con controles de calidad, CV en PDF generado automáticamente y métricas anónimas con Supabase."
+      "description": "Este portafolio como producto de datos: contenido desde una sola fuente JSON, CI/CD con controles de calidad, CV en PDF generado automáticamente y métricas anónimas con Supabase.",
+      "tipo": "Automatización web",
+      "problema": "Mantener un portafolio y un CV bilingües siempre coherentes entre sí, sin editar el contenido en varios lugares.",
+      "solucion": "El portafolio como producto de datos: una sola fuente JSON validada, CI/CD con controles de calidad, CV en PDF generado automáticamente y métricas anónimas con Supabase.",
+      "trabajo": [
+        "Contenido en una sola fuente JSON validada con zod, con control de paridad ES/EN.",
+        "CI/CD en GitHub Actions: html-validate, enlaces con lychee, Lighthouse ≥ 90 y pruebas unitarias.",
+        "CV en PDF generado con Playwright desde los mismos datos.",
+        "Métricas anónimas con Supabase, con RLS y funciones RPC, sin datos personales.",
+        "Proyectos personales leídos desde la API de GitHub en cada build, con reconstrucción diaria.",
+        "Accesibilidad: navegación por teclado, movimiento reducido y modo claro/oscuro."
+      ],
+      "flujo": [
+        {
+          "texto": "Datos JSON",
+          "icono": "doc"
+        },
+        {
+          "texto": "Astro",
+          "tech": "Astro"
+        },
+        {
+          "texto": "GitHub Actions",
+          "tech": "GitHub Actions"
+        },
+        {
+          "texto": "GitHub Pages",
+          "icono": "github"
+        },
+        {
+          "texto": "Supabase",
+          "tech": "Supabase"
+        }
+      ],
+      "flujoNota": "Una sola fuente JSON; Astro genera la web y el CV en PDF; GitHub Actions valida y publica en GitHub Pages; Supabase guarda las métricas anónimas."
     },
     "en": {
-      "description": "This portfolio as a data product: content from a single JSON source, CI/CD with quality checks, an automatically generated PDF résumé and anonymous metrics with Supabase."
+      "description": "This portfolio as a data product: content from a single JSON source, CI/CD with quality checks, an automatically generated PDF résumé and anonymous metrics with Supabase.",
+      "tipo": "Web automation",
+      "problema": "Keeping a bilingual portfolio and résumé always consistent with each other, without editing content in several places.",
+      "solucion": "The portfolio as a data product: a single validated JSON source, CI/CD with quality checks, an automatically generated PDF résumé and anonymous metrics with Supabase.",
+      "trabajo": [
+        "Content in a single JSON source validated with zod, with ES/EN parity checks.",
+        "CI/CD on GitHub Actions: html-validate, link checks with lychee, Lighthouse ≥ 90 and unit tests.",
+        "PDF résumé generated with Playwright from the same data.",
+        "Anonymous metrics with Supabase, using RLS and RPC functions, with no personal data.",
+        "Personal projects read from the GitHub API on every build, with a daily rebuild.",
+        "Accessibility: keyboard navigation, reduced motion and light/dark mode."
+      ],
+      "flujo": [
+        {
+          "texto": "JSON data",
+          "icono": "doc"
+        },
+        {
+          "texto": "Astro",
+          "tech": "Astro"
+        },
+        {
+          "texto": "GitHub Actions",
+          "tech": "GitHub Actions"
+        },
+        {
+          "texto": "GitHub Pages",
+          "icono": "github"
+        },
+        {
+          "texto": "Supabase",
+          "tech": "Supabase"
+        }
+      ],
+      "flujoNota": "A single JSON source; Astro builds the site and the PDF résumé; GitHub Actions checks and publishes to GitHub Pages; Supabase stores the anonymous metrics."
     }
   },
   "pipeline-etl-retail": {
-    "en": {
-      "description": "Automated ELT pipeline for retail sales: Python + dbt + PostgreSQL (Neon), BCB/BCRP exchange rates, data quality tests and daily runs with GitHub Actions."
-    },
     "estado": "en_desarrollo",
-    "linaje": "https://anamedinaaguirre.github.io/pipeline-etl-retail/"
+    "linaje": "https://anamedinaaguirre.github.io/pipeline-etl-retail/",
+    "es": {
+      "tipo": "Ingeniería de datos",
+      "problema": "Los reportes de ventas dependen de cargas manuales y de convertir monedas a mano, con riesgo de errores y datos duplicados. Se necesitaba un flujo que cada día integre ventas y tipo de cambio, valide la calidad y deje los datos listos para analizar.",
+      "solucion": "Pipeline ELT con Python, dbt, PostgreSQL (Neon), GitHub Actions y Power BI. Cada día se ejecutan la extracción, la carga a raw, dbt build con sus tests y el registro de la corrida; el linaje de dbt se publica en GitHub Pages.",
+      "trabajo": [
+        "Pipeline diario en GitHub Actions (07:00, Lima): extracción, carga a raw, dbt build con tests y registro en etl_runs.",
+        "Simulador de llegada de datos con watermark y carga idempotente (borrar por clave e insertar, en una sola transacción).",
+        "138 tests de calidad con dbt y prueba de fallo controlado: si un test falla, el pipeline se detiene sin avanzar el watermark.",
+        "Montos en USD y PEN con tipos de cambio oficiales del BCB y del BCRP.",
+        "Conciliación de ventas vs. total pagado, explicada al centavo.",
+        "CI en cada cambio: ruff, actionlint, pytest y dbt parse.",
+        "Documentación de dbt (linaje) publicada en GitHub Pages.",
+        "Rol de solo lectura en PostgreSQL para Power BI."
+      ],
+      "flujo": [
+        {
+          "texto": "Olist + BCB · BCRP",
+          "icono": "download"
+        },
+        {
+          "texto": "Python",
+          "tech": "Python"
+        },
+        {
+          "texto": "PostgreSQL (Neon)",
+          "tech": "PostgreSQL"
+        },
+        {
+          "texto": "dbt",
+          "tech": "dbt"
+        },
+        {
+          "texto": "Power BI",
+          "tech": "Power BI",
+          "pendiente": true
+        }
+      ],
+      "flujoNota": "Cada día, GitHub Actions orquesta el flujo: Python extrae ventas y tipos de cambio, los carga en PostgreSQL (Neon) y dbt los transforma y valida. Power BI se conectará al terminar el proyecto."
+    },
+    "en": {
+      "description": "Automated ELT pipeline for retail sales: Python + dbt + PostgreSQL (Neon), BCB/BCRP exchange rates, data quality tests and daily runs with GitHub Actions.",
+      "tipo": "Data engineering",
+      "problema": "Sales reports depend on manual loads and converting currencies by hand, with a risk of errors and duplicated data. A flow was needed that integrates sales and exchange rates every day, validates quality and leaves the data ready for analysis.",
+      "solucion": "ELT pipeline with Python, dbt, PostgreSQL (Neon), GitHub Actions and Power BI. Every day it runs extraction, the raw load, dbt build with its tests and the run log; the dbt lineage is published on GitHub Pages.",
+      "trabajo": [
+        "Daily pipeline on GitHub Actions (07:00, Lima): extraction, raw load, dbt build with tests and logging to etl_runs.",
+        "Data-arrival simulator with a watermark and idempotent loads (delete by key and insert, in a single transaction).",
+        "138 dbt data quality tests and a controlled failure test: if a test fails, the pipeline stops without advancing the watermark.",
+        "Amounts in USD and PEN using official BCB and BCRP exchange rates.",
+        "Reconciliation of sales vs. total paid, explained to the cent.",
+        "CI on every change: ruff, actionlint, pytest and dbt parse.",
+        "dbt documentation (lineage) published on GitHub Pages.",
+        "Read-only PostgreSQL role for Power BI."
+      ],
+      "flujo": [
+        {
+          "texto": "Olist + BCB · BCRP",
+          "icono": "download"
+        },
+        {
+          "texto": "Python",
+          "tech": "Python"
+        },
+        {
+          "texto": "PostgreSQL (Neon)",
+          "tech": "PostgreSQL"
+        },
+        {
+          "texto": "dbt",
+          "tech": "dbt"
+        },
+        {
+          "texto": "Power BI",
+          "tech": "Power BI",
+          "pendiente": true
+        }
+      ],
+      "flujoNota": "Every day, GitHub Actions orchestrates the flow: Python extracts sales and exchange rates, loads them into PostgreSQL (Neon) and dbt transforms and validates them. Power BI will be connected when the project is finished."
+    }
   }
 }
