@@ -23,17 +23,17 @@ const d = diagramText(Astro.props.lang ?? 'es');
           <g class="d-node">
             <rect x="40" y="36" width="220" height="44" rx="10" />
             <use href="#i-modules" x="56" y="47" width="22" height="22" class="d-icon" />
-            <text class="d-label d-label--sm" x="90" y="63">Odoo</text>
+            <text class="d-label d-label--sm" x="90" y="63">{d.sourceData}</text>
           </g>
           <g class="d-node">
             <rect x="40" y="88" width="220" height="44" rx="10" />
-            <use href="#i-cart" x="56" y="99" width="22" height="22" class="d-icon" />
-            <text class="d-label d-label--sm" x="90" y="115">WooCommerce</text>
+            <use href="#i-doc" x="56" y="99" width="22" height="22" class="d-icon" />
+            <text class="d-label d-label--sm" x="90" y="115">{d.sourceFiles}</text>
           </g>
           <g class="d-node">
             <rect x="40" y="140" width="220" height="44" rx="10" />
-            <use href="#i-fingerprint" x="56" y="151" width="22" height="22" class="d-icon" />
-            <text class="d-label d-label--sm" x="90" y="167">BioTime</text>
+            <use href="#i-api" x="56" y="151" width="22" height="22" class="d-icon" />
+            <text class="d-label d-label--sm" x="90" y="167">{d.sourceApis}</text>
           </g>
 
           <g class="d-links" marker-end="url(#arrowv)">
@@ -102,17 +102,17 @@ const d = diagramText(Astro.props.lang ?? 'es');
           <g class="d-node">
             <rect x="4" y="38" width="104" height="64" rx="10" />
             <use href="#i-modules" x="45" y="47" width="22" height="22" class="d-icon" />
-            <text class="d-label d-label--node" x="56" y="89" text-anchor="middle">Odoo</text>
+            <text class="d-label d-label--node" x="56" y="89" text-anchor="middle">{d.sourceData}</text>
           </g>
           <g class="d-node">
             <rect x="4" y="126" width="104" height="64" rx="10" />
-            <use href="#i-cart" x="45" y="135" width="22" height="22" class="d-icon" />
-            <text class="d-label d-label--node" x="56" y="177" text-anchor="middle">WooCommerce</text>
+            <use href="#i-doc" x="45" y="135" width="22" height="22" class="d-icon" />
+            <text class="d-label d-label--node" x="56" y="177" text-anchor="middle">{d.sourceFiles}</text>
           </g>
           <g class="d-node">
             <rect x="4" y="214" width="104" height="64" rx="10" />
-            <use href="#i-fingerprint" x="45" y="223" width="22" height="22" class="d-icon" />
-            <text class="d-label d-label--node" x="56" y="265" text-anchor="middle">BioTime</text>
+            <use href="#i-api" x="45" y="223" width="22" height="22" class="d-icon" />
+            <text class="d-label d-label--node" x="56" y="265" text-anchor="middle">{d.sourceApis}</text>
           </g>
 
           <!-- Fila central: mismo ancho, alto y padding -->

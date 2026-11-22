@@ -6,9 +6,12 @@ import type { Lang } from '../lib/cv';
 
 const es = {
   // Pipeline del hero
-  heroTitle: 'Pipeline de datos: fuentes, integración, almacenamiento, visualización y decisiones',
+  heroTitle: 'Esquema conceptual de un flujo de datos: fuentes, integración, almacenamiento, visualización y decisiones',
   heroDesc:
-    'Odoo, WooCommerce y BioTime son las fuentes; sus datos se integran con flujos ETL en n8n y Python, se almacenan en PostgreSQL y se visualizan en Power BI para tomar decisiones.',
+    'Esquema conceptual de un flujo con datos, archivos y APIs como fuentes, procesamiento con n8n y Python, almacenamiento en PostgreSQL y visualización en Power BI para apoyar decisiones.',
+  sourceData: 'Datos',
+  sourceFiles: 'Archivos',
+  sourceApis: 'APIs',
   sources: 'Fuentes',
   integration: 'Integración',
   storage: 'Almacenamiento',
@@ -72,8 +75,10 @@ const es = {
   invNegative: 'Stock negativo',
   invBigDiff: 'Diferencias grandes',
   // Integraciones
-  integTitle: 'n8n al centro conectando Odoo 17, WooCommerce y BioTime, con monitoreo y alertas',
-  logsAlerts: 'Logs y alertas',
+  integTitle: 'Seguimiento de mercadería: formulario en SharePoint, flujos en Power Automate y notificaciones de cambios de estado a los responsables',
+  trackingForm: 'Formulario',
+  trackingEmails: 'Correos',
+  trackingStatus: 'Cambios de estado',
   // BPMN
   bpmnTitle: 'Diagrama BPMN con carriles para Ventas, Almacén, Finanzas y RRHH',
   laneSales: 'Ventas',
@@ -83,9 +88,12 @@ const es = {
 };
 
 const en: typeof es = {
-  heroTitle: 'Data pipeline: sources, integration, storage, visualization and decisions',
+  heroTitle: 'Conceptual data flow: sources, integration, storage, visualization and decisions',
   heroDesc:
-    'Odoo, WooCommerce and BioTime are the sources; their data is integrated through ETL workflows in n8n and Python, stored in PostgreSQL and visualized in Power BI to support decisions.',
+    'Conceptual flow with data, files and APIs as sources, processing with n8n and Python, storage in PostgreSQL and visualization in Power BI to support decisions.',
+  sourceData: 'Data',
+  sourceFiles: 'Files',
+  sourceApis: 'APIs',
   sources: 'Sources',
   integration: 'Integration',
   storage: 'Storage',
@@ -144,8 +152,10 @@ const en: typeof es = {
   invAlerts: 'Automatic alerts',
   invNegative: 'Negative stock',
   invBigDiff: 'Large differences',
-  integTitle: 'n8n at the center connecting Odoo 17, WooCommerce and BioTime, with monitoring and alerts',
-  logsAlerts: 'Logs & alerts',
+  integTitle: 'Merchandise tracking: a SharePoint form, Power Automate flows and notifications of status changes to the people responsible',
+  trackingForm: 'Form',
+  trackingEmails: 'Emails',
+  trackingStatus: 'Status changes',
   bpmnTitle: 'BPMN diagram with lanes for Sales, Warehouse, Finance and HR',
   laneSales: 'Sales',
   laneWarehouse: 'Warehouse',

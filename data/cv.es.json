@@ -12,7 +12,15 @@
     "nombre": "Ana Patricia Medina Aguirre",
     "nombreCorto": "Ana Medina",
     "titulo": "Analista de Datos y Automatización",
-    "stack": ["ETL", "Python", "SQL (PostgreSQL)", "Power BI", "n8n", "Power Automate", "Odoo"],
+    "stack": [
+      "ETL",
+      "Python",
+      "SQL (PostgreSQL)",
+      "Power BI",
+      "n8n",
+      "Power Automate",
+      "Odoo"
+    ],
     "frasesHero": [
       "Analista de Datos",
       "ETL con Python y SQL",
@@ -21,15 +29,23 @@
       "Integraciones con Odoo y APIs"
     ],
     "ubicacion": "Lima, Perú",
-    "foto": { "alt": "Retrato de Ana Patricia Medina Aguirre" }
+    "foto": {
+      "alt": "Retrato de Ana Patricia Medina Aguirre"
+    }
   },
   "contacto": {
     "email": "meymar1405@gmail.com",
     "telefono": "+51970585398",
     "telefonoVisible": "+51 970 585 398",
     "whatsapp": "https://wa.me/51970585398",
-    "linkedin": { "url": "https://www.linkedin.com/in/ana-medina-ba5839269", "usuario": "ana-medina-ba5839269" },
-    "github": { "url": "https://github.com/AnaMedinaAguirre", "usuario": "AnaMedinaAguirre" },
+    "linkedin": {
+      "url": "https://www.linkedin.com/in/ana-medina-ba5839269",
+      "usuario": "ana-medina-ba5839269"
+    },
+    "github": {
+      "url": "https://github.com/AnaMedinaAguirre",
+      "usuario": "AnaMedinaAguirre"
+    },
     "cierre": "¿Buscas a alguien que convierta procesos manuales en flujos automatizados y datos en decisiones? Conversemos."
   },
   "perfil": [
@@ -38,8 +54,14 @@
     "Soy estudiante de décimo ciclo de Ingeniería de Sistemas en la Universidad César Vallejo (Quinto Superior)."
   ],
   "ficha": [
-    { "etiqueta": "Foco actual", "valor": "Datos y automatización: pipelines ETL, Power BI y flujos con n8n y Power Automate" },
-    { "etiqueta": "Idiomas", "valor": "Español nativo · Inglés B2" }
+    {
+      "etiqueta": "Foco actual",
+      "valor": "Datos y automatización: pipelines ETL, Power BI y flujos con n8n y Power Automate"
+    },
+    {
+      "etiqueta": "Idiomas",
+      "valor": "Español nativo · Inglés B2"
+    }
   ],
   "proyectosProfesionales": [
     {
@@ -53,8 +75,14 @@
       "problema": "La gerencia esperaba varios días por reportes consolidados: cada área exportaba su Excel y se unían a mano.",
       "solucion": "Un asistente en Odoo que entiende preguntas por texto o voz, elige la consulta registrada que corresponde y responde con los datos del ERP, respetando los permisos de quien pregunta. Cada mañana envía a la gerencia un resumen de la operación.",
       "experiencia": 1,
-      "logros": [1],
-      "tecnologias": ["Odoo 18", "Python", "OWL"]
+      "logros": [
+        1
+      ],
+      "tecnologias": [
+        "Odoo 18",
+        "Python",
+        "OWL"
+      ]
     },
     {
       "id": "dashboards",
@@ -66,8 +94,15 @@
       "problema": "La gerencia necesitaba ver las ventas y los márgenes de todas las empresas y sedes juntas, no cada una por separado.",
       "solucion": "Un tablero OWL dentro de Odoo 18 que consulta PostgreSQL con SQL y solo cuenta comprobantes aceptados por SUNAT. Usa el selector de compañías nativo de Odoo, muestra los montos con o sin IGV y exporta a Excel.",
       "experiencia": 1,
-      "logros": [2],
-      "tecnologias": ["Odoo 18", "Python", "OWL", "PostgreSQL"]
+      "logros": [
+        2
+      ],
+      "tecnologias": [
+        "Odoo 18",
+        "Python",
+        "OWL",
+        "PostgreSQL"
+      ]
     },
     {
       "id": "conteo-inventario",
@@ -79,8 +114,14 @@
       "problema": "Contar inventario en tienda sin dejar de vender: un ajuste que reemplaza el stock por lo contado borra las ventas hechas durante el conteo, y las diferencias grandes o el stock negativo pasaban sin aviso.",
       "solucion": "Un módulo de Odoo para el celular: se escanea con la cámara sin ver el stock esperado (conteo ciego), el supervisor aprueba y el ajuste se aplica por diferencia, así las ventas hechas durante el conteo se respetan. Envía alertas automáticas por stock negativo y diferencias grandes.",
       "experiencia": 1,
-      "logros": [3],
-      "tecnologias": ["Odoo 18", "Python", "OWL"]
+      "logros": [
+        3
+      ],
+      "tecnologias": [
+        "Odoo 18",
+        "Python",
+        "OWL"
+      ]
     },
     {
       "id": "multisede",
@@ -92,21 +133,36 @@
       "problema": "Cada tienda necesitaba seguir operando con su propia base de datos y, a la vez, mantener catálogo, precios y stock alineados con la sede central. Además, sumar una tienda nueva tenía que ser un proceso estándar.",
       "solucion": "Un VPS central y una base PostgreSQL local por sede, sincronizadas vía API / JSON-RPC con un módulo centralizado (conexión, almacén remoto, lista de precios y punto de venta por sede), y un despliegue estandarizado con Debian, Nginx y Tailscale. Participé en su implementación.",
       "experiencia": 1,
-      "logros": [4],
-      "tecnologias": ["Odoo 18", "Python", "PostgreSQL", "API / JSON-RPC", "Debian", "Nginx", "Tailscale"]
+      "logros": [
+        4
+      ],
+      "tecnologias": [
+        "Odoo 18",
+        "Python",
+        "PostgreSQL",
+        "API / JSON-RPC",
+        "Debian",
+        "Nginx",
+        "Tailscale"
+      ]
     },
     {
       "id": "integraciones",
       "diagrama": "integraciones",
       "cliente": "CasaLinda",
-      "titulo": "Automatización e integración de sistemas",
-      "descripcion": "Flujos de integración y transformación de datos (ETL) que conectan Odoo 17, WooCommerce y BioTime para sincronizar stock, pedidos y asistencia, reduciendo tareas manuales. Incluye monitoreo, logs y alertas para automatizaciones críticas.",
+      "titulo": "Seguimiento de mercadería con Power Automate y SharePoint",
+      "descripcion": "Automatización del seguimiento de mercadería entre Mayorista, Comercial y Almacén mediante formularios en SharePoint y flujos en Power Automate, con correos a los responsables y notificaciones de cada cambio de estado.",
       "tipo": "Automatización",
-      "problema": "Stock, pedidos y asistencia se movían entre Odoo 17, WooCommerce y BioTime con trabajo manual.",
-      "solucion": "Flujos de integración y ETL con n8n, Power Automate y Python que conectan los tres sistemas, con monitoreo, logs y alertas para las automatizaciones críticas.",
+      "problema": "El seguimiento de mercadería entre Mayorista, Comercial y Almacén dependía de correos sueltos, sin seguimiento de los cambios de estado.",
+      "solucion": "El jefe de tienda completa un formulario en SharePoint y los flujos de Power Automate envían correos a los responsables y notifican cada cambio de estado.",
       "experiencia": 2,
-      "logros": [2, 4, 5],
-      "tecnologias": ["n8n", "Power Automate", "Python", "Power BI", "API"]
+      "logros": [
+        2
+      ],
+      "tecnologias": [
+        "Power Automate",
+        "SharePoint"
+      ]
     },
     {
       "id": "bpmn",
@@ -118,8 +174,14 @@
       "problema": "Ventas, almacén, finanzas y RRHH necesitaban procesos documentados y rediseñados para la implementación de Odoo 17.",
       "solucion": "Modelamiento AS-IS / TO-BE en BPMN y soporte funcional en Odoo 17: parametrización, pruebas UAT y documentación.",
       "experiencia": 2,
-      "logros": [6],
-      "tecnologias": ["BPMN", "Odoo 17", "UAT"]
+      "logros": [
+        5
+      ],
+      "tecnologias": [
+        "BPMN",
+        "Odoo 17",
+        "UAT"
+      ]
     }
   ],
   "experiencia": [
@@ -136,7 +198,16 @@
         "Desarrollé un módulo de conteo de inventario desde el celular: escaneo con cámara, conteo ciego, aprobación del supervisor y ajuste de stock que respeta las ventas ocurridas durante el conteo, con alertas automáticas por stock negativo y diferencias grandes.",
         "Participé en la implementación de una arquitectura multisede en Odoo 18 en 4 empresas retail (12 sedes): VPS central y base de datos PostgreSQL local por sede, un módulo de sincronización centralizado para catálogo, precios y stock vía API / JSON-RPC, y un despliegue estandarizado con Debian, Nginx y Tailscale."
       ],
-      "tecnologias": ["Odoo 18", "Python", "OWL", "PostgreSQL", "API / JSON-RPC", "Linux Debian", "Nginx", "Tailscale"]
+      "tecnologias": [
+        "Odoo 18",
+        "Python",
+        "OWL",
+        "PostgreSQL",
+        "API / JSON-RPC",
+        "Linux Debian",
+        "Nginx",
+        "Tailscale"
+      ]
     },
     {
       "cargo": "Analista de Automatización y Transformación Digital",
@@ -150,10 +221,19 @@
         "Automaticé el seguimiento de mercadería entre Mayorista, Comercial y Almacén con Power Automate y SharePoint: el jefe de tienda llena un formulario y el sistema envía los correos a los responsables y notifica cada cambio de estado, reemplazando correos sueltos sin seguimiento.",
         "Desarrollé una aplicación web para el área de Prevención que centraliza notas de crédito y productos robados de las tiendas, con permisos para que cada usuario vea solo lo suyo; reemplazó archivos Excel que se compartían manualmente.",
         "Automaticé la atención de tickets de Sistemas y Mantenimiento: registro por formulario en SharePoint y aviso automático al usuario cuando su caso se resuelve.",
-        "Integré Odoo 17, WooCommerce y BioTime vía API con n8n y Python para sincronizar stock, pedidos y asistencia, con monitoreo, logs y alertas para las automatizaciones críticas.",
         "Levanté y documenté los procesos AS-IS / TO-BE (BPMN) para el cambio de sistema a Odoo 17, con soporte en parametrización, pruebas UAT, manuales y capacitación a usuarios."
       ],
-      "tecnologias": ["n8n", "Power Automate", "SharePoint", "Python", "Odoo 17", "WooCommerce", "BioTime", "Power BI", "BPMN"]
+      "tecnologias": [
+        "n8n",
+        "Power Automate",
+        "SharePoint",
+        "Python",
+        "Odoo 17",
+        "WooCommerce",
+        "BioTime",
+        "Power BI",
+        "BPMN"
+      ]
     },
     {
       "cargo": "Desarrolladora Web",
@@ -168,7 +248,11 @@
         "Integración del sitio web con sistemas internos (Sistema PROGRESS).",
         "Optimización SEO técnico, velocidad de carga, seguridad, documentación técnica y control de versiones con Git."
       ],
-      "tecnologias": ["WordPress", "PROGRESS", "Git"]
+      "tecnologias": [
+        "WordPress",
+        "PROGRESS",
+        "Git"
+      ]
     },
     {
       "cargo": "Desarrolladora Web",
@@ -177,8 +261,13 @@
       "inicio": "2024-11",
       "fin": "2025-02",
       "ubicacion": "Lima, Perú",
-      "logros": ["Diseño de páginas web responsive con Elementor y WordPress para móviles, tablets y computadoras."],
-      "tecnologias": ["WordPress", "Elementor"]
+      "logros": [
+        "Diseño de páginas web responsive con Elementor y WordPress para móviles, tablets y computadoras."
+      ],
+      "tecnologias": [
+        "WordPress",
+        "Elementor"
+      ]
     }
   ],
   "tecnologias": [
@@ -186,85 +275,196 @@
       "id": "datos",
       "nombre": "Datos y BI",
       "items": [
-        { "nombre": "Power BI", "icono": "powerbi" },
-        { "nombre": "Power Query", "icono": "etl" },
-        { "nombre": "DAX", "icono": "api" },
-        { "nombre": "Modelado de datos", "icono": "bpmn" },
-        { "nombre": "Dashboards", "icono": "powerbi" },
-        { "nombre": "Excel avanzado", "icono": "excel" },
-        { "nombre": "SQL (PostgreSQL)", "icono": "postgresql" },
-        { "nombre": "ETL", "icono": "etl" },
-        { "nombre": "dbt", "icono": "layers" }
+        {
+          "nombre": "Power BI",
+          "icono": "powerbi"
+        },
+        {
+          "nombre": "Power Query",
+          "icono": "etl"
+        },
+        {
+          "nombre": "DAX",
+          "icono": "api"
+        },
+        {
+          "nombre": "Modelado de datos",
+          "icono": "bpmn"
+        },
+        {
+          "nombre": "Dashboards",
+          "icono": "powerbi"
+        },
+        {
+          "nombre": "Excel avanzado",
+          "icono": "excel"
+        },
+        {
+          "nombre": "SQL (PostgreSQL)",
+          "icono": "postgresql"
+        },
+        {
+          "nombre": "ETL",
+          "icono": "etl"
+        },
+        {
+          "nombre": "dbt",
+          "icono": "layers"
+        }
       ]
     },
     {
       "id": "automatizacion",
       "nombre": "Automatización",
       "items": [
-        { "nombre": "n8n", "icono": "n8n" },
-        { "nombre": "Power Automate", "icono": "powerautomate" },
-        { "nombre": "Python", "icono": "python" },
-        { "nombre": "SharePoint", "icono": "sharepoint" }
+        {
+          "nombre": "n8n",
+          "icono": "n8n"
+        },
+        {
+          "nombre": "Power Automate",
+          "icono": "powerautomate"
+        },
+        {
+          "nombre": "Python",
+          "icono": "python"
+        },
+        {
+          "nombre": "SharePoint",
+          "icono": "sharepoint"
+        }
       ]
     },
     {
       "id": "erp",
       "nombre": "ERP e IA",
       "items": [
-        { "nombre": "Odoo 17 y 18", "icono": "modules" },
-        { "nombre": "Módulos personalizados en Python", "icono": "python" },
-        { "nombre": "OWL", "icono": "code" },
-        { "nombre": "Asistentes de IA con consultas controladas", "icono": "ai" },
-        { "nombre": "API / JSON-RPC", "icono": "api" }
+        {
+          "nombre": "Odoo 17 y 18",
+          "icono": "modules"
+        },
+        {
+          "nombre": "Módulos personalizados en Python",
+          "icono": "python"
+        },
+        {
+          "nombre": "OWL",
+          "icono": "code"
+        },
+        {
+          "nombre": "Asistentes de IA con consultas controladas",
+          "icono": "ai"
+        },
+        {
+          "nombre": "API / JSON-RPC",
+          "icono": "api"
+        }
       ]
     },
     {
       "id": "integraciones",
       "nombre": "Integraciones",
       "items": [
-        { "nombre": "WooCommerce", "icono": "cart" },
-        { "nombre": "BioTime", "icono": "fingerprint" },
-        { "nombre": "Sistema PROGRESS", "icono": "server" },
-        { "nombre": "SharePoint", "icono": "sharepoint" }
+        {
+          "nombre": "WooCommerce",
+          "icono": "cart"
+        },
+        {
+          "nombre": "BioTime",
+          "icono": "fingerprint"
+        },
+        {
+          "nombre": "Sistema PROGRESS",
+          "icono": "server"
+        },
+        {
+          "nombre": "SharePoint",
+          "icono": "sharepoint"
+        }
       ]
     },
     {
       "id": "infra",
       "nombre": "Infraestructura",
       "items": [
-        { "nombre": "Linux Debian", "icono": "debian" },
-        { "nombre": "PostgreSQL", "icono": "postgresql" },
-        { "nombre": "Nginx", "icono": "nginx" },
-        { "nombre": "Tailscale", "icono": "tailscale" },
-        { "nombre": "VPS", "icono": "server" }
+        {
+          "nombre": "Linux Debian",
+          "icono": "debian"
+        },
+        {
+          "nombre": "PostgreSQL",
+          "icono": "postgresql"
+        },
+        {
+          "nombre": "Nginx",
+          "icono": "nginx"
+        },
+        {
+          "nombre": "Tailscale",
+          "icono": "tailscale"
+        },
+        {
+          "nombre": "VPS",
+          "icono": "server"
+        }
       ]
     },
     {
       "id": "procesos",
       "nombre": "Gestión de procesos",
       "items": [
-        { "nombre": "BPMN (AS-IS / TO-BE)", "icono": "bpmn" },
-        { "nombre": "Pruebas UAT", "icono": "checklist" }
+        {
+          "nombre": "BPMN (AS-IS / TO-BE)",
+          "icono": "bpmn"
+        },
+        {
+          "nombre": "Pruebas UAT",
+          "icono": "checklist"
+        }
       ]
     },
     {
       "id": "web",
       "nombre": "Web",
       "items": [
-        { "nombre": "WordPress", "icono": "wordpress" },
-        { "nombre": "Elementor", "icono": "elementor" },
-        { "nombre": "HTML", "icono": "html5" },
-        { "nombre": "CSS", "icono": "css" }
+        {
+          "nombre": "WordPress",
+          "icono": "wordpress"
+        },
+        {
+          "nombre": "Elementor",
+          "icono": "elementor"
+        },
+        {
+          "nombre": "HTML",
+          "icono": "html5"
+        },
+        {
+          "nombre": "CSS",
+          "icono": "css"
+        }
       ]
     },
     {
       "id": "herramientas",
       "nombre": "Herramientas",
       "items": [
-        { "nombre": "Git", "icono": "git" },
-        { "nombre": "GitHub", "icono": "github" },
-        { "nombre": "GitHub Actions", "icono": "githubactions" },
-        { "nombre": "Microsoft Office avanzado (Excel, Word, PowerPoint)", "icono": "doc" }
+        {
+          "nombre": "Git",
+          "icono": "git"
+        },
+        {
+          "nombre": "GitHub",
+          "icono": "github"
+        },
+        {
+          "nombre": "GitHub Actions",
+          "icono": "githubactions"
+        },
+        {
+          "nombre": "Microsoft Office avanzado (Excel, Word, PowerPoint)",
+          "icono": "doc"
+        }
       ]
     }
   ],
@@ -274,19 +474,31 @@
       "titulo": "Análisis funcional",
       "descripcion": "Levantamiento de procesos y requerimientos para soluciones en Odoo y sistemas multisede en retail."
     },
-    { "icono": "bpmn", "titulo": "Modelado de procesos", "descripcion": "Procesos AS-IS / TO-BE en BPMN para ventas, almacén, finanzas y RRHH." },
-    { "icono": "checklist", "titulo": "Implementación y pruebas", "descripcion": "Parametrización, pruebas UAT y soporte funcional en Odoo 17." },
+    {
+      "icono": "bpmn",
+      "titulo": "Modelado de procesos",
+      "descripcion": "Procesos AS-IS / TO-BE en BPMN para ventas, almacén, finanzas y RRHH."
+    },
+    {
+      "icono": "checklist",
+      "titulo": "Implementación y pruebas",
+      "descripcion": "Parametrización, pruebas UAT y soporte funcional en Odoo 17."
+    },
     {
       "icono": "etl",
-      "titulo": "Integración y automatización",
-      "descripcion": "Pipelines ETL y flujos entre sistemas, con monitoreo, logs y alertas para automatizaciones críticas."
+      "titulo": "Automatización de procesos",
+      "descripcion": "Formularios, seguimiento de solicitudes y notificaciones con Power Automate y SharePoint."
     },
     {
       "icono": "shield",
       "titulo": "Administración de sistemas",
       "descripcion": "Despliegue estandarizado de sedes con Debian, PostgreSQL, Nginx y Tailscale, como parte de la arquitectura multisede."
     },
-    { "icono": "users", "titulo": "Documentación y capacitación", "descripcion": "Manuales, documentación de procesos y capacitación a usuarios." }
+    {
+      "icono": "users",
+      "titulo": "Documentación y capacitación",
+      "descripcion": "Manuales, documentación de procesos y capacitación a usuarios."
+    }
   ],
   "educacion": [
     {
@@ -296,20 +508,44 @@
       "fin": "2026-12",
       "nota": "graduación prevista",
       "ubicacion": "Lima, Perú",
-      "detalles": ["Estudiante de décimo ciclo."],
+      "detalles": [
+        "Estudiante de décimo ciclo."
+      ],
       "meritos": [
-        { "titulo": "Orden de mérito: Quinto Superior", "detalle": "Puesto 418 de 2466" },
-        { "titulo": "Cuadro de mérito semestral 2026-I: Décimo Superior", "detalle": "Puesto 24 de 254, promedio 15.67" }
+        {
+          "titulo": "Orden de mérito: Quinto Superior",
+          "detalle": "Puesto 418 de 2466"
+        },
+        {
+          "titulo": "Cuadro de mérito semestral 2026-I: Décimo Superior",
+          "detalle": "Puesto 24 de 254, promedio 15.67"
+        }
       ]
     }
   ],
   "formacion": [
-    { "nombre": "Microsoft Azure Data Fundamentals (DP-900)", "emisor": "Microsoft Learn", "estado": "en_curso", "icono": "azure" },
-    { "nombre": "Databricks Fundamentals", "emisor": "Databricks Academy", "estado": "en_curso", "icono": "databricks" }
+    {
+      "nombre": "Microsoft Azure Data Fundamentals (DP-900)",
+      "emisor": "Microsoft Learn",
+      "estado": "en_curso",
+      "icono": "azure"
+    },
+    {
+      "nombre": "Databricks Fundamentals",
+      "emisor": "Databricks Academy",
+      "estado": "en_curso",
+      "icono": "databricks"
+    }
   ],
   "idiomas": [
-    { "idioma": "Español", "nivel": "Nativo" },
-    { "idioma": "Inglés", "nivel": "B2 — lectura técnica y comunicación escrita" }
+    {
+      "idioma": "Español",
+      "nivel": "Nativo"
+    },
+    {
+      "idioma": "Inglés",
+      "nivel": "B2 — lectura técnica y comunicación escrita"
+    }
   ],
   "cvDoc": {
     "titular": "Analista de Datos y Automatización | Power BI · SQL · Python · Power Automate · Odoo",
@@ -320,7 +556,11 @@
         "cargo": "Analista Funcional",
         "ubicacion": "Lima",
         "empleadores": [
-          { "empresa": "Boson Innovation E.I.R.L.", "inicio": "2026-08", "fin": null }
+          {
+            "empresa": "Boson Innovation E.I.R.L.",
+            "inicio": "2026-08",
+            "fin": null
+          }
         ],
         "logros": [
           "Desarrollé un asistente de IA para Odoo que responde en lenguaje natural, por texto o voz, las consultas de la gerencia y envía cada mañana un resumen de la operación. Reemplaza reportes consolidados que tardaban varios días (cada área exportaba su Excel y se unían a mano). Por seguridad, la IA no genera SQL: elige entre consultas registradas que leen el ERP con los permisos del usuario.",
@@ -333,22 +573,33 @@
         "cargo": "Analista de Automatización y Transformación Digital",
         "ubicacion": "Lima",
         "empleadores": [
-          { "empresa": "CasaLinda", "inicio": "2025-11", "fin": "2026-07" }
+          {
+            "empresa": "CasaLinda",
+            "inicio": "2025-11",
+            "fin": "2026-07"
+          }
         ],
         "logros": [
           "Desarrollé dashboards en Power BI para todas las áreas: reportes que tomaban semanas en prepararse pasaron a generarse automáticamente.",
           "Automaticé el seguimiento de mercadería entre Mayorista, Comercial y Almacén con Power Automate y SharePoint: el jefe de tienda llena un formulario y el sistema envía los correos a los responsables y notifica cada cambio de estado, reemplazando correos sueltos sin seguimiento.",
           "Desarrollé una aplicación web para el área de Prevención que centraliza notas de crédito y productos robados de las tiendas, con permisos para que cada usuario vea solo lo suyo; reemplazó archivos Excel que se compartían manualmente.",
           "Automaticé la atención de tickets de Sistemas y Mantenimiento: registro por formulario en SharePoint y aviso automático al usuario cuando su caso se resuelve.",
-          "Integré Odoo 17, WooCommerce y BioTime vía API con n8n y Python para sincronizar stock, pedidos y asistencia.",
           "Levanté y documenté los procesos AS-IS / TO-BE (BPMN) para el cambio de sistema a Odoo 17, con soporte en parametrización, pruebas UAT y capacitación."
         ]
       },
       {
         "cargo": "Desarrolladora Web",
         "empleadores": [
-          { "empresa": "CasaLinda", "inicio": "2025-02", "fin": "2025-11" },
-          { "empresa": "Consigue Ventas", "inicio": "2024-11", "fin": "2025-02" }
+          {
+            "empresa": "CasaLinda",
+            "inicio": "2025-02",
+            "fin": "2025-11"
+          },
+          {
+            "empresa": "Consigue Ventas",
+            "inicio": "2024-11",
+            "fin": "2025-02"
+          }
         ],
         "logros": [
           "Sitios WordPress responsive, integración del sitio con el sistema interno PROGRESS, SEO técnico y control de versiones con Git."
@@ -372,20 +623,43 @@
         "inicio": "2022-04",
         "fin": "2026-12",
         "nota": "graduación prevista",
-        "logros": ["Quinto Superior (puesto 418 de 2466) · Décimo Superior 2026-I (puesto 24 de 254)."]
+        "logros": [
+          "Quinto Superior (puesto 418 de 2466) · Décimo Superior 2026-I (puesto 24 de 254)."
+        ]
       }
     ],
     "formacion": {
       "etiqueta": "Formación en curso",
-      "items": ["Microsoft Azure Data Fundamentals (DP-900)", "Databricks Fundamentals"]
+      "items": [
+        "Microsoft Azure Data Fundamentals (DP-900)",
+        "Databricks Fundamentals"
+      ]
     },
     "habilidades": [
-      { "grupo": "Datos y BI", "items": "Power BI (DAX, Power Query), SQL / PostgreSQL, dbt, modelado dimensional, Excel" },
-      { "grupo": "Automatización e integración", "items": "Power Automate, SharePoint, n8n, Python, APIs REST / JSON-RPC" },
-      { "grupo": "ERP e IA", "items": "Odoo 17/18 (módulos en Python y OWL), asistentes de IA con consultas controladas" },
-      { "grupo": "Procesos", "items": "BPMN (AS-IS / TO-BE), pruebas UAT" },
-      { "grupo": "Herramientas", "items": "Git, GitHub, Linux (Debian)" },
-      { "grupo": "Idiomas", "items": "Español nativo · Inglés B2 — lectura técnica y comunicación escrita" }
+      {
+        "grupo": "Datos y BI",
+        "items": "Power BI (DAX, Power Query), SQL / PostgreSQL, dbt, modelado dimensional, Excel"
+      },
+      {
+        "grupo": "Automatización e integración",
+        "items": "Power Automate, SharePoint, n8n, Python, APIs REST / JSON-RPC"
+      },
+      {
+        "grupo": "ERP e IA",
+        "items": "Odoo 17/18 (módulos en Python y OWL), asistentes de IA con consultas controladas"
+      },
+      {
+        "grupo": "Procesos",
+        "items": "BPMN (AS-IS / TO-BE), pruebas UAT"
+      },
+      {
+        "grupo": "Herramientas",
+        "items": "Git, GitHub, Linux (Debian)"
+      },
+      {
+        "grupo": "Idiomas",
+        "items": "Español nativo · Inglés B2 — lectura técnica y comunicación escrita"
+      }
     ]
   }
 }
