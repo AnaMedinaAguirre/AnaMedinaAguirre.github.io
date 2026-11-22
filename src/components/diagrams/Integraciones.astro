@@ -8,32 +8,36 @@ const d = diagramText(Astro.props.lang ?? 'es');
 <figure class="project-art">
             <svg class="diagram" viewBox="0 0 320 180" role="img" aria-labelledby="pj4-d-title">
               <title id="pj4-d-title">{d.integTitle}</title>
-              <g class="d-links">
-                <path d="M160 90 72 40M160 90 248 40M160 90 72 140M160 90 248 140" />
+              <defs>
+                <marker id="tracking-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M0 0 10 5 0 10z" class="d-arrowhead" />
+                </marker>
+              </defs>
+              <g class="d-links" marker-end="url(#tracking-arrow)">
+                <path d="M124 52 137 70" />
+                <path d="M183 70 206 54" />
+                <path d="M183 110 206 126" />
               </g>
               <g class="d-node">
-                <rect x="16" y="24" width="108" height="32" rx="16" />
-                <use href="#i-modules" x="28" y="31" width="18" height="18" class="d-icon" /><text
-                  class="d-sub d-sub--sm d-strong" x="52" y="44">Odoo 17</text>
+                <rect x="8" y="20" width="116" height="48" rx="12" />
+                <use href="#i-sharepoint" x="18" y="32" width="20" height="20" class="d-icon" />
+                <text class="d-sub d-sub--sm d-strong" x="44" y="40">SharePoint</text>
+                <text class="d-sub d-sub--sm" x="44" y="56">{d.trackingForm}</text>
               </g>
               <g class="d-node">
-                <rect x="184" y="24" width="128" height="32" rx="16" />
-                <use href="#i-cart" x="196" y="31" width="18" height="18" class="d-icon" /><text
-                  class="d-sub d-sub--sm d-strong" x="220" y="44">WooCommerce</text>
-              </g>
-              <g class="d-node">
-                <rect x="16" y="124" width="108" height="32" rx="16" />
-                <use href="#i-fingerprint" x="28" y="131" width="18" height="18" class="d-icon" /><text
-                  class="d-sub d-sub--sm d-strong" x="52" y="144">BioTime</text>
+                <rect x="206" y="24" width="106" height="32" rx="16" />
+                <use href="#i-mail" x="216" y="31" width="18" height="18" class="d-icon" /><text
+                  class="d-sub d-sub--sm d-strong" x="240" y="44">{d.trackingEmails}</text>
               </g>
               <g class="d-node d-node--event">
-                <rect x="184" y="124" width="128" height="32" rx="16" />
-                <use href="#i-checklist" x="196" y="131" width="18" height="18" class="d-icon d-icon--event" /><text
-                  class="d-sub d-sub--sm d-strong" x="220" y="144">{d.logsAlerts}</text>
+                <rect x="166" y="126" width="146" height="32" rx="16" />
+                <use href="#i-checklist" x="176" y="133" width="18" height="18" class="d-icon d-icon--event" /><text
+                  class="d-sub d-sub--sm d-strong" x="200" y="146">{d.trackingStatus}</text>
               </g>
               <g class="d-node d-node--accent">
                 <circle cx="160" cy="90" r="30" />
-                <use href="#i-n8n" x="146" y="76" width="28" height="28" class="d-icon" />
+                <use href="#i-powerautomate" x="146" y="76" width="28" height="28" class="d-icon" />
               </g>
+              <text class="d-sub d-sub--sm d-strong" x="96" y="164" text-anchor="middle">Power Automate</text>
             </svg>
           </figure>
